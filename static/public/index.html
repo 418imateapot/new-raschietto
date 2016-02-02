@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="it"> <!--ng-app="teapot">-->
+
+<head>
+
+    <meta charset="utf-8" />
+    <base href="/" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="rgb(34, 34, 34)" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+
+    <title>I'm a Teapot</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css'
+    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
+    />
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,700'
+    />
+
+    <style type="text/css">
+        /**
+         * Hide when Angular is not yet loaded and initialized
+         */
+        [ng-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body layout="row" ng-controller="ApplicationController as app" ng-cloak class="relative"
+role="main">
+    <teapot-navigator></teapot-navigator>
+    <md-content layout="column" layout-fill>
+        <top-bar></top-bar>
+        <md-content ui-view/>
+    </md-content>
+    </div>
+
+    <!-- Al momento di uploadare ci basta solo un unico bundle
+    <script src="./bundle.js"></script>
+    -->
+    <script src="./jspm_packages/system.js" type="text/javascript"></script>
+    <script src="./config.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        // Boostrap manuale per non far impazzire systemjs
+        // https://github.com/jspm/registry/issues/358
+        System.import('js/main')
+            .then(()=>angular.bootstrap(document, ['teapot']))
+            .catch(console.error.bind(console)); // make sure any errors print to console
+    </script>
+
+</body>
+
+</html>

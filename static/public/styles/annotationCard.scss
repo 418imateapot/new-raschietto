@@ -1,0 +1,21 @@
+/*****GODDAMN FONTS!************/
+md-icon.avatar-font {
+    font-family: 'Kreon', serif;
+    font-size: 2rem;
+    display: block;
+    width: 2.2rem;
+    height: 2.1rem;
+}
+md-card-header-text.annocard-header{
+    position: relative;
+    left: 0.5rem;
+    top: 0.5rem;
+}
+md-card.annocard {
+    background-color: #FBFBFB;
+/*    background-color: #F0F8FF; */
+}
+
+md-card.annocard * {
+    word-wrap: break-word;
+}

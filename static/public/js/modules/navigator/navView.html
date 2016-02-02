@@ -1,0 +1,58 @@
+<!-- Template per la barra laterale -->
+<md-sidenav md-component-id="left" class="teapot-sidenav md-sidenav-left">
+    <md-content>
+        <md-toolbar class="{{navigator.modeColor}} md-toolbar md-tall">
+
+            <!-- INTESTAZIONE -->
+            <div layout-align="center center" class="md-toolbar-tools">
+                <md-icon class="material-icons">{{navigator.modeIcon}}</md-icon>
+                <h2 class="nav-mode-title md-flex">
+                Modalità {{navigator.activeMode}}</h2>
+                <br/>
+            </div>
+            <md-button ng-click="navigator.switchMode()" class="teapot-switch-mode-button md-raised">
+                {{navigator.inactiveMode}}
+            </md-button>
+
+
+        </md-toolbar>
+        <!-- ELEMENTI MENU -->
+        <md-list>
+            <md-subheader class="md-no-sticky">Strumenti</md-subheader>
+            <md-list-item id="document-list-menu-el" ng-click="navigator.openToolbox('documents')">
+                Elenco Documenti
+                <md-icon class="material-icons">description</md-icon>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item id="annotation-list-menu-el" ng-click="navigator.openToolbox('annotations')">
+                Elenco Annotazioni
+                <md-icon class="material-icons">assignment</md-icon>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item id="filter-menu-el" ng-click="navigator.openToolbox('filters')">
+                Filtri
+                <md-icon class="material-icons">filter_list</md-icon>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-subheader class="md-no-sticky">Scraping</md-subheader>
+            <md-list-item>
+                Avvia Scraper
+                <md-icon class="material-icons">web</md-icon>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-subheader class="md-no-sticky">Altro</md-subheader>
+            <md-list-item>
+                Tutorial
+                <md-icon class="material-icons">help_outline</md-icon>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item>
+                About
+                <md-icon class="material-icons">favorite_border</md-icon>
+            </md-list-item>
+            <md-divider></md-divider>
+        </md-list>
+
+
+        <md-content>
+</md-sidenav>

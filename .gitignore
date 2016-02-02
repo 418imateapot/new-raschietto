@@ -1,0 +1,12 @@
+env
+logs
+static/build
+static/bower_components
+static/node_modules
+static/typings
+apache_files/010-raschietto.conf
+doc/server/_build/doctrees/
+*.pyc
+*.swp
+*.desktop
+*~

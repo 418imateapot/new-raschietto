@@ -1,0 +1,15 @@
+<div layout="row" layout-align="center center" layout-padding layout-fill ng-cloak>
+    <md-whiteframe class="md-whiteframe-5dp" flex-sm="100" flex-gt-sm="90" flex-gt-md="80"
+    layout layout-align="center center" id="document-view" ng-hide="mainArea.loading">
+        <span layout-padding ng-bind-html="mainArea.content"></span>
+    </md-whiteframe>
+</div>
+
+<!--
+<div flex layout-padding id="document-view" class="animate-hide" id="show-document"
+ng-bind-html="mainArea.content" ng-hide="mainArea.loading">
+</div>
+ -->
+<div layout="column" ng-show="mainArea.loading" layout-align="center center">
+    <md-progress-circular md-mode="indeterminate" md-diameter="80"></md-progress-circular>
+</div>

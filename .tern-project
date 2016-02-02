@@ -1,0 +1,13 @@
+{
+  "libs": [
+    "browser",
+    "jquery",
+    "angular",
+    "angular-animate",
+    "angular-foundation",
+    "angular-ui-router"
+  ],
+  "plugins": {
+    "angular": "./"
+  }
+}

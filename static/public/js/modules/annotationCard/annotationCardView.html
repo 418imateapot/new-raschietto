@@ -1,0 +1,23 @@
+<md-card class="annocard">
+    <md-card-header>
+        <md-card-avatar>
+            <!-- uso bind-html perchè devo infilare a volte dei &nbsp; per allineare tutto -->
+            <md-icon class="avatar-font" ng-bind-html="annoCard.icon"></md-icon>
+        </md-card-avatar>
+        <md-card-header-text class="annocard-header">
+            <span class="md-title">{{annoCard.header}}</span>
+            <span class="md-subhead">
+                Annotato da: <a href="{{annoCard.email}}">{{annoCard.provenance}}</a>
+            </span>
+        </md-card-header-text>
+    </md-card-header>
+    <md-card-content>
+        <p>
+            {{annoCard.text}}
+        </p>
+    </md-card-content>
+    <md-card-actions layout="row" layout-align="end center">
+        <md-button>Modifica</md-button>
+        <md-button>Cancella</md-button>
+    </md-card-actions>
+</md-card>

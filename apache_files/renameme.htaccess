@@ -1,0 +1,8 @@
+RewriteEngine on
+
+RewriteRule	^api/(.*)$ run.wsgi/$1 [QSA,PT,L]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !/run.wsgi
+RewriteRule ^.*$ index.html [NC,L]

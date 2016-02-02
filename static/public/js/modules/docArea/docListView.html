@@ -1,0 +1,17 @@
+<h1 class="md-display-2">Documenti disponibili</h1>
+<md-list ng-repeat="doc in docArea.docs">
+    <md-list-item class="md-3-line">
+        <div class="md-list-item-text" layout="column">
+            <a ui-sref="mode.docs.document({doi: doc.doi.value})">
+                <h5>{{doc.title.value}}</h5>
+            </a>
+            <br/>
+            <p>URL originale: <a href="{{doc.url.value}}">{{doc.url.value}}</a>
+            </p>
+            </br>
+            <p>DOI: {{doc.doi.value}}</p>
+            </br>
+        </div>
+    </md-list-item>
+    <md-divider></md-divider>
+</md-list>
