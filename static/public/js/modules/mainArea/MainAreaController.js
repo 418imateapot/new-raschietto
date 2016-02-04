@@ -10,10 +10,6 @@ export default function MainAreaController($scope, $state, $sanitize, documentSe
     model.loading = true; /** Usato per l'animazione */
     /** model.content ->  Il contenuto del documento HTML passato da appctrl */
     
-    if(model.content !== '') { // Abbiamo gia' la pagina ma il controller 
-        model.highlight();     // e' stato ricaricato
-    }
-
     $scope.currentState = $state;
     $scope.$watch('currentState', function(newState, oldState) {
         if (!newState.params.doi) {
@@ -21,6 +17,7 @@ export default function MainAreaController($scope, $state, $sanitize, documentSe
             console.warn("Tried to load a document without a doi");
             return;
         }
+        console.log("LOAD DOC;");
         let doi = decodeURIComponent(newState.params.doi);
         doi = documentService.decodeDoi(doi);
         documentService.findByDoi(doi).then((doc) => {
@@ -43,6 +40,7 @@ export default function MainAreaController($scope, $state, $sanitize, documentSe
             .then(doc => {
                 model.content = doc.resp.content;
                 model.loading = false;
+                model.highlight();
             });
     }
 }

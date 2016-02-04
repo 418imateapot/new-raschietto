@@ -1,6 +1,9 @@
 ApplicationController.$inject = ['$scope', '$stateParams', '$compile', 'documentService', 'annotationService', 'userService', 'appService'];
 
-export default function ApplicationController($scope, $stateParams, $compile, documentService, annotationService, userService, appService) {
+export
+default
+
+function ApplicationController($scope, $stateParams, $compile, documentService, annotationService, userService, appService) {
 
     let model = this;
 
@@ -11,7 +14,7 @@ export default function ApplicationController($scope, $stateParams, $compile, do
     model.isFiltered = _isFiltered; // Funzione passata giu' per lo $scope
     model.annotationsLoading = false;
     model.retrieveAnnotations = _getAnnos;
-    model.highlight = _highlight; // La funzione che visualizza le annotazioni sul testo
+    model.highlight = _highlight;
 
     //model.showTabDialog = () => {};
 
@@ -44,8 +47,8 @@ export default function ApplicationController($scope, $stateParams, $compile, do
      * @return {bool} true se l'annotazione va filtrata
      */
     function _isFiltered(item) {
-       return model.filters.has(item.type.value) ||
-                model.filters.has(item.provenance.value);
+        return model.filters.has(item.type.value) ||
+            model.filters.has(item.provenance.value);
     }
 
     /**
@@ -66,7 +69,7 @@ export default function ApplicationController($scope, $stateParams, $compile, do
                 annotationService.query(url).then(response => {
                     model.annotations = annotationService.tidy(response.body);
                     model.annotationsLoading = false;
-                    model.highlight();
+                    _highlight();
                 });
             });
     }
