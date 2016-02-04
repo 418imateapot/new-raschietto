@@ -1,21 +1,32 @@
 @import 'styles/annotationCard.scss';
 @import 'styles/textAnnotations.scss';
 
+$myBlue: rgb(0, 140, 186);
+$myRed: rgb(240, 65, 36);
+$myBlack: rgb(34, 34, 34);
+
+.md-fab#add-annotation {
+    position: fixed;
+    right: 2em;
+    bottom: 2em; 
+    background-color: $myBlue;
+}
+
 .md-toolbar {
     color: white;
     /* Colore barra sidenav == reader */
     &.teapot-mode-reader {
         padding: 1em;
-        background-color: rgb(0, 140, 186);
+        background-color: $myBlue;
     }
     /* Colore barra sidenav == annotator */
     &.teapot-mode-annotator {
         padding: 1em;
-        background-color: rgb(240, 65, 36);
+        background-color: $myRed;
     }
     /* Colore per la barra principale */
     &.teapot-toolbar {
-        background-color: rgb(34, 34, 34);
+        background-color: $myBlack;
     }
 }
 
@@ -31,7 +42,7 @@ h2.nav-mode-title {
 /* Il blu che piace ai più */
 
 .md-button.teapot-primary {
-    background-color: rgb(0, 140, 186);
+    background-color: $myBlue;
 }
 #main-content {
     position: relative;
