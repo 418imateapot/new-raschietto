@@ -10,7 +10,7 @@ function ApplicationController($scope, $stateParams, $compile, documentService, 
     model.user = '';
     model.content = '';
     model.annotations = [];
-    model.filters = new Set(); // Se un tipo/gruppo appartiene al set, va filtrato
+    model.filters = _initFilters(); //Se un tipo/gruppo non appartiene al set, va filtrato
     model.isFiltered = _isFiltered; // Funzione passata giu' per lo $scope
     model.annotationsLoading = false;
     model.retrieveAnnotations = _getAnnos;
@@ -39,6 +39,60 @@ function ApplicationController($scope, $stateParams, $compile, documentService, 
         return result;
     }
 
+    function _initFilters() {
+        let groupFilters = new Map();
+        let filters = {
+            'hasTitle': {
+                name: 'Titolo',
+                display: true
+            },
+            'hasAuthor': {
+                name: 'Autore',
+                display: true
+            },
+            'hasPublicationYear': {
+                name: 'Anno di Pubblicazione',
+                display: true
+            },
+            'hasURL': {
+                name: 'URL',
+                display: true
+            },
+            'hasDOI': {
+                name: 'DOI',
+                display: true
+            },
+            'hasComment': {
+                name: 'Commento',
+                display: true
+            },
+            'denotesRethoric': {
+                name: 'Retorica',
+                display: true
+            },
+            'cites': {
+                name: 'Citazione',
+                display: true
+            }
+        };
+
+        model.annotations.forEach(item => {
+            // La chiave e' la mail, il valore il nome -se esiste- se no la
+            // mail di nuovo
+            if (groupFilters.has(item.provenance.value)) return;
+            let name = item.groupName ? item.groupName.value : item.provenance.value;
+            groupFilters.set(item.provenance.value, name);
+        });
+
+        for (let [k, v] of groupFilters) {
+            filters[k] = {
+                name: v,
+                display: 'true'
+            };
+        }
+
+        return filters;
+    }
 
     /**
      * Data un'annotazione, verifica se esiste un filtro che
@@ -47,8 +101,9 @@ function ApplicationController($scope, $stateParams, $compile, documentService, 
      * @return {bool} true se l'annotazione va filtrata
      */
     function _isFiltered(item) {
-        return model.filters.has(item.type.value) ||
-            model.filters.has(item.provenance.value);
+        // se l'oggetto ha display: false non va visualizzato
+        return model.filters[item.type.value].display && 
+            model.filters[item.provenance.value].display;
     }
 
     /**
@@ -69,6 +124,7 @@ function ApplicationController($scope, $stateParams, $compile, documentService, 
                 annotationService.query(url).then(response => {
                     model.annotations = annotationService.tidy(response.body);
                     model.annotationsLoading = false;
+                    model.filters = _initFilters(); // crea i filtri in base ai gruppi
                     _highlight();
                 });
             });

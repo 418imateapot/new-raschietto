@@ -124,9 +124,10 @@ export default function annotationService($http) {
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX frbr: <http://purl.org/vocab/frbr/core#>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX foaf: <http://xmlns.com/foaf/0.1/>
         PREFIX raschietto: <http://vitali.web.cs.unibo.it/raschietto/>
 
-        SELECT ?type ?provenance ?predicate ?object ?label ?innerObject ?fragment ?start ?end ?src
+        SELECT ?type ?provenance ?groupName ?predicate ?object ?label ?innerObject ?fragment ?start ?end ?src
         WHERE {
             ?x a oa:Annotation;
                 raschietto:type ?type;
@@ -135,6 +136,7 @@ export default function annotationService($http) {
             ?body rdf:subject <${expr}>;
                 rdf:predicate ?predicate;
                 rdf:object ?object.
+            OPTIONAL {?provenance foaf:name ?groupName.}
             OPTIONAL{?object rdfs:label ?label.}
             OPTIONAL{?object rdf:subject ?innerObject. }
             OPTIONAL{

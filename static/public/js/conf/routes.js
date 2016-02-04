@@ -68,7 +68,8 @@ function routerConfig($stateProvider, $urlRouterProvider, $locationProvider) {
                 '@': {
                     template: `
 <teapot-toolbox annotations-loading="{{app.annotationsLoading}}"
-                    annotations="app.annotations">
+        annotations="app.annotations"
+        filters="app.filters">
 </teapot-toolbox>`
                 }
             }

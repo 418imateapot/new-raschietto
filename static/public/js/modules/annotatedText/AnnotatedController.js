@@ -37,7 +37,7 @@ export default function AnnotatedTextController($scope) {
 
         /* Scarta le annotazioni filtrate */
         model.managedAnnotations.forEach((elem) => {
-            if (!model.isFiltered({item: elem}))
+            if (model.isFiltered({item: elem}))
                 model.activeAnnotations.push(elem);
         });
 
