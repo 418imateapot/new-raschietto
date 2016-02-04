@@ -1,24 +1,5 @@
 @import 'styles/annotationCard.scss';
-
-span.anno-hasTitle {
-    background-color: red;
-}
-span.anno-hasAuthor {
-    background-color: green;
-}
-span.anno-hasDOI {
-    background-color: purple;
-}
-span.anno-hasPublicationYear {
-    background-color: blue;
-}
-span.anno-cites{
-    background-color: yellow;
-}
-span.anno-mixed{
-    background-color: brown;
-}
-
+@import 'styles/textAnnotations.scss';
 
 .md-toolbar {
     color: white;
