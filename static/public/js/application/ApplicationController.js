@@ -74,6 +74,11 @@ function ApplicationController($scope, $stateParams, $compile, documentService, 
             });
     }
 
+    /**
+     * Crea una direttiva per ciascun frammento
+     * annotato, la quale si occupa poi del suo
+     * comportamento.
+     */
     function _highlight() {
 
         let newElements = [];
@@ -115,11 +120,6 @@ function ApplicationController($scope, $stateParams, $compile, documentService, 
             }
 
         });
-        /*
-            let substring = ae.html().substring(val.start.value, (val.start.value+val.end.value));
-            let text = ae.html().replace(substring, `<span class="reddd">${substring}</span>`);
-            ae.html(text);
-            */
 
         // Compila i nuovi elementi
         newElements.forEach((el) => $compile(el)($scope));
