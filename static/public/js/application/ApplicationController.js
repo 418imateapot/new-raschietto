@@ -7,8 +7,11 @@ export default function ApplicationController($scope, $stateParams, $compile, do
     model.user = '';
     model.content = '';
     model.annotations = [];
+    model.filters = new Set(); // Se un tipo/gruppo appartiene al set, va filtrato
+    model.isFiltered = _isFiltered; // Funzione passata giu' per lo $scope
     model.annotationsLoading = false;
     model.retrieveAnnotations = _getAnnos;
+    model.highlight = _highlight; // La funzione che visualizza le annotazioni sul testo
 
     //model.showTabDialog = () => {};
 
@@ -33,6 +36,18 @@ export default function ApplicationController($scope, $stateParams, $compile, do
         return result;
     }
 
+
+    /**
+     * Data un'annotazione, verifica se esiste un filtro che
+     * impedisce di visualizzarla
+     * @param {object} item L'annotazione da filtrare
+     * @return {bool} true se l'annotazione va filtrata
+     */
+    function _isFiltered(item) {
+       return model.filters.has(item.type.value) ||
+                model.filters.has(item.provenance.value);
+    }
+
     /**
      * Carica le annotazioni del doc corrente
      * interrogando annotationService
@@ -51,7 +66,7 @@ export default function ApplicationController($scope, $stateParams, $compile, do
                 annotationService.query(url).then(response => {
                     model.annotations = annotationService.tidy(response.body);
                     model.annotationsLoading = false;
-                    _highlight();
+                    model.highlight();
                 });
             });
     }
@@ -63,7 +78,6 @@ export default function ApplicationController($scope, $stateParams, $compile, do
         model.annotations.forEach((val, index) => {
             let source, fragment, type, provenance;
             try {
-                //if(val.type.value !== 'hasAuthor') return;
                 source = val.src.value.indexOf('dlib') !== -1 ? 'dlib' : 'statistica';
                 fragment = val.fragment.value;
                 type = val.type.value;
@@ -89,7 +103,8 @@ export default function ApplicationController($scope, $stateParams, $compile, do
             // aggiungi gli attributi che ci servono
             let exsisting_annotations = elem.attr('annotations') || '';
             elem.attr('annotated-text', 'app.retrieveAnnotations(indexes)')
-                .attr('annotations', `${exsisting_annotations} ${index}`); // mantiene tutti gli indici
+                .attr('annotations', `${exsisting_annotations} ${index}`) // mantiene tutti gli indici
+                .attr('annotation-filters', 'app.isFiltered(item)');
 
             // Non vogliamo compilare trenta volte lo stesso elemento
             if (!isAlreadyAnnotated) {

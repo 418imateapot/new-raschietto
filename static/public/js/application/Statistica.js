@@ -34,7 +34,7 @@ export default class Statistica {
         if (!suffix)
             return null;
 
-        console.log(prefix+suffix[0]);
+        //console.log(prefix+suffix[0]);
 
         return prefix + suffix[0];
     }

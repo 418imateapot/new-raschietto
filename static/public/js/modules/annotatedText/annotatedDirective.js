@@ -1,12 +1,10 @@
-export
-default
-
-function annotatedText() {
+export default function annotatedText() {
     return {
         restrict: 'AE',
         transclude: true,
         bindToController: {
-            getAnnotations: '&annotatedText'
+            getAnnotations: '&annotatedText',
+            isFiltered: '&annotationFilters'
         },
         templateUrl: 'js/modules/annotatedText/annotatedView.html',
         controller: 'AnnotatedTextController',
@@ -16,30 +14,14 @@ function annotatedText() {
 
 
     function annotatedTextLink(scope, el, attrs, ctrl, transclude) {
-        let annotationIndexes = attrs.annotations.trim().split(' ');
-        let minStartRange = 0;
-        let maxEndRange = 0;
-        let annoType = '';
 
-        ctrl.managedAnnotations = ctrl.getAnnotations({
-            indexes: annotationIndexes
-        });
+        let annotationInfo = ctrl.elementConfig(attrs);
 
-        /* Individua il range più grande delle annotazioni  *
-         * su questo elemento, inoltra determina il tipo    */
-        ctrl.managedAnnotations.forEach((elem, index) => {
-            if (index === 0) {
-                minStartRange = elem.start.value;
-                maxEndRange = elem.end.value;
-                annoType = elem.type.value;
-            } else {
-                minStartRange = (minStartRange < elem.start.value) ? minStartRange : elem.start.value;
-                maxEndRange = (maxEndRange > elem.end.value) ? maxEndRange : elem.end.value;
-                annoType = (annoType === elem.type.value) ? annoType : 'mixed';
-            }
-        });
-
-        let substring = el.text().substring(minStartRange, maxEndRange);
+        let annoType = annotationInfo.annoType;
+        let substring = el.text()
+            .substring(
+                annotationInfo.minStartRange,
+                annotationInfo.maxEndRange);
 
         /* Thanks SO!
          * https://stackoverflow.com/questions/16090487/find-a-string-of-text-in-an-element-and-wrap-some-span-tags-round-it
