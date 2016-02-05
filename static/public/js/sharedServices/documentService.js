@@ -77,7 +77,7 @@ function documentService($http) {
                     ?x a fabio:Expression;
                         dcterms:title ?title;
                         fabio:hasRepresentation ?url.
-                    OPTIONAL{?x prism:hasDOI ?doi.}
+                    ?x prism:hasDOI ?doi.
                 }
             }`; // Backtick, non virgoletta semplice
         var encodedQuery = encodeURIComponent(query);
