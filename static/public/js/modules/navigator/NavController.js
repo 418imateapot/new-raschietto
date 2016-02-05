@@ -106,6 +106,13 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
                 $rootScope.$broadcast('login', {state: $stateParams.mode});
             });
     }
-    function _logout() {}
+    function _logout() {
+ userService.logout();
+ model.isLoggedIn = userService.isLoggedIn;
+   $rootScope.$broadcast('logout');
+   $state.go('.',{mode:'reader'});
+     _showNavToolBar({mode:'reader'});
+
+    }
 
 }

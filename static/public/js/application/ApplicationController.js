@@ -26,6 +26,9 @@ export default function ApplicationController($scope, $stateParams, $compile, do
         model.user = args.user || '';
     });
 
+    $scope.$on('logout', (ev, args) => {
+        model.user =  '';
+    });
     console.info("Raschietto sta scaldando i motori...");
 
     //////////////////////////
@@ -104,7 +107,7 @@ export default function ApplicationController($scope, $stateParams, $compile, do
      */
     function _isFiltered(item) {
         // se l'oggetto ha display: false non va visualizzato
-        return model.filters[item.type.value].display && 
+        return model.filters[item.type.value].display &&
             model.filters[item.provenance.value].display;
     }
 

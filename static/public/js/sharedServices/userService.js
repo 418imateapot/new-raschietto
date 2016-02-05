@@ -29,4 +29,12 @@ export default function userService($cookies) {
         return email;
     };
 
+    service.logout = function() {
+
+        $cookies.remove('credenziali');
+        service.isLoggedIn = false;
+
+    };
+
+
 }
