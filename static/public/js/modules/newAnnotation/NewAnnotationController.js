@@ -1,10 +1,11 @@
-NewAnnotationController.$inject = ['$mdDialog'];
+NewAnnotationController.$inject = ['$mdDialog', '$stateParams'];
 
-export default function NewAnnotationController($mdDialog) {
+export default function NewAnnotationController($mdDialog, $stateParams) {
 
     const model = this;
 
     model.showModal = _showModal;
+    model.isVisible = () => $stateParams.mode === 'annotator';
 
 
     ///////////////////////

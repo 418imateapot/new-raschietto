@@ -19,12 +19,13 @@ export default function userService($cookies) {
      */
     service.login = function(email, password) {
 
-        var credenziali = {
+        let credenziali = {
             email: email,
             password: password
         };
 
         $cookies.put('credenziali', JSON.stringify(credenziali));
+        service.isLoggedIn = true;
         return email;
     };
 

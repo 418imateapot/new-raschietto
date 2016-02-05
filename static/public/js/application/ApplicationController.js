@@ -1,9 +1,6 @@
 ApplicationController.$inject = ['$scope', '$stateParams', '$compile', 'documentService', 'annotationService', 'userService', 'appService'];
 
-export
-default
-
-function ApplicationController($scope, $stateParams, $compile, documentService, annotationService, userService, appService) {
+export default function ApplicationController($scope, $stateParams, $compile, documentService, annotationService, userService, appService) {
 
     let model = this;
 
@@ -22,6 +19,11 @@ function ApplicationController($scope, $stateParams, $compile, documentService, 
     // https://stackoverflow.com/questions/24078535/angularjs-controller-as-syntax-and-watch
     $scope.$watch(() => model.content, () => {
         _load_annotations();
+    });
+
+    // Se c'è un login, aggiornare l'utente
+    $scope.$on('login', (ev, args) => {
+        model.user = args.user || '';
     });
 
     console.info("Raschietto sta scaldando i motori...");

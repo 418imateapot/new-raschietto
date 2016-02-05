@@ -1,28 +1,28 @@
 <md-dialog ng-cloak>
-    <form layout="column">
+    <form layout="column" ng-submit="loginModal.submit(loginModal._email, loginModal._password)">
         <md-dialog-content layout="column">
 
-         <div flex="100">
-            <md-input-container class="md-block">
-                <label>E-mail</label>
-                <input type="email"ng-model="_email" autofocus>
-            </md-input-container>
-          </div>
-        <div flex="100">
-                  <md-input-container class="md-block">
+            <div flex="100">
+                <md-input-container class="md-block">
+                    <label>E-mail</label>
+                    <input type="email" ng-model="loginModal._email" autofocus>
+                </md-input-container>
+            </div>
+            <div flex="100">
+                <md-input-container class="md-block">
                     <label>Password</label>
-                    <input type="password"ng-model="_password" >
-                  </md-input-container>
-          </div>
+                    <input type="password" ng-model="loginModal._password">
+                </md-input-container>
+            </div>
         </md-dialog-content>
 
         <md-dialog-actions layout="row">
-            <md-button ng-click="loginModal.submit(_email, _password)" >
+            <md-button type="submit">
                 Login
             </md-button>
 
             <span flex></span>
-            <md-button ng-click="loginModal.cancel()" >
+            <md-button ng-click="loginModal.cancel()">
                 Annulla
             </md-button>
         </md-dialog-actions>

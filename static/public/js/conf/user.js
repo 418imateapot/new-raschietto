@@ -1,27 +1,30 @@
-userConfig.$inject = ['$rootScope', '$state', '$stateParams', 'userService', 'loginModal'];
+userConfig.$inject = ['$rootScope', '$state', 'userService', 'loginModal'];
 
 /**
  * Ogni volta che l'applicazione cambia stato, verifica se sia
  * necessaria l'autenticazione per accedere al nuovo stato.
  */
-export default function userConfig($rootScope, $state, $stateParams, userService, loginModal) {
+export default function userConfig($rootScope, $state, userService, loginModal) {
 
-    $rootScope.$on('$stateChangeSuccess', (event, toState, toParams) => {
+    $rootScope.$on('$stateChangeStart', (event, toState, toParams) => {
 
-        let needsAuthentication = ($stateParams.mode === "annotator");
+        let needsAuthentication = (toParams.mode === "annotator");
 
-        if (!needsAuthentication || userService.isLoggedIn) {
-            console.log('niente da fare');
+        if (!needsAuthentication || userService.isLoggedIn)
             return;
-        }
 
         event.preventDefault();
         loginModal(event)
-            .then(() => $state.go('.', {mode: 'annotator'}))
+            .then((user) => {
+                $rootScope.$broadcast('login', {state: toParams.mode, user: user});
+                $state.go(toState.name, toParams);
+            })
             .catch((err) => {
-                console.error(err);
-                return $state.go('.', {mode: 'reader'});
+                console.warn(err);
+                toParams.mode = 'reader';
+                $rootScope.$broadcast('login', {state: toParams.mode});
+                return $state.go(toState.name, toParams);
             });
-
     });
+
 }

@@ -19,6 +19,9 @@ export default function NavController($scope, $state, $stateParams, $mdDialog, $
     // Sincronizza l'intestazione della sidebar con la modalità attuale
     $scope.currentState = $stateParams;
     $scope.$watch('currentState', _showNavToolBar);
+    // Quando un login fallisce c'è bisogno di sincronizzare manualmente la
+    // barra, a quanto pare
+    $scope.$on('login', (ev, args) => _showNavToolBar({mode:args.state}));
 
 
     //////////////////////////
