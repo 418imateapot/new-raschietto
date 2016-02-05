@@ -1,4 +1,4 @@
-NavController.$inject = ['$scope', '$rootScope', '$state', '$stateParams', '$mdDialog', '$mdSidenav', 'userService', 'loginModal'];
+NavController.$inject = ['$scope', '$rootScope', '$state', '$stateParams', '$mdDialog', '$mdSidenav', 'annotationService', 'userService', 'loginModal'];
 /**
  * $mdSidenav e $mdDialog sono i servizi per interagire
  * rispettivamente con la barra laterale e la finestra modale
@@ -6,7 +6,7 @@ NavController.$inject = ['$scope', '$rootScope', '$state', '$stateParams', '$mdD
 export
 default
 
-function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdSidenav, userService, loginModal) {
+function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdSidenav, annotationService, userService, loginModal) {
     var model = this;
 
     model.open = () => $mdSidenav('left').toggle(); // Funzione da invocare per aprire il dialog.
@@ -16,6 +16,7 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
     model.modeIcon = '?'; // Icona della modalità
     model.openToolbox = _openToolbox;
     model.switchMode = _switchMode;
+    model.scrape = _scrape;
     model.about = _about;
 
     model.isLoggedIn = userService.isLoggedIn;
@@ -28,7 +29,9 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
     // Quando un login fallisce c'è bisogno di sincronizzare manualmente la
     // barra, a quanto pare
     $scope.$on('login', (ev, args) => {
-        _showNavToolBar({mode: args.state});
+        _showNavToolBar({
+            mode: args.state
+        });
         model.isLoggedIn = userService.isLoggedIn;
     });
 
@@ -99,20 +102,31 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
     function _login() {
         loginModal(event)
             .then((user) => {
-                $rootScope.$broadcast('login', {state: $stateParams.mode, user: user});
+                $rootScope.$broadcast('login', {
+                    state: $stateParams.mode,
+                    user: user
+                });
             })
             .catch((err) => {
                 console.warn(err);
-                $rootScope.$broadcast('login', {state: $stateParams.mode});
+                $rootScope.$broadcast('login', {
+                    state: $stateParams.mode
+                });
             });
     }
-    function _logout() {
- userService.logout();
- model.isLoggedIn = userService.isLoggedIn;
-   $rootScope.$broadcast('logout');
-   $state.go('.',{mode:'reader'});
-     _showNavToolBar({mode:'reader'});
 
+    function _scrape() {
+        annotationService.scrape($stateParams.doi)
+            .then(res => console.info(res))
+            .catch(err => console.warn(err));
+    }
+
+    function _logout() {
+        userService.logout();
+        model.isLoggedIn = userService.isLoggedIn;
+        $rootScope.$broadcast('logout');
+        $state.go('.', {mode: 'reader'});
+        _showNavToolBar({mode: 'reader'});
     }
 
 }

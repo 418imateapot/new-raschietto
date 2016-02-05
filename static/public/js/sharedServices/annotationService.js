@@ -3,7 +3,7 @@
  */
 // TODO: Cancella i rami else di debug
 
-annotationService.$inject = ['$http'];
+annotationService.$inject = ['$http', 'documentService'];
 
 /**
  * @namespace
@@ -14,14 +14,27 @@ annotationService.$inject = ['$http'];
  *
  * @todo Cancella i rami else di debug
  */
-export default function annotationService($http) {
+export default function annotationService($http, documentService) {
     var promise;
 
     return {
         query: query,
-        tidy: tidy
+        tidy: tidy,
+        scrape: scrape
     };
 
+
+    function scrape(doi) {
+        return documentService.findByDoi(documentService.decodeDoi(doi))
+            .then(result => {
+                let url = encodeURIComponent(result.url.value);
+                let request_url = `/api/scraper?url=${url}`;
+                return $http.get(request_url)
+                   .then(result => result)
+                   .catch(err => err);
+            })
+            .catch(err => err);
+    }
 
     /** 
      * @member
