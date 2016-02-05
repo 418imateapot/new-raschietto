@@ -5,12 +5,13 @@
 import metaArea from './metaArea/index.js';
 import mainArea from './mainArea/index.js';
 import docArea from'./docArea/index.js';
-import './loginModal/index.js';
+import login from './loginModal/index.js';
 import navigator from './navigator/index.js';
 import toolbox from './toolbox/index.js';
 import annotationCard from './annotationCard/index.js';
 import topbar from './topbar/index.js';
 import annotatedText from './annotatedText/index.js';
+import newAnnotation from './newAnnotation/index.js';
 
 export default angular.module('teapot.modules', [
     annotationCard,
@@ -19,7 +20,8 @@ export default angular.module('teapot.modules', [
     mainArea,
     navigator,
     topbar,
+    newAnnotation,
     annotatedText,
-    toolbox
-//    'teapot.modules.login'
+    toolbox,
+    login
 ]).name;

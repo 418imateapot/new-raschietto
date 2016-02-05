@@ -1,4 +1,4 @@
-<!-- filtri -->
+<!-- filtri 
 <md-content layout="row" layout-padding layout-wrap layout-align="center center">
     <md-checkbox ng-checked="metaArea.exists('hasTitle', metaArea.selected)" ng-click="metaArea.toggle('hasTitle', metaArea.selected)">
         Titolo
@@ -28,6 +28,7 @@
     </md-checkbox>
 </md-content>
 <hr>
+-->
 <!-- Cards con le annotazioni -->
 
 <!-- loading... -->
@@ -40,7 +41,7 @@
 layout-align="center start" layout-xs="column">
 
     <div ng-repeat="anno in metaArea.annotations" flex="50" flex-xs="100" layout="column"
-    ng-if="metaArea.exists(anno.type.value, metaArea.selected)">
+    ng-if="app.isFiltered(anno)">
         <annotation-card annotation="anno" flex/>
     </div>
 

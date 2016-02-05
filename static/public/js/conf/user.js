@@ -6,19 +6,21 @@ userConfig.$inject = ['$rootScope', '$state', '$stateParams', 'userService', 'lo
  */
 export default function userConfig($rootScope, $state, $stateParams, userService, loginModal) {
 
-    $rootScope.$on('$stateChangeStart', (event, toState, toParams) => {
+    $rootScope.$on('$stateChangeSuccess', (event, toState, toParams) => {
 
-        let autenticazione = ($stateParams.mode === "annotator");
+        let needsAuthentication = ($stateParams.mode === "annotator");
 
-        if (!autenticazione || userService.isLoggedIn)
+        if (!needsAuthentication || userService.isLoggedIn) {
+            console.log('niente da fare');
             return;
+        }
 
         event.preventDefault();
-        loginModal()
-            .then(() => $state.go(toState.name, toParams))
+        loginModal(event)
+            .then(() => $state.go('.', {mode: 'annotator'}))
             .catch((err) => {
                 console.error(err);
-                return $state.go('reader');
+                return $state.go('.', {mode: 'reader'});
             });
 
     });

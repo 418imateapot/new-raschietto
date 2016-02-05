@@ -29,12 +29,8 @@ export default class Statistica {
         let prefix = Statistica.PREFIXES[type];
         let suffix = xpath.match(/\/\w+\[?\d?\]??$/i); // recupera l'ultima parte dell'xpath originale
 
-
-        if(type === 'hasAuthor') console.log(suffix);
         if (!suffix)
             return null;
-
-        //console.log(prefix+suffix[0]);
 
         return prefix + suffix[0];
     }

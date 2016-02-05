@@ -1,26 +1,39 @@
+loginModal.$inject = ['$mdDialog', '$rootScope', 'userService'];
+
+export
+default
+function loginModal($mdDialog, $rootScope, userService) {
+
+    return function(event) {
+        let promise = $mdDialog.show({
+                controller: DialogController,
+                controllerAs: 'loginModal',
+                templateUrl: 'js/modules/loginModal/loginView.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose: true
+            });
+        return promise;
+    };
 
 
-loginModal.$inject = ['$modal', '$rootScope'];
+    function DialogController($mdDialog) {
+        const dialog = this;
 
-/**
- * @namespace
- */
-export default function loginModal($modal, $rootScope) {
+        dialog.cancel = function() {
+            $mdDialog.cancel("cancelled");
+        };
 
-    /**
-     * @inner
-     */
+        dialog.submit = function(email, password) {
+            var user = userService.login(email, password);
+            $mdDialog.hide(user);
+        };
+    }
+
+
     function assignCurrentUser(user) {
         $rootScope.currentUser = user;
         return user;
     }
 
-    return function() {
-        var istance = $modal.open({
-            templateUrl: 'views/loginView.html',
-            controller: 'LoginModalController',
-            controllerAs: 'loginModal'
-        });
-        return istance.result.then(assignCurrentUser);
-    };
 }

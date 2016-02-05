@@ -1,21 +1,23 @@
-export default class userService {
+userService.$inject = ['$cookies'];
 
-    constructor($cookies) {
-        this.cookies = $cookies;
-        this.isLoggedIn = false;
-        this.userName = '';
-    }
+export default function userService($cookies) {
 
-    storeLastDocument(doi) {
+    const service = this;
+
+    service.isLoggedIn = false;
+    service.userName = '';
+
+
+    service.storeLastDocument = function(doi) {
         //TODO implementation
         console.info("Saving last open document");
-    }
+    };
 
     /**
      * Esegue il login e setta un cookie
      * @return {object} Un dizionario con le credenziali di accesso
      */
-    login(email, password) {
+    service.login = function(email, password) {
 
         var credenziali = {
             email: email,
@@ -24,8 +26,6 @@ export default class userService {
 
         $cookies.put('credenziali', JSON.stringify(credenziali));
         return email;
-    }
+    };
 
 }
-
-userService.$inject = ['$cookies'];

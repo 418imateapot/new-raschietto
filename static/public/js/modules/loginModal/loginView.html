@@ -1,9 +1,17 @@
-<div class="">
-    <form ng-submit="loginModal.submit(_email,_password)">
-        <input type="email" ng-model="_email" />
-        <input type="password" ng-model="_password" />
-        <button>Submit</button>
+<md-dialog ng-cloak>
+    <form>
+        <md-dialog-content>
+            <input type="email" ng-model="_email" autofocus/>
+            <input type="password" ng-model="_password" />
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="loginModal.submit(_email, _password)">
+                Login
+            </md-button>
+            <span flex></span>
+            <md-button ng-click="loginModal.cancel()">
+                Annulla
+            </md-button>
+        </md-dialog-actions>
     </form>
-    <button ng-click="loginModal.cancel()">Cancel</button>
-
-</div>
+</md-dialog>

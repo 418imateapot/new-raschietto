@@ -2,7 +2,7 @@ export default function annotationCardDirective ($parse) {
     return {
         restrict: 'AE',
         templateUrl: 'js/modules/annotationCard/annotationCardView.html',
-        scope: {
+        bindToController: {
             annotation: '='
         },
         controller: 'AnnotationCardController',

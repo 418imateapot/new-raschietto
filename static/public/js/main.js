@@ -36,6 +36,6 @@ var app = angular.module('teapot', [
 
 /* Registra le ROUTE */
 app.config(conf.router);
-//app.run(conf.auth);
+app.run(conf.user);
 app.controller('ApplicationController', ApplicationController);
 app.service('appService', appService);
