@@ -5,6 +5,7 @@
 #
 
 import re
+from json import JSONEncoder
 from lxml import html
 import httplib, json
 from urlparse import urlparse
@@ -27,7 +28,7 @@ def _scrape_dlib(url_string):
     url = url_string
 
     result = {"title": title, "doi": doi, "authors": authors, "date": date, "url": url}
-    return result
+    return JSONEncoder().encode(result)
 
 
 def _scrape_statistica(url_string):
@@ -47,7 +48,7 @@ def _scrape_statistica(url_string):
     url = url_string
 
     result = {"title": title, "doi": doi, "authors": authors, "date": date, "url": url}
-    return result
+    return JSONEncoder().encode(result)
 
 
 def scrapeit(url_string):

@@ -5,6 +5,7 @@ Gestisce il routing per l'api server-side di raschietto
 from flask import request, Response
 
 from .boris.documents import get_doc
+from .boris.remoteScraping import scrapeit
 from . import app
 
 
@@ -16,12 +17,10 @@ def get_document():
     return get_doc(doc_url)
 
 
-@app.route('/annotations', methods=['GET'])
-def get_annotations():
+@app.route('/scraper', methods=['GET'])
+def scrape_document():
     doc_url = request.args.get('url')
-    # CHIAMA LO SCRAPER
-    # RESTITUISCI RISULTATO
-    return "<h1>Nulla da vedere</h1>"
+    return scrapeit(doc_url)
 
 
 @app.route('/', defaults={'path': ''})
