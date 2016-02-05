@@ -1,9 +1,12 @@
-NavController.$inject = ['$scope', '$state', '$stateParams', '$mdDialog', '$mdSidenav'];
+NavController.$inject = ['$scope', '$rootScope', '$state', '$stateParams', '$mdDialog', '$mdSidenav', 'userService', 'loginModal'];
 /**
  * $mdSidenav e $mdDialog sono i servizi per interagire
  * rispettivamente con la barra laterale e la finestra modale
  */
-export default function NavController($scope, $state, $stateParams, $mdDialog, $mdSidenav) {
+export
+default
+
+function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdSidenav, userService, loginModal) {
     var model = this;
 
     model.open = () => $mdSidenav('left').toggle(); // Funzione da invocare per aprire il dialog.
@@ -15,13 +18,19 @@ export default function NavController($scope, $state, $stateParams, $mdDialog, $
     model.switchMode = _switchMode;
     model.about = _about;
 
+    model.isLoggedIn = userService.isLoggedIn;
+    model.login = _login;
+    model.logout = _logout;
 
     // Sincronizza l'intestazione della sidebar con la modalità attuale
     $scope.currentState = $stateParams;
     $scope.$watch('currentState', _showNavToolBar);
     // Quando un login fallisce c'è bisogno di sincronizzare manualmente la
     // barra, a quanto pare
-    $scope.$on('login', (ev, args) => _showNavToolBar({mode:args.state}));
+    $scope.$on('login', (ev, args) => {
+        _showNavToolBar({mode: args.state});
+        model.isLoggedIn = userService.isLoggedIn;
+    });
 
 
     //////////////////////////
@@ -62,11 +71,11 @@ export default function NavController($scope, $state, $stateParams, $mdDialog, $
      */
     function _about(ev) {
         $mdDialog.show({
-                template: '<iframe width="512" height="384" src="https://www.youtube.com/embed/ykwqXuMPsoc" frameborder="0" allowfullscreen></iframe>',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true
-            });
+            template: '<iframe width="512" height="384" src="https://www.youtube.com/embed/ykwqXuMPsoc" frameborder="0" allowfullscreen></iframe>',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true
+        });
     }
 
     /**
@@ -86,5 +95,17 @@ export default function NavController($scope, $state, $stateParams, $mdDialog, $
             model.modeIcon = 'import_contacts';
         }
     }
+
+    function _login() {
+        loginModal(event)
+            .then((user) => {
+                $rootScope.$broadcast('login', {state: $stateParams.mode, user: user});
+            })
+            .catch((err) => {
+                console.warn(err);
+                $rootScope.$broadcast('login', {state: $stateParams.mode});
+            });
+    }
+    function _logout() {}
 
 }

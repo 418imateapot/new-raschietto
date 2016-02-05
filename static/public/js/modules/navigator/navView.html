@@ -51,6 +51,17 @@
                 <md-icon class="material-icons">favorite_border</md-icon>
             </md-list-item>
             <md-divider></md-divider>
+            <md-list-item ng-show="navigator.isLoggedIn" ng-click="navigator.logout()">
+                Logout
+                <md-icon class="material-icons">account_circle</md-icon>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item ng-hide="navigator.isLoggedIn" ng-click="navigator.login()">
+                Login
+                <md-icon class="material-icons">account_circle</md-icon>
+            </md-list-item>
+            <md-divider></md-divider>
+
         </md-list>
 
 
