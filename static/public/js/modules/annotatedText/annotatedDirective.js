@@ -22,6 +22,8 @@ export default function annotatedText() {
             .substring(
                 annotationInfo.minStartRange,
                 annotationInfo.maxEndRange);
+        
+        console.log(annotationInfo);
 
         /* Thanks SO!
          * https://stackoverflow.com/questions/16090487/find-a-string-of-text-in-an-element-and-wrap-some-span-tags-round-it

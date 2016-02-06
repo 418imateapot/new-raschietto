@@ -2,14 +2,14 @@ export default class Dlib {
 
     static get PREFIXES() {
         return {
-            'hasTitle': '//*[@id="document-view"]/span',
-            'hasAuthor': '//*[@id="document-view"]/span',
-            'hasPublicationYear':  '//*[@id="document-view"]/span',
-            'hasDOI': '//*[@id="document-view"]/span',
-            'hasURL': '//*[@id="document-view"]/span',
-            'hasComment': '//*[@id="document-view"]/span',
-            'denotesRethoric': '//*[@id="document-view"]/span',
-            'cites': '//*[@id="document-view"]/span'
+            'hasTitle': '//*[@id="document-view"]/td',
+            'hasAuthor': '//*[@id="document-view"]/td',
+            'hasPublicationYear':  '//*[@id="document-view"]/td',
+            'hasDOI': '//*[@id="document-view"]/td',
+            'hasURL': '//*[@id="document-view"]/td',
+            'hasComment': '//*[@id="document-view"]/td',
+            'denotesRethoric': '//*[@id="document-view"]/td',
+            'cites': '//*[@id="document-view"]/td'
         };
     }
 
@@ -27,16 +27,22 @@ export default class Dlib {
             return null;
 
         xpath = xpath.replace(/\/text.*$/, ''); // Elimina estensioni strane
+        xpath = xpath.replace(/h\[32\]/, 'h3[2]');      // Hack orrendo
+
+        let suffix = xpath.slice(xpath.lastIndexOf('td'));
+        suffix = suffix.slice(suffix.indexOf('/'));
+
         let prefix = Dlib.PREFIXES[type];
-        let suffix = xpath.match(/\/\w+\[?\d?\]??$/i); // recupera l'ultima parte dell'xpath originale
+        //
+        //let suffix = xpath.match(/\/\w+\[?\d?\]??$/i); // recupera l'ultima parte dell'xpath originale
 
 
-        if (!suffix)
+        if (!suffix) {
             return null;
+        }
+        //console.log(type, xpath, prefix+suffix);
 
-        if (type==='cites') console.info(prefix+suffix[0]);
-
-        return prefix + suffix[0];
+        return prefix + suffix;
     }
 
 }

@@ -36,7 +36,7 @@ export default function annotationService($http, documentService) {
             .catch(err => err);
     }
 
-    /** 
+    /**
      * @member
      * Restituisce la promessa del risultato di una query gigante
      * sul documento passato come arg.
@@ -49,7 +49,8 @@ export default function annotationService($http, documentService) {
         var expression = url.replace(/\.html$/, '')
                             .replace(/$/, '_ver1');
         var encodedQuery = encodeURIComponent(_build_query(expression));
-        var endpoint = 'http://tweb2015.cs.unibo.it:8080/data';
+        //var endpoint = 'http://tweb2015.cs.unibo.it:8080/data';
+        var endpoint = 'http://localhost:3030/data';
         var opts = 'format=json&callback=JSON_CALLBACK';
         var url_string = `${endpoint}?query=${encodedQuery}&${opts}`;
         promise = $http.jsonp(url_string)
@@ -68,6 +69,50 @@ export default function annotationService($http, documentService) {
         return promise;
     }
 
+
+    function _genLabel(type) {
+        switch(type) {
+            case 'hasTitle':
+                return 'Titolo';
+            case 'hasPublicationYear':
+                return 'Anno di pubblicazione';
+            case 'hasAuthor':
+                return 'Autore';
+            case 'hasURL':
+                return 'URL';
+            case 'hasDOI':
+                return 'DOI';
+            case 'hasComment':
+                return 'Commento';
+            case 'denotesRethoric':
+                return 'Funzione retorica';
+            case 'cites':
+                return 'Citazione';
+        }
+        return null;
+    }
+
+    function _genType(label) {
+            if (/tit/i.test(label)) {
+                return 'hasTitle';
+            } else if (/pub/i.test(label)) {
+                return 'hasPublicationYear';
+            } else if (/aut/i.test(label)) {
+                return 'hasAuthor';
+            } else if (/URL/i.test(label)) {
+                return 'hasURL';
+            } else if (/DOI/i.test(label)) {
+                return 'hasDOI';
+            } else if (/comment/i.test(label)) {
+                return 'hasComment';
+            } else if (/ret/i.test(label)) {
+                return 'denotesRethoric';
+            } else if (/cit/i.test(label)) {
+                return 'cites';
+            }
+            return null;
+    }
+
     /**
      * @inner
      * Convalida i risultati e li riorganizza
@@ -83,6 +128,16 @@ export default function annotationService($http, documentService) {
             for (let i in items) {
                 let keep = false;
                 let elem = items[i];
+                // Genera elem.type se non esiste
+                if (!elem.type && !elem.typeLabel) {
+                    continue;
+                } else if (!elem.type) {
+                    let type = _genType(elem.typeLabel.value);
+                    elem.type = {value: type};
+                } else if (!elem.typeLabel) {
+                    let label = _genLabel(elem.type.value);
+                    elem.typeLabel = {value: label};
+                }
                 let type = elem.type.value;
                 switch (type) {
                     case 'hasTitle':
@@ -132,7 +187,7 @@ export default function annotationService($http, documentService) {
 
     function _build_query(expr) {
         // Usa i nuovi template string di ES6
-        return `
+            return `
         PREFIX oa: <http://www.w3.org/ns/oa#>
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX frbr: <http://purl.org/vocab/frbr/core#>
@@ -140,12 +195,13 @@ export default function annotationService($http, documentService) {
         PREFIX foaf: <http://xmlns.com/foaf/0.1/>
         PREFIX raschietto: <http://vitali.web.cs.unibo.it/raschietto/>
 
-        SELECT ?type ?provenance ?groupName ?predicate ?object ?label ?innerObject ?fragment ?start ?end ?src
+        SELECT ?type ?typeLabel ?provenance ?predicate ?object ?objectLabel ?bodyLabel ?innerObject ?fragment ?start ?end ?src
         WHERE {
             ?x a oa:Annotation;
-                raschietto:type ?type;
                 oa:annotatedBy ?provenance;
                 oa:hasBody ?body.
+            OPTIONAL {?x rdfs:label ?typeLabel.}
+            OPTIONAL {?x raschietto:type ?type;}
             ?body rdf:subject <${expr}>;
                 rdf:predicate ?predicate;
                 rdf:object ?object.

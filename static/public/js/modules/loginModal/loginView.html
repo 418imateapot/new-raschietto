@@ -1,5 +1,12 @@
 <md-dialog ng-cloak>
-    <form layout="column" ng-submit="loginModal.submit(loginModal._email, loginModal._password)">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>
+          <span>Login</span>
+        </h2>
+        </div>
+    </md-toolbar>
+    <form layout="column" layout-padding ng-submit="loginModal.submit(loginModal._email, loginModal._password)">
         <md-dialog-content layout="column">
 
             <div flex="100">

@@ -172,8 +172,6 @@ k = {
     }
 }
 
-
-
 print generateGraphFromJSON(k)
 #print generateGraphFromJSON(j)
 

@@ -15,8 +15,10 @@ export default function NewAnnotationController($mdDialog, $stateParams) {
     function _showModal(ev) {
         $mdDialog.show({
                 controller: DialogController,
+                controllerAs: 'dialog',
                 templateUrl: 'js/modules/newAnnotation/newAnnotationModal.tmpl.html',
                 parent: angular.element(document.body),
+                fullscreen: true,
                 targetEvent: ev,
                 clickOutsideToClose: true
             })
@@ -30,6 +32,7 @@ export default function NewAnnotationController($mdDialog, $stateParams) {
     function DialogController() {
 
         const dialog = this;
+        dialog.showFields = (type) => type === dialog.typeSelected;
 
     }
 
