@@ -10,9 +10,6 @@ import unicodedata
 # cites oggetto: resource con {id, label}
 ## gli altri tipi di annotazione hanno come oggetto un literal (cioè nel json c'è quella come chiave)
 
-#### gli statement con work, expression e item devono esserci anche per gli articoli citati?
-
-
 def generateGraphFromJSON(jsonAnn):
     """
     Data un'annotazione in formato JSON genera i corrispondenti statement RDF.
@@ -22,6 +19,7 @@ def generateGraphFromJSON(jsonAnn):
     FABIO = Namespace("http://purl.org/spar/fabio/")
     FOAF = Namespace("http://xmlns.com/foaf/0.1/")
     OA = Namespace("http://www.w3.org/ns/oa#")
+    RSCH = Namespace("http://vitali.web.cs.unibo.it/raschietto/")
     SCHEMA = Namespace("http://schema.org/")
     SKOS = Namespace("http://www.w3.org/2004/02/skos/core#")
 
@@ -48,6 +46,7 @@ def generateGraphFromJSON(jsonAnn):
         target = BNode()
         fragmentSel = BNode()
 
+        annType = Literal(annotation['type'])
         annLabel = Literal(annotation['label'])
         bodyLabel = Literal(annotation['body']['label'])
 
@@ -55,6 +54,7 @@ def generateGraphFromJSON(jsonAnn):
         bodyPredicate = URIRef(annotation['body']['predicate'])
 
         g.add((ann, RDF.type, OA.Annotation))
+        g.add((ann, RSCH.type, annType))
         g.add((ann, RDFS.label, annLabel))
         g.add((ann, OA.hasTarget, target))  # inizia target
 
@@ -134,31 +134,31 @@ j = {
 k = {
     "annotations": [
         {
-            "type": "cites" ,
-            "label": "Citazione" ,
+            "type": "cites",
+            "label": "Citazione",
             "body": {
-                "label": "Questo articolo cita ‘Institutional repositories, open access, and scholarly communication: A study of conflicting paradigms.’" ,
-                "subject": "dlib:03moulaison_ver1" ,
-                "predicate": "cito:cites" ,
+                "label": "Questo articolo cita ‘Institutional repositories, open access, and scholarly communication: A study of conflicting paradigms.’",
+                "subject": "dlib:03moulaison_ver1",
+                "predicate": "cito:cites",
                 "resource": {
-                    "id": "dlib:03moulaison_ver1_cited_3" ,
+                    "id": "dlib:03moulaison_ver1_cited_3",
                     "label": "[3] Cullen, R., & Chawner, B. (2011). Institutional repositories, open access, and scholarly communication: A study of conflicting paradigms. The Journal of Academic Librarianship, 37(6), 460-470. http://doi.org/10.1016/j.acalib.2011.07.002"
                 }
             }
         },
         {
-            "type": "hasTitle" ,
-            "label": "Titolo" ,
+            "type": "hasTitle",
+            "label": "Titolo",
             "body": {
                 "label": "il titolo è blabla",
-                "subject": "dlib:03moulaison_ver1_cited_3" ,
-                "predicate": "dcterms:title" ,
+                "subject": "dlib:03moulaison_ver1_cited_3",
+                "predicate": "dcterms:title",
                 "literal": "Institutional repositories, open access, and scholarly communication: A study of conflicting paradigms"
             }
         }
     ],
     "target": {
-        "source": "dlib:03moulaison.html" ,
+        "source": "dlib:03moulaison.html",
         "id": "form1_table3_tbody1_tr1_td1_table5_tbody1_tr1_td2_p38",
         "start": 0,
         "end": 21000
@@ -172,10 +172,36 @@ k = {
     }
 }
 
-
+r = {
+    "annotations": [
+    {
+        "type": "denotesRhetoric" ,
+        "label": "retorica",
+        "body": {
+            "label": "Introduzione" ,
+            "subject": "dlib:03moulaison_ver1#form1_table3_tbody1_tr1_td1_table5_tbody1_tr1_td2_h34-0-12",
+            "predicate": "sem:denotes",
+            "resource": "deo:Introduction"
+        }
+    }],
+    "target": {
+        "source": "dlib:03moulaison.html" ,
+        "id": "form1_table3_tbody1_tr1_td1_table5_tbody1_tr1_td2_h34",
+        "start": 0,
+        "end": 12
+    } ,
+    "provenance": {
+        "author": {
+            "name": "Pinco Pallino" ,
+            "email": "pinco.pallino@studio.unibo.it" 
+        } ,
+        "time": "2015-03-12T15:46"
+    }
+}
 
 print generateGraphFromJSON(k)
 #print generateGraphFromJSON(j)
+#print generateGraphFromJSON(r)
 
 
 
