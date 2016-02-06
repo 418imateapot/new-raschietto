@@ -1,1 +1,88 @@
-<p> viva la pappa</p>
+<md-dialog class="md-dialog-fullscreen" id="newAnnoModal" ng-cloak>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>
+          <span>Nuova annotazione</span>
+        </h2>
+        </div>
+    </md-toolbar>
+    <md-content layout-padding>
+
+        <form layout="column">
+            <!-- select -->
+
+            <md-input-container flex="100">
+                <label>Tipo di annotazione</label>
+                <md-select ng-model="dialog.typeSelected">
+                    <md-option value="hasTitle">Titolo</md-option>
+                    <md-option value="hasAuthor">Autore</md-option>
+                    <md-option value="hasPublicationYear">Anno di pubblicazione</md-option>
+                    <md-option value="hasDOI">DOI</md-option>
+                    <md-option value="hasURL">URL</md-option>
+                    <md-option value="hasComment">Commento</md-option>
+                    <md-option value="denotesRethoric">Retorica</md-option>
+                    <md-option value="cites">Citazione</md-option>
+                </md-select>
+            </md-input-container>
+
+            <!-- form collection -->
+
+            <div layout="row">
+                <!--title-->
+                <md-input-container ng-show="dialog.showFields('hasTitle')">
+                    <label>Titolo</label>
+                    <input>
+                </md-input-container>
+
+                <!--author-->
+                <span ng-show="dialog.showFields('hasAuthor')">
+                    <md-input-container>
+                        <label>Nome</label>
+                        <input/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Cognome</label>
+                        <input/>
+                    </md-input-container>
+                </span>
+
+                <!--pubYear-->
+                <md-input-container ng-show="dialog.showFields('hasPublicationYear')">
+                    <label>Anno di Pubblicazione</label>
+                    <input>
+                </md-input-container>
+
+                <!--doi-->
+                <md-input-container ng-show="dialog.showFields('hasDOI')">
+                    <label>DOI</label>
+                    <input>
+                </md-input-container>
+
+                <!--url-->
+                <md-input-container ng-show="dialog.showFields('hasURL')">
+                    <label>URL</label>
+                    <input>
+                </md-input-container>
+
+                <!--comment-->
+                <md-input-container ng-show="dialog.showFields('hasComment')">
+                    <label>Commento</label>
+                    <textarea rows="5" md-select-on-focus></textarea>
+                </md-input-container>
+
+                <!--rethoric-->
+                <md-input-container ng-show="dialog.showFields('denotesRethoric')">
+                    <label>Funzione retorica</label>
+                    <p>radio!</p>
+                </md-input-container>
+
+                <!--cites-->
+                <md-input-container ng-show="dialog.showFields('cites')">
+                    <h3>articolo citato</h3>
+                </md-input-container>
+            </div>
+
+        </form>
+
+    </md-content>
+</md-dialog>

@@ -33,7 +33,13 @@ function AnnotationCardController($sanitize) {
             case 'hasAuthor':
                 model.icon = 'Au';
                 model.header = 'Autore del documento';
-                model.text = model.annotation.label.value;
+                if (model.annotation.bodyLabel) {
+                    model.text = model.annotation.bodyLabel.value;
+                } else if(model.annotation.objectLabel){
+                    model.text = model.annotation.objectLabel.value;
+                } else {
+                    model.text = model.annotation.object.value;
+                }
                 break;
             case 'hasURL':
                 model.icon = '&nbsp;U';

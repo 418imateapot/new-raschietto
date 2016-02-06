@@ -54,11 +54,11 @@ def _dlib_get(url_string):
     my_page = html.fromstring(body)
 
     title = my_page.xpath('//h3[@class="blue-space"][2]')
-    full_content = my_page.xpath('//table[3]//table[5]//table[1]//td[2]/*')
+    full_content = my_page.xpath('/html/body/form/table[3]//tr/td/table[5]//tr/td/table[1]//tr/td[2]')[0]
+    # full_content = my_page.xpath('//table[3]//table[5]//table[1]//td[2]/*')
     doi = my_page.xpath('/html/head/meta[@name="DOI"]/@content')
 
-    full_content = ''.join(
-        [etree.tostring(fix_links(el, url_string)) for el in full_content])
+    full_content = etree.tostring(fix_links(full_content, url_string))
 
     result = {
         'title': title[0].text_content(),
