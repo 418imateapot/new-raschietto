@@ -129,7 +129,6 @@ export default function annotationService($http, documentService) {
                 let keep = false;
                 let elem = items[i];
                 if (!elem.type) continue;
-                /*
                 // Genera elem.type se non esiste
                 if (!elem.type && !elem.typeLabel) {
                     continue;
@@ -140,7 +139,6 @@ export default function annotationService($http, documentService) {
                     let label = _genLabel(elem.type.value);
                     elem.typeLabel = {value: label};
                 }
-                */
                 let type = elem.type.value;
                 switch (type) {
                     case 'hasTitle':
@@ -201,8 +199,8 @@ SELECT ?type ?typeLabel ?provenance ?predicate ?object ?objectLabel ?bodyLabel ?
 WHERE {
     ?x a oa:Annotation;
         oa:annotatedBy ?provenance;
-        oa:hasBody ?body;
-  	raschietto:type ?type.
+        oa:hasBody ?body.
+    OPTIONAL{?x raschietto:type ?type.}
     OPTIONAL {?x rdfs:label ?typeLabel.}
     ?body rdf:subject <${expr}>;
         rdf:predicate ?predicate;
