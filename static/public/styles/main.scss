@@ -50,9 +50,23 @@ h2.nav-mode-title {
     position: relative;
     top: 4em;
 }
+
 main-area {
     word-wrap: break-word;
     text-align: justify;
+
+    // Per le stupide immagini enormi
+    img{
+        max-width: 100%;
+        height: auto;
+        width: auto\9; /* ie8 */
+    }
+    // Per le stupide tabelle giganti
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
 }
 .teapot-sidenav {
     position: fixed;

@@ -38,7 +38,8 @@ function AnnotationCardController($sanitize) {
                 } else if(model.annotation.objectLabel){
                     model.text = model.annotation.objectLabel.value;
                 } else {
-                    model.text = model.annotation.object.value;
+                    // Meglio l'abbreviazione che niente
+                    model.text = model.annotation.object.value.split('/').pop();
                 }
                 break;
             case 'hasURL':

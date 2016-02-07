@@ -29,10 +29,11 @@ export default function annotatedText() {
          * https://stackoverflow.com/questions/16090487/find-a-string-of-text-in-an-element-and-wrap-some-span-tags-round-it
         */
         el.html(function(_, html) {
-            return html.replace(substring,
+            return el.text().replace(substring,
                 `<span class="annotation anno-${annoType}">${substring}</span>`
             );
         });
+        console.log(substring);
         // Non posso usare ng-click se no mi tocca
         // ricompilare la direttiva e succedono
         // Brutte Cose (R)
