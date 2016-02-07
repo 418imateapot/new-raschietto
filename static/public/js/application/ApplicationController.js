@@ -1,6 +1,6 @@
-ApplicationController.$inject = ['$scope', '$stateParams', '$compile', 'documentService', 'annotationService', 'userService', 'appService'];
+ApplicationController.$inject = ['$scope', '$stateParams', '$compile', '$mdSidenav', 'documentService', 'annotationService', 'userService', 'appService'];
 
-export default function ApplicationController($scope, $stateParams, $compile, documentService, annotationService, userService, appService) {
+export default function ApplicationController($scope, $stateParams, $compile, $mdSidenav, documentService, annotationService, userService, appService) {
 
     let model = this;
 
@@ -12,6 +12,7 @@ export default function ApplicationController($scope, $stateParams, $compile, do
     model.annotationsLoading = false;
     model.retrieveAnnotations = _getAnnos;
     model.highlight = _highlight;
+    model.openNav = (ev) => $mdSidenav('left').open();
 
     //model.showTabDialog = () => {};
 

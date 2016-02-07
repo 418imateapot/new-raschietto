@@ -23,7 +23,7 @@ export default function annotatedText() {
                 annotationInfo.minStartRange,
                 annotationInfo.maxEndRange);
         
-        console.log(annotationInfo);
+        //console.log(annotationInfo);
 
         /* Thanks SO!
          * https://stackoverflow.com/questions/16090487/find-a-string-of-text-in-an-element-and-wrap-some-span-tags-round-it
@@ -33,7 +33,6 @@ export default function annotatedText() {
                 `<span class="annotation anno-${annoType}">${substring}</span>`
             );
         });
-        console.log(substring);
         // Non posso usare ng-click se no mi tocca
         // ricompilare la direttiva e succedono
         // Brutte Cose (R)

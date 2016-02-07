@@ -34,6 +34,17 @@ export default function NewAnnotationController($mdDialog, $stateParams) {
         const dialog = this;
         dialog.showFields = (type) => type === dialog.typeSelected;
 
+        dialog.annotation = {
+            hasTitle: {},
+            hasAuthor: {},
+            hasPublicationYear: {},
+            hasURL: {},
+            hasDOI: {},
+            hasComment: {},
+            denotesRethoric: {},
+            cites: {}
+        };
+
     }
 
 }

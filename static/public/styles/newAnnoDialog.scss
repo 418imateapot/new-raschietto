@@ -1,6 +1,17 @@
 @media (min-width: 600px) {
-    #newAnnoModal {
+    .newAnnoModal {
         min-width: 80%;
         min-height: 80%;
     }
+}
+
+.newAnnoForm {
+    width: 100%;
+    height: 100%;
+}
+
+.newAnnoButtons {
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
 }

@@ -1,12 +1,12 @@
-<md-dialog class="md-dialog-fullscreen" id="newAnnoModal" ng-cloak>
-    <md-toolbar>
+<md-dialog class="md-dialog-fullscreen newAnnoModal" ng-cloak>
+    <md-toolbar class="md-toolbar teapot-tb-secondary">
         <div class="md-toolbar-tools">
             <h2>
           <span>Nuova annotazione</span>
         </h2>
         </div>
     </md-toolbar>
-    <md-content layout-padding>
+    <md-dialog-content layout-padding>
 
         <form layout="column">
             <!-- select -->
@@ -65,9 +65,11 @@
                 </md-input-container>
 
                 <!--comment-->
-                <md-input-container ng-show="dialog.showFields('hasComment')">
+                <md-input-container class="md-block" ng-show="dialog.showFields('hasComment')">
                     <label>Commento</label>
-                    <textarea rows="5" md-select-on-focus></textarea>
+                    <textarea ng-model="dialog.annotation.hasComment.comment"
+                        rows="5" md-select-on-focus>
+                    </textarea>
                 </md-input-container>
 
                 <!--rethoric-->
@@ -82,7 +84,13 @@
                 </md-input-container>
             </div>
 
+            <md-dialog-actions class="newAnnoButtons" layout="row" layout-align="end end">
+                <hr/>
+                <md-button class="md-raised" type="submit">Salva</md-button>
+                <md-button class="md-raised" type="reset">Annulla</md-button>
+            </md-dialog-actions>
+
         </form>
 
-    </md-content>
+    </md-dialog-content>
 </md-dialog>

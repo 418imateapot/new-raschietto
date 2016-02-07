@@ -30,6 +30,10 @@ $myBlack: rgb(34, 34, 34);
     &.teapot-toolbar {
         background-color: $myBlack;
     }
+
+    &.teapot-tb-secondary {
+        background-color: $myBlue;
+    }
 }
 
 /* Il titolo della sidenav! */

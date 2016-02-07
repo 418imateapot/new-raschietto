@@ -35,7 +35,7 @@
 <body layout="row" ng-controller="ApplicationController as app" ng-cloak class="relative"
 role="main">
     <teapot-navigator></teapot-navigator>
-    <span layout="column" layout-fill>
+    <span layout="column" layout-fill md-swipe-right="app.openNav()">
         <top-bar></top-bar>
         <md-content flex>
             <ui-view/>
