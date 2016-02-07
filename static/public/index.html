@@ -35,11 +35,12 @@
 <body layout="row" ng-controller="ApplicationController as app" ng-cloak class="relative"
 role="main">
     <teapot-navigator></teapot-navigator>
-    <md-content layout="column" layout-fill>
+    <span layout="column" layout-fill>
         <top-bar></top-bar>
-        <span ui-view/>
-    </md-content>
-    </div>
+        <md-content flex>
+            <ui-view/>
+        </md-content>
+    </span>
 
     <!-- Al momento di uploadare ci basta solo un unico bundle
     <script src="./bundle.js"></script>

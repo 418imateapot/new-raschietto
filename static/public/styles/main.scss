@@ -46,9 +46,10 @@ h2.nav-mode-title {
 .md-button.teapot-primary {
     background-color: $myBlue;
 }
-#main-content {
-    position: relative;
-    top: 4em;
+#document-view {
+    //position: relative;
+    //top: 4em;
+    margin-top: 2em;
 }
 
 main-area {
