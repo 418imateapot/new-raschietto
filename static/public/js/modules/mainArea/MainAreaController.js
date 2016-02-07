@@ -9,6 +9,7 @@ export default function MainAreaController($scope, $state, $sanitize, documentSe
 
     model.loading = true; /** Usato per l'animazione */
     /** model.content ->  Il contenuto del documento HTML passato da appctrl */
+    model.url = ''; // L'url del documento caricato
     
     $scope.currentState = $state;
     $scope.$watch('currentState', function(newState, oldState) {
@@ -22,6 +23,7 @@ export default function MainAreaController($scope, $state, $sanitize, documentSe
         doi = documentService.decodeDoi(doi);
         documentService.findByDoi(doi).then((doc) => {
             if (!doc) return; // Shit happens...
+            model.url = doc.url.value;
             change_document('none', {
                 'doc_url': doc.url.value,
                 'doc_doi': doc.doi.value

@@ -8,7 +8,7 @@
     </md-toolbar>
     <md-dialog-content layout-padding>
 
-        <form layout="column">
+        <form layout="column" ng-submit="dialog.submit()">
             <!-- select -->
 
             <md-input-container flex="100">
@@ -31,7 +31,7 @@
                 <!--title-->
                 <md-input-container ng-show="dialog.showFields('hasTitle')">
                     <label>Titolo</label>
-                    <input>
+                    <input ng-model="dialog.annotation.hasTitle.title">
                 </md-input-container>
 
                 <!--author-->
@@ -49,40 +49,80 @@
                 <!--pubYear-->
                 <md-input-container ng-show="dialog.showFields('hasPublicationYear')">
                     <label>Anno di Pubblicazione</label>
-                    <input>
+                    <input ng-model="dialog.annotation.hasPublicationYear.year">
                 </md-input-container>
 
                 <!--doi-->
                 <md-input-container ng-show="dialog.showFields('hasDOI')">
                     <label>DOI</label>
-                    <input>
+                    <input ng-model="dialog.annotation.hasDOI.doi">
                 </md-input-container>
 
                 <!--url-->
                 <md-input-container ng-show="dialog.showFields('hasURL')">
                     <label>URL</label>
-                    <input>
+                    <input ng-model="dialog.annotation.hasURL.url">
                 </md-input-container>
 
                 <!--comment-->
                 <md-input-container class="md-block" ng-show="dialog.showFields('hasComment')">
-                    <label>Commento</label>
-                    <textarea ng-model="dialog.annotation.hasComment.comment"
-                        rows="5" md-select-on-focus>
+                    <label ng-show="dialog.fragment">Commento</label>
+                    <textarea ng-show="dialog.fragment" ng-model="dialog.annotation.hasComment.comment"
+                    rows="5" md-select-on-focus>
                     </textarea>
+                    <md-content ng-hide="dialog.fragment">Attenzione: questo tipo di annotazione richiede una selezione
+                        testuale.
+                    </md-content>
                 </md-input-container>
 
                 <!--rethoric-->
                 <md-input-container ng-show="dialog.showFields('denotesRethoric')">
-                    <label>Funzione retorica</label>
-                    <p>radio!</p>
+                    <h3 ng-show="dialog.fragment">Funzione retorica:</h3>
+                    <md-radio-group ng-show="dialog.fragment" ng-model="dialog.annotation.denotesRethoric.rethoric">
+                        <md-radio-button value="sro:Abstract" class="md-primary">Abstract</md-radio-button>
+                        <md-radio-button value="deo:Introduction" class="md-primary">Introduction</md-radio-button>
+                        <md-radio-button value="deo:Materials" class="md-primary">Materials</md-radio-button>
+                        <md-radio-button value="deo:Methods" class="md-primary">Methods</md-radio-button>
+                        <md-radio-button value="deo:Results" class="md-primary">Results</md-radio-button>
+                        <md-radio-button value="sro:Discussion" class="md-primary">Discussion</md-radio-button>
+                        <md-radio-button value="sro:Conclusion" class="md-primary">Conclusion</md-radio-button>
+                    </md-radio-group>
+                    <md-content ng-hide="dialog.fragment">Attenzione: questo tipo di annotazione richiede una selezione
+                        testuale.
+                    </md-content>
                 </md-input-container>
 
                 <!--cites-->
-                <md-input-container ng-show="dialog.showFields('cites')">
-                    <h3>articolo citato</h3>
-                </md-input-container>
+                <span ng-show="dialog.showFields('cites')">
+                    <span ng-show="dialog.fragment">
+                    <h3>Articolo citato</h3>
+                    <md-input-container>
+                        <label>Titolo</label>
+                        <input/ ng-model="dialog.annotation.cites.title">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Autori (separati da virgola)</label>
+                        <input/ ng-model="dialog.annotation.cites.author">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Anno di pubblicazione</label>
+                        <input/ ng-model="dialog.annotation.cites.year">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>DOI</label>
+                        <input/ ng-model="dialog.annotation.cites.doi">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>URL</label>
+                        <input/ ng-model="dialog.annotation.cites.url">
+                    </md-input-container>
+                    </span>
+                <md-content ng-hide="dialog.fragment">Attenzione: questo tipo di annotazione richiede una selezione testuale.
+                </md-content>
+                </span>
             </div>
+
+            <p>{{ dialog.provenance | json}}</p>
 
             <md-dialog-actions class="newAnnoButtons" layout="row" layout-align="end end">
                 <hr/>

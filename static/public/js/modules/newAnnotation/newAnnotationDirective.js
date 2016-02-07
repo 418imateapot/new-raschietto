@@ -3,7 +3,7 @@ export default function newAnnotationDirective() {
         restrict: "AE",
         templateUrl: 'js/modules/newAnnotation/newAnnotationView.html',
         bindToController: {
-
+            docUrl: "="
         },
         controller: 'NewAnnotationController',
         controllerAs: 'newAnnotation'

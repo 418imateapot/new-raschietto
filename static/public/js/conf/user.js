@@ -1,10 +1,10 @@
-userConfig.$inject = ['$rootScope', '$state', 'userService', 'loginModal'];
+userConfig.$inject = ['$rootScope', '$state', '$cookies' ,'userService', 'loginModal'];
 
 /**
  * Ogni volta che l'applicazione cambia stato, verifica se sia
  * necessaria l'autenticazione per accedere al nuovo stato.
  */
-export default function userConfig($rootScope, $state, userService, loginModal) {
+export default function userConfig($rootScope, $state, $cookies, userService, loginModal) {
 
     $rootScope.$on('$stateChangeStart', (event, toState, toParams) => {
 
@@ -12,6 +12,17 @@ export default function userConfig($rootScope, $state, userService, loginModal) 
 
         if (!needsAuthentication || userService.isLoggedIn)
             return;
+
+        let cookie = $cookies.get('credenziali');
+        if (cookie) {
+            let cookie_object = JSON.parse(cookie);
+            let username = cookie_object.username;
+            let email = cookie_object.email;
+            userService.login(username, email);
+            $rootScope.$broadcast('login', {state: toParams.mode, user: name});
+            return;
+        }
+
 
         event.preventDefault();
         loginModal(event)

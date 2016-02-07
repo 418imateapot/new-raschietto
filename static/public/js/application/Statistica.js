@@ -20,7 +20,7 @@ export default class Statistica {
 
     // converte un xpath preso da fuseki in uno che
     // ha speranza di funzionare in raschietto
-    static convert(xpath, type, provenance) {
+    static convertToRaschietto(xpath, type, provenance) {
 
         if (Statistica.BLACKLIST.indexOf(provenance) !== -1)
             return null;

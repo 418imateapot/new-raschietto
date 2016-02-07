@@ -21,7 +21,7 @@ export default class Dlib {
 
     // converte un xpath preso da fuseki in uno che
     // ha speranza di funzionare in raschietto
-    static convert(xpath, type, provenance) {
+    static convertToRaschietto(xpath, type, provenance) {
 
         if (Dlib.BLACKLIST.indexOf(provenance) !== -1)
             return null;
@@ -43,6 +43,21 @@ export default class Dlib {
         //console.log(type, xpath, prefix+suffix);
 
         return prefix + suffix;
+    }
+
+    static convertFromRaschietto(localPath) {
+        const DLIB_PREFIX = '/html/body/form/table[3]/tbody/tr/td/table[5]/tbody/tr/td/table[1]/tbody/tr/td[2]';
+
+        // togli la robaccia
+        localPath = localPath.toLowerCase();
+        localPath = localPath.replace(/\/undefined.*/ , '');
+
+        let suffix = localPath.slice(localPath.lastIndexOf('td'));
+        suffix = suffix.slice(suffix.indexOf('/'));
+
+        let result = DLIB_PREFIX + suffix;
+
+        return result;
     }
 
 }

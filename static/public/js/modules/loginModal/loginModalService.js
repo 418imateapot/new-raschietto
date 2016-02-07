@@ -26,8 +26,8 @@ function loginModal($mdDialog, $rootScope, userService) {
         dialog.cancel = function() {
             $mdDialog.cancel("cancelled");
         };
-        dialog.submit = function(email, password) {
-            let user = userService.login(email, password);
+        dialog.submit = function(username, email) {
+            let user = userService.login(username, email);
             $mdDialog.hide(user);
         };
     }

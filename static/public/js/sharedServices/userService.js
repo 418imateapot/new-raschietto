@@ -6,6 +6,7 @@ export default function userService($cookies) {
 
     service.isLoggedIn = false;
     service.userName = '';
+    service.userEmail = '';
 
 
     service.storeLastDocument = function(doi) {
@@ -15,24 +16,28 @@ export default function userService($cookies) {
 
     /**
      * Esegue il login e setta un cookie
-     * @return {object} Un dizionario con le credenziali di accesso
      */
-    service.login = function(email, password) {
+    service.login = function(username, email) {
 
         let credenziali = {
-            email: email,
-            password: password
+            username: username,
+            email: email
         };
+
+        service.userName = username;
+        service.userEmail = email;
 
         $cookies.put('credenziali', JSON.stringify(credenziali));
         service.isLoggedIn = true;
-        return email;
+        return username;
     };
 
     service.logout = function() {
 
         $cookies.remove('credenziali');
         service.isLoggedIn = false;
+        service.userName = '';
+        service.userEmail = '';
 
     };
 

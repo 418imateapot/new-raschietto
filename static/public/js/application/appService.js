@@ -33,12 +33,12 @@ export default function appService() {
             case 'dlib':
 
                 //xpath = xpath.replace(DLIB_ORIGINAL_PREFIX, DLIB_RASCHIETTO_PREFIX);
-                xpath = Dlib.convert(xpath, type, provenance);
+                xpath = Dlib.convertToRaschietto(xpath, type, provenance);
                 if (!xpath) return;
                 break;
             case 'statistica':
                 // delle due l'una...
-                xpath = Statistica.convert(xpath, type, provenance);
+                xpath = Statistica.convertToRaschietto(xpath, type, provenance);
                 if (!xpath) return;
                 /*
                 xpath = xpath.replace(STAT_ORIGINAL_PREFIX, STAT_RASCHIETTO_PREFIX)
@@ -71,15 +71,20 @@ export default function appService() {
     function fragment_to_xpath(uri) {
         uri = uri.replace(/^/, "/");
         uri = uri.replace(/_/gi, "/");
-        return uri.replace(/([0-9]+)/gi, function(str, backref) {
+        uri = uri.replace(/([0-9]+)/gi, function(str, backref) {
             return "[" + backref + "]";
         });
+        uri = uri.replace(/h\[(\d)(\d+)\]/, (str, ref1, ref2) => {
+            return 'h' + ref1 + '[' + ref2 + ']'; // Per evitare cose come h[32]
+        });
+        return uri;
     }
 
     function xpath_to_fragment(xpath) {
         xpath = xpath.replace(/^\//, "");
-            xpath = xpath.replace(/\//gi, "_");
-                return xpath.replace(/\[/gi, "");
+        xpath = xpath.replace(/\//gi, "_");
+        xpath = xpath.replace(/\[/gi, "").replace(/\]/gi, "");
+        return xpath;
     }
 
 }
