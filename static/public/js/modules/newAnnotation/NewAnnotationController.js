@@ -1,11 +1,12 @@
 import Dlib from '../../application/Dlib.js';
 import Statistica from '../../application/Statistica.js';
 
-NewAnnotationController.$inject = ['$mdDialog', '$stateParams', 'userService', 'newAnnotationService'];
+NewAnnotationController.$inject = ['$mdConstant', '$mdDialog', '$stateParams', 'userService', 'newAnnotationService'];
 
-export default function NewAnnotationController($mdDialog, $stateParams, userService, newAnnotationService) {
+export default function NewAnnotationController($mdConstant, $mdDialog, $stateParams, userService, newAnnotationService) {
 
     const model = this;
+
 
     model.showModal = _showModal;
     model.isVisible = () => $stateParams.mode === 'annotator';
@@ -105,6 +106,7 @@ export default function NewAnnotationController($mdDialog, $stateParams, userSer
     function DialogController(userService) {
 
         const dialog = this;
+        dialog.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA]; // Separatori per i nomi
 
         dialog.showFields = (type) => type === dialog.typeSelected;
         dialog.submit = _submit;
@@ -119,13 +121,13 @@ export default function NewAnnotationController($mdDialog, $stateParams, userSer
 
         dialog.annotation = {
             hasTitle: {},
-            hasAuthor: {},
+            hasAuthor: {authors: []},
             hasPublicationYear: {},
             hasURL: {},
             hasDOI: {},
             hasComment: {},
             denotesRethoric: {},
-            cites: {}
+            cites: {authors: []}
         };
 
         /////////////////////

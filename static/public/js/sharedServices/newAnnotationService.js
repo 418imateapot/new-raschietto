@@ -106,7 +106,10 @@ function newAnnotationService($cookies) {
                     "label": `Questo articolo cita ‘${data.title}’`,
                     "subject": data.subject,
                     "predicate": "cito:cites",
-                    "resource": {}
+                    "resource": {
+                        "id": data.subject + '_cited_',
+                        "label": "sometext"
+                    }
                 };
                 break;
         }
