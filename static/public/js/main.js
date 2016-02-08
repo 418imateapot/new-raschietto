@@ -12,6 +12,10 @@ import 'angular-material/angular-material.css!';
 import 'styles/main.scss!';
 
 import $ from 'jquery';
+import rangy from 'rangy';
+// Questo modo di importare non è ideale, ma il tempo è tiranno...
+import '../jspm_packages/github/timdown/rangy-release@1.3.0/rangy-classapplier.js';
+import '../jspm_packages/github/timdown/rangy-release@1.3.0/rangy-highlighter.js';
 import angular from 'angular';
 import ngAnimate from 'angular-animate';
 import material from 'angular-material';

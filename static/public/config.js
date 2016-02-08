@@ -30,6 +30,7 @@ System.config({
     "fuzzy": "npm:fuzzy@0.1.1",
     "jquery": "npm:jquery@2.2.0",
     "json": "github:systemjs/plugin-json@0.1.0",
+    "rangy": "github:timdown/rangy-release@1.3.0",
     "scss": "github:theefer/plugin-sass@master",
     "text": "github:systemjs/plugin-text@0.0.4",
     "traceur": "github:jmcriffey/bower-traceur@0.0.93",
