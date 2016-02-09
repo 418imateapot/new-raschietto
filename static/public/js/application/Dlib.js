@@ -26,32 +26,28 @@ export default class Dlib {
         if (Dlib.BLACKLIST.indexOf(provenance) !== -1)
             return null;
 
-        let re = '^(?:/html/body)?';
-        re += '/form(?:[\\d])?';
-        re += '/table[3]/(tbody/)?';
-        re += 'tr([\\d])?\/td([\\d])?/table[5]/(tbody/)?';
-        re += 'tr([\\d])?/td([\\d])?/table[1]/(tbody/)?';
-        re += 'tr([\\d])?/td[2]';
-        re = new RegExp(re, 'i');
+        xpath = xpath.replace(/^\/\[\d\]/, ''); // Ho visto cose che voi umani...
+        let re = '^(?:/html/body)?(?:/\\[\d\\])*';
+        re += '/form(?:\\[\\d\\])?';
+        re += '/table\\[3\\]/(?:tbody/)?';
+        re += 'tr(?:\\[\\d\\])?\/td(?:\\[\\d\\])?/table\\[5\\]/(?:tbody/)?';
+        re += 'tr(?:\\[\\d\\])?/td(?:\\[\\d\\])?/table\\[1\\]/(?:tbody/)?';
+        re += 'tr(?:\\[\\d\\])?/td\\[2\\]';     // xpath in fiamme al largo
+        re = new RegExp(re, 'i');               // dei bastioni di orione
 
-let FIGO_PREFIX = /^[\/html\/body]?\/form\[[\d]\]?\/table\[3\]\/[tbody\/]?tr[\[\d\]]?\/td[\[\d\]]?\/table\[5\]\/[tbody\/]?tr[\[\d\]]?\/td[\[\d\]]?\/table\[1\]\/[tbody\/]?tr[\[\d\]]?\/td\[2\]/;
-        xpath = xpath.replace(/\/text.*$/, ''); // Elimina estensioni strane
-        //xpath = xpath.replace(/h\[32\]/, 'h3[2]');      // Hack orrendo
-
-        let suffix = xpath.slice(xpath.lastIndexOf('td'));
-        suffix = suffix.slice(suffix.indexOf('/'));
-
-        let prefix = Dlib.PREFIXES[type];
-        //
-        //let suffix = xpath.match(/\/\w+\[?\d?\]??$/i); // recupera l'ultima parte dell'xpath originale
-
-
-        if (!suffix) {
+        if (!xpath.match(re)) {
+            // Non so che farci...
+            console.warn(xpath + '\n- nessun match');
             return null;
         }
+        let suffix = xpath.replace(re, '');
+        let prefix = Dlib.PREFIXES[type];
+        let result = Dlib.add_tbody(prefix + suffix);
+
+        console.log(result);
         //console.log(type, xpath, prefix+suffix);
 
-        return prefix + suffix;
+        return result;
     }
 
     static convertFromRaschietto(localPath) {
@@ -67,6 +63,10 @@ let FIGO_PREFIX = /^[\/html\/body]?\/form\[[\d]\]?\/table\[3\]\/[tbody\/]?tr[\[\
         let result = DLIB_PREFIX + suffix;
 
         return result;
+    }
+
+    static add_tbody(xpath) {
+        return xpath.replace(/(?:tbody\/)?tr/, 'tbody/tr');
     }
 
 }
