@@ -23,9 +23,9 @@ export default function annotatedText() {
         // Usa rangy.highlighter per applicare le classi
         // ed evvidenziare il testo sul nostro range
         let h = rangy.createHighlighter();
-        h.addClassApplier(rangy.createClassApplier('annotation'));
+        //h.addClassApplier(rangy.createClassApplier('annotation'));
         h.addClassApplier(rangy.createClassApplier(`anno-${annoType}`));
-        h.highlightRanges('annotation', [range]);
+        //h.highlightRanges('annotation', [range]);
         h.highlightRanges(`anno-${annoType}`, [range]);
 
         let ancestor = range.commonAncestorContainer;

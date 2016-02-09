@@ -26,8 +26,17 @@ export default class Dlib {
         if (Dlib.BLACKLIST.indexOf(provenance) !== -1)
             return null;
 
+        let re = '^(?:/html/body)?';
+        re += '/form(?:[\\d])?';
+        re += '/table[3]/(tbody/)?';
+        re += 'tr([\\d])?\/td([\\d])?/table[5]/(tbody/)?';
+        re += 'tr([\\d])?/td([\\d])?/table[1]/(tbody/)?';
+        re += 'tr([\\d])?/td[2]';
+        re = new RegExp(re, 'i');
+
+let FIGO_PREFIX = /^[\/html\/body]?\/form\[[\d]\]?\/table\[3\]\/[tbody\/]?tr[\[\d\]]?\/td[\[\d\]]?\/table\[5\]\/[tbody\/]?tr[\[\d\]]?\/td[\[\d\]]?\/table\[1\]\/[tbody\/]?tr[\[\d\]]?\/td\[2\]/;
         xpath = xpath.replace(/\/text.*$/, ''); // Elimina estensioni strane
-        xpath = xpath.replace(/h\[32\]/, 'h3[2]');      // Hack orrendo
+        //xpath = xpath.replace(/h\[32\]/, 'h3[2]');      // Hack orrendo
 
         let suffix = xpath.slice(xpath.lastIndexOf('td'));
         suffix = suffix.slice(suffix.indexOf('/'));

@@ -1,15 +1,16 @@
-export default class Statistica {
+export
+default class Statistica {
 
     static get PREFIXES() {
         return {
-            'hasTitle': '//*[@id="document-view"]/span/div/div[2]',
-            'hasAuthor': '//*[@id="document-view"]/span/div/div[3]',
+            'hasTitle': '//*[@id="document-view"]/div/div[2]',
+            'hasAuthor': '//*[@id="document-view"]/div/div[3]',
             'hasPublicationYear': null,
-            'hasDOI': '//*[@id="document-view"]/span/div',
+            'hasDOI': '//*[@id="document-view"]/div',
             'hasURL': '',
             'hasComment': '',
             'denotesRethoric': '',
-            'cites': '//*[@id="document-view"]/span/div/div[7]/div'
+            'cites': '//*[@id="document-view"]/div/div[7]/div'
         };
     }
 
@@ -26,13 +27,19 @@ export default class Statistica {
             return null;
 
         xpath = xpath.replace(/\/text.*$/, ''); // Elimina estensioni strane
-        let prefix = Statistica.PREFIXES[type];
-        let suffix = xpath.match(/\/\w+\[?\d?\]??$/i); // recupera l'ultima parte dell'xpath originale
 
-        if (!suffix)
+        let suffix = xpath.slice(xpath.lastIndexOf('div[1]'));
+        suffix = suffix.slice(suffix.indexOf('/'));
+
+        let prefix = '//*[@id="document-view"]/div';
+
+
+        if (!suffix) {
             return null;
+        }
+        //console.log(type, xpath, prefix+suffix);
 
-        return prefix + suffix[0];
+        return prefix + suffix;
     }
 
 }

@@ -1,9 +1,6 @@
 newAnnotationService.$inject = ['$cookies'];
 
-export
-default
-
-function newAnnotationService($cookies) {
+export default function newAnnotationService($cookies) {
 
     const service = this;
 
@@ -29,9 +26,9 @@ function newAnnotationService($cookies) {
             }],
             "target": {
                 "source": data.url, // URL
-                "id": data.fragment.path, // Fragment
-                "start": data.fragment.start,
-                "end": data.fragment.end
+                "id": data.fragment ? data.fragment.path : '', // Fragment
+                "start": data.fragment ? data.fragment.start : '',
+                "end": data.fragment ? data.fragment.end : ''
             },
             "provenance": {
                 "author": {

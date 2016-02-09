@@ -61,9 +61,14 @@ export default function NewAnnotationController($mdConstant, $mdDialog, $statePa
         // Probabilmente inutile, ma fragasega
         if (selection.anchorNode) {
             let localPath = getPathTo(selection.anchorNode);
+            let path;
 
             // TODO Fallo funzionare con statistica
-            let path = Dlib.convertFromRaschietto(localPath);
+            if (model.docUrl.indexOf('dlib' !== -1)) {
+                path = Dlib.convertFromRaschietto(localPath);
+            } else {
+                path = Statistica.convertFromRaschietto(localPath);
+            }
             let focus = selection.focusOffset;
             let anchor = selection.anchorOffset;
             let start = focus < anchor ? focus : anchor;
