@@ -15,8 +15,22 @@ export default function newAnnotationService($cookies) {
         $cookies.putObject('pending', newAnnotations);
     }
 
+function _generateAnnotation(data){
+  console.log(data);
+    if(data.type=='hasAuthor') {
+      let  autori=data.authors;
+    let results = autori.map(function(val){
+      data.authorname = val;
+      _generateRealAnnotation(data);
+    });
+    return results;
 
-    function _generateAnnotation(data) {
+    }
+      else{ return _generateRealAnnotation(data); }
+      }
+
+
+    function _generateRealAnnotation(data) {
         console.log(data);
         let result = {
             "annotations": [{
@@ -38,6 +52,7 @@ export default function newAnnotationService($cookies) {
                 "time": data.provenance.time.toUTCString()
             }
         };
+
         return result;
     }
 
@@ -64,7 +79,10 @@ export default function newAnnotationService($cookies) {
                 break;
             case 'hasAuthor':
                 result = {
-                    "label": `Un autore del documento è ${author}`,
+                    "label": `Un autore del documento è ${data.authorname}`,
+                    "subject": data.subject,
+                    "predicate": "dcterms:creator",
+                    "literal": data.authorname
                 };
                 break;
             case 'hasURL':
