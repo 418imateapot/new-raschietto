@@ -21,12 +21,25 @@ export default function annotatedText() {
         let range = buildRange(el.get(0), annotationInfo.minStartRange, annotationInfo.maxEndRange);
 
         // Usa rangy.highlighter per applicare le classi
-        // ed evvidenziare il testo sul nostro range
+        // ed evidenziare il testo sul nostro range
         let h = rangy.createHighlighter();
         //h.addClassApplier(rangy.createClassApplier('annotation'));
         h.addClassApplier(rangy.createClassApplier(`anno-${annoType}`));
-        //h.highlightRanges('annotation', [range]);
-        h.highlightRanges(`anno-${annoType}`, [range]);
+        try {
+            //h.highlightRanges('annotation', [range]);
+            h.highlightRanges(`anno-${annoType}`, [range]);
+        } catch (e) {
+            console.error(e);
+            console.error(annotationInfo);
+        }
+
+        // DEBUG
+        if (el.get(0).nodeName === 'p') {
+            console.log('ww');
+            console.log(h);
+        }
+        console.log(el);
+        console.log(h);
 
         let ancestor = range.commonAncestorContainer;
         if (ancestor.nodeType === ancestor.TEXT_NODE) {
@@ -39,7 +52,7 @@ export default function annotatedText() {
         // ricompilare la direttiva e succedono
         // Brutte Cose (R)
         ctrl.element.bind('click', ctrl.showAnnotations);
-        if(annoType === 'hasTitle') console.log(ctrl.element);
+        if (annoType === 'hasTitle') console.log(ctrl.element);
 
     }
 
