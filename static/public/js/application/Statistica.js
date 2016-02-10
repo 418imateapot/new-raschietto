@@ -1,22 +1,16 @@
-export
-default class Statistica {
+export default class Statistica {
 
-    static get PREFIXES() {
-        return {
-            'hasTitle': '//*[@id="document-view"]/div/div[2]',
-            'hasAuthor': '//*[@id="document-view"]/div/div[3]',
-            'hasPublicationYear': null,
-            'hasDOI': '//*[@id="document-view"]/div',
-            'hasURL': '',
-            'hasComment': '',
-            'denotesRethoric': '',
-            'cites': '//*[@id="document-view"]/div/div[7]/div'
-        };
+    static get LOCAL_PREFIX() {
+        return '//*[@id="document-view"]/div';
+    }
+
+    static get REMOTE_PREFIX() {
+        return '/html/body/div[1]/div[3]/div[2]/div[3]';
     }
 
     static get BLACKLIST() {
-        // solo i worst offender..
-        return ['http://server/unset-base/ltw1529@scrappa.it'];
+        // temporaneo, finchè non capisco cosa non va
+        return ['mailto:antonio.lagana2@studio.unibo.it'];
     }
 
     // converte un xpath preso da fuseki in uno che
@@ -26,20 +20,43 @@ default class Statistica {
         if (Statistica.BLACKLIST.indexOf(provenance) !== -1)
             return null;
 
+        let re = '^(?:/html/body)?';
+        re += '/div\\[\\d\\]/div\\[\\d\\]/div\\[\\d\\]/div\\[\\d\\]';
+        re = new RegExp(re, 'i');
+
         xpath = xpath.replace(/\/text.*$/, ''); // Elimina estensioni strane
 
-        let suffix = xpath.slice(xpath.lastIndexOf('div[1]'));
-        suffix = suffix.slice(suffix.indexOf('/'));
-
-        let prefix = '//*[@id="document-view"]/div';
-
-
-        if (!suffix) {
+        if (!xpath.match(re)) {
+            // Non so che farci...
+            console.warn(xpath + '\n- nessun match');
             return null;
         }
-        //console.log(type, xpath, prefix+suffix);
+        let suffix = xpath.replace(re, '');
+        let result = Statistica.LOCAL_PREFIX + suffix;
 
-        return prefix + suffix;
+        //console.log(type, xpath, prefix+suffix);
+        return result;
     }
+
+
+    static convertFromRaschietto(localPath) {
+
+        // togli la robaccia
+        localPath = localPath.toLowerCase();
+        localPath = localPath.replace(/\/undefined.*/, '');
+
+        // Recupera l'ultimo pezzo del path che vogliamo
+        // (dopo il primo div dentro md-whiteframe)
+        localPath = localPath.slice(localPath.lastIndexOf('whiteframe[1]'));
+        localPath = localPath.slice(localPath.indexOf('div[1]'));
+        localPath = localPath.slice(localPath.indexOf('/'));
+
+        return Statistica.REMOTE_PREFIX + localPath;
+    }
+
+    static add_tbody(xpath) {
+        return xpath.replace(/(?:tbody\/)?tr/, 'tbody/tr');
+    }
+
 
 }

@@ -31,7 +31,8 @@
                 <!--title-->
                 <md-input-container ng-show="dialog.showFields('hasTitle')">
                     <label>Titolo del documento</label>
-                    <input ng-model="dialog.annotation.hasTitle.title">
+                    <input ng-model="dialog.annotation.hasTitle.title">{{dialog.text}}
+                    </input>
                 </md-input-container>
 
                 <!--author-->
@@ -63,36 +64,47 @@
                 </md-input-container>
 
                 <!--comment-->
-                <md-input-container class="md-block" ng-show="dialog.showFields('hasComment')">
-                    <label ng-show="dialog.fragment">Inserisci un commento</label>
-                    <textarea ng-show="dialog.fragment" ng-model="dialog.annotation.hasComment.comment"
-                    rows="5" md-select-on-focus>
-                    </textarea>
-                    <md-content ng-hide="dialog.fragment">Attenzione: questo tipo di annotazione richiede una selezione
+                <div ng-show="dialog.showFields('hasComment')">
+                    <span ng-show="dialog.selectedText">
+                        <h3>Testo selezionato:</h3>
+                        <p>{{dialog.selectedText}}</p>
+                    </span>
+                    <md-input-container class="md-block" ng-show="dialog.selectedText">
+                        <label>Inserisci un commento</label>
+                        <textarea ng-model="dialog.annotation.hasComment.comment" rows="5" md-select-on-focus>
+                        </textarea>
+                    </md-input-container>
+                    <md-content ng-hide="dialog.selectedText">Attenzione: questo tipo di annotazione richiede una selezione
                         testuale.
                     </md-content>
-                </md-input-container>
+                </div>
 
                 <!--rethoric-->
-                <md-input-container ng-show="dialog.showFields('denotesRethoric')">
-                    <h3 ng-show="dialog.fragment">Funzione retorica del frammento selezionato:</h3>
-                    <md-radio-group layout="row" ng-show="dialog.fragment" ng-model="dialog.annotation.denotesRethoric.rethoric">
-                        <md-radio-button value="sro:Abstract" class="md-primary">Abstract</md-radio-button>
-                        <md-radio-button value="deo:Introduction" class="md-primary">Introduction</md-radio-button>
-                        <md-radio-button value="deo:Materials" class="md-primary">Materials</md-radio-button>
-                        <md-radio-button value="deo:Methods" class="md-primary">Methods</md-radio-button>
-                        <md-radio-button value="deo:Results" class="md-primary">Results</md-radio-button>
-                        <md-radio-button value="sro:Discussion" class="md-primary">Discussion</md-radio-button>
-                        <md-radio-button value="sro:Conclusion" class="md-primary">Conclusion</md-radio-button>
-                    </md-radio-group>
-                    <md-content ng-hide="dialog.fragment">Attenzione: questo tipo di annotazione richiede una selezione
+                <div ng-show="dialog.showFields('denotesRethoric')">
+                    <span ng-show="dialog.selectedText">
+                        <h3>Testo selezionato:</h3>
+                        <p>{{dialog.selectedText}}</p>
+                    </span>
+                    <md-input-container>
+                        <h3 ng-show="dialog.selectedText">Funzione retorica del frammento selezionato:</h3>
+                        <md-radio-group layout="row" ng-show="dialog.fragment" ng-model="dialog.annotation.denotesRethoric.rethoric">
+                            <md-radio-button value="sro:Abstract" class="md-primary">Abstract</md-radio-button>
+                            <md-radio-button value="deo:Introduction" class="md-primary">Introduction</md-radio-button>
+                            <md-radio-button value="deo:Materials" class="md-primary">Materials</md-radio-button>
+                            <md-radio-button value="deo:Methods" class="md-primary">Methods</md-radio-button>
+                            <md-radio-button value="deo:Results" class="md-primary">Results</md-radio-button>
+                            <md-radio-button value="sro:Discussion" class="md-primary">Discussion</md-radio-button>
+                            <md-radio-button value="sro:Conclusion" class="md-primary">Conclusion</md-radio-button>
+                        </md-radio-group>
+                    </md-input-container>
+                    <md-content ng-hide="dialog.selectedText">Attenzione: questo tipo di annotazione richiede una selezione
                         testuale.
                     </md-content>
-                </md-input-container>
+                </div>
 
                 <!--cites-->
                 <span ng-show="dialog.showFields('cites')">
-                    <span layout="column"  ng-show="dialog.fragment">
+                    <span layout="column"  ng-show="dialog.selectedText">
                     <h3>Informazioni sull'articolo citato</h3>
                     <md-input-container>
                         <label>Titolo</label>
@@ -118,14 +130,17 @@
                         <input/ ng-model="dialog.annotation.cites.url">
                     </md-input-container>
                     </span>
-                <md-content ng-hide="dialog.fragment">Attenzione: questo tipo di annotazione richiede una selezione testuale.
+                <md-content ng-hide="dialog.selectedText">Attenzione: questo tipo di annotazione richiede una selezione testuale.
                 </md-content>
                 </span>
             </div>
 
-            <p>{{ dialog.provenance | json}}</p>
+            <p>
+                Autore: {{ dialog.provenance.name}}
+                <br>{{dialog.provenance.time | date: medium}}
+            </p>
 
-            <md-dialog-actions class="newAnnoButtons" layout="row" layout-align="end end">
+            <md-dialog-actions class="newAnnoButtons" layout="row" flex layout-align="end end">
                 <hr/>
                 <md-button class="md-raised" type="submit">Salva</md-button>
                 <md-button class="md-raised" type="reset">Annulla</md-button>

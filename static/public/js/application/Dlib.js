@@ -1,21 +1,15 @@
 export default class Dlib {
 
-    static get PREFIXES() {
-        return {
-            'hasTitle': '//*[@id="document-view"]/td',
-            'hasAuthor': '//*[@id="document-view"]/td',
-            'hasPublicationYear':  '//*[@id="document-view"]/td',
-            'hasDOI': '//*[@id="document-view"]/td',
-            'hasURL': '//*[@id="document-view"]/td',
-            'hasComment': '//*[@id="document-view"]/td',
-            'denotesRethoric': '//*[@id="document-view"]/td',
-            'cites': '//*[@id="document-view"]/td'
-        };
+    static get LOCAL_PREFIX() {
+        return '//*[@id="document-view"]/td';
+    }
+
+    static get REMOTE_PREFIX() {
+        return '/html/body/form/table[3]/tbody/tr/td/table[5]/tbody/tr/td/table[1]/tbody/tr/td[2]';
     }
 
     static get BLACKLIST() {
         // solo i worst offender..
-        // return ['http://server/unset-base/ltw1529@scrappa.it'];
         return [];
     }
 
@@ -26,41 +20,38 @@ export default class Dlib {
         if (Dlib.BLACKLIST.indexOf(provenance) !== -1)
             return null;
 
-        xpath = xpath.replace(/^\/\[\d\]/, ''); // Ho visto cose che voi umani...
-        let re = '^(?:/html/body)?(?:/\\[\d\\])*';
-        re += '/form(?:\\[\\d\\])?';
-        re += '/table\\[3\\]/(?:tbody/)?';
+        xpath = xpath.replace(/^\/\[\d\]/, ''); // Io ne ho viste cose che voi umani...
+        let re = '^(?:/html/body)?'; // non potreste immaginarvi
+        re += '/form(?:\\[\\d\\])?'; // regexp in fiamme al largo
+        re += '/table\\[3\\]/(?:tbody/)?'; // del triple store di Orione
         re += 'tr(?:\\[\\d\\])?\/td(?:\\[\\d\\])?/table\\[5\\]/(?:tbody/)?';
         re += 'tr(?:\\[\\d\\])?/td(?:\\[\\d\\])?/table\\[1\\]/(?:tbody/)?';
-        re += 'tr(?:\\[\\d\\])?/td\\[2\\]';     // xpath in fiamme al largo
-        re = new RegExp(re, 'i');               // dei bastioni di orione
+        re += 'tr(?:\\[\\d\\])?/td\\[2\\]'; // xpath balenare nel buio vicino ai
+        re = new RegExp(re, 'i'); // server di Tannhauser
 
         if (!xpath.match(re)) {
             // Non so che farci...
-            console.warn(xpath + '\n- nessun match');
+            // console.warn(xpath + '\n- nessun match');
             return null;
         }
         let suffix = xpath.replace(re, '');
-        let prefix = Dlib.PREFIXES[type];
-        let result = Dlib.add_tbody(prefix + suffix);
+        let result = Dlib.add_tbody(Dlib.LOCAL_PREFIX + suffix);
 
-        console.log(result);
-        //console.log(type, xpath, prefix+suffix);
+        //console.log(result);
 
         return result;
     }
 
     static convertFromRaschietto(localPath) {
-        const DLIB_PREFIX = '/html/body/form/table[3]/tbody/tr/td/table[5]/tbody/tr/td/table[1]/tbody/tr/td[2]';
 
         // togli la robaccia
         localPath = localPath.toLowerCase();
-        localPath = localPath.replace(/\/undefined.*/ , '');
+        localPath = localPath.replace(/\/undefined.*/, '');
 
         let suffix = localPath.slice(localPath.lastIndexOf('td'));
         suffix = suffix.slice(suffix.indexOf('/'));
 
-        let result = DLIB_PREFIX + suffix;
+        let result = Dlib.REMOTE_PREFIX + suffix;
 
         return result;
     }
@@ -70,4 +61,3 @@ export default class Dlib {
     }
 
 }
-

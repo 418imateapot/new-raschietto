@@ -17,18 +17,27 @@ export default function NewAnnotationController($mdConstant, $mdDialog, $statePa
     ///////////////////////
 
     // https://stackoverflow.com/questions/2631820/im-storing-click-coordinates-in-my-db-and-then-reloading-them-later-and-showing/2631931#2631931
+    // Modificata per ignorare i tag inseriti da raschietto
     function getPathTo(element) {
         if (element === document.body)
             return element.tagName;
+
+        if (element.className && element.className.match(/anno-?\w+/)) {
+            // Se troviamo un elemento inserito da noi,
+            // non lo vogliamo nell'xpath
+            return getPathTo(element.parentNode);
+        }
 
         var ix = 0;
         var siblings = element.parentNode.childNodes;
         for (var i = 0; i < siblings.length; i++) {
             var sibling = siblings[i];
-            if (sibling === element)
+            if (sibling === element) {
                 return getPathTo(element.parentNode) + '/' + element.tagName + '[' + (ix + 1) + ']';
-            if (sibling.nodeType === 1 && sibling.tagName === element.tagName)
+            }
+            if (sibling.nodeType === 1 && sibling.tagName === element.tagName) {
                 ix++;
+            }
         }
     }
 
@@ -54,6 +63,7 @@ export default function NewAnnotationController($mdConstant, $mdDialog, $statePa
 
     function _showModal(ev) {
         let selection = _selection();
+        let selectedText = selection.toString();
         let fragment = null;
         let subject = model.docUrl.replace(/\.html$/, '');
         subject = subject + '_ver1';
@@ -63,19 +73,19 @@ export default function NewAnnotationController($mdConstant, $mdDialog, $statePa
             let localPath = getPathTo(selection.anchorNode);
             let path;
 
-            // TODO Fallo funzionare con statistica
-            if (model.docUrl.indexOf('dlib' !== -1)) {
+            if (model.docUrl.match('dlib')) {
                 path = Dlib.convertFromRaschietto(localPath);
             } else {
                 path = Statistica.convertFromRaschietto(localPath);
             }
             let focus = selection.focusOffset;
             let anchor = selection.anchorOffset;
-            let start = focus < anchor ? focus : anchor;
-            let end = focus > anchor ? focus : anchor;
+            //TODO controllare gli offset che genera
+            let start = Math.min(focus, anchor);
+            let end = Math.max(focus, anchor);
 
-            // Se non c'è testo selezionato => start === end
-            if (start !== end) {
+            // Se non c'è testo selezionato, niente path
+            if (selectedText !== '') {
                 fragment = {
                     path: _xpath_to_fragment(path),
                     start: start,
@@ -87,18 +97,22 @@ export default function NewAnnotationController($mdConstant, $mdDialog, $statePa
         $mdDialog.show({
                 controller: DialogController,
                 controllerAs: 'dialog',
+                //Deps, part.1
                 bindToController: {
                     fragment: fragment,
-                    subject: subject
-                },
+                    subject: subject,
+                    selectedText: selectedText
+                },//Deps
                 templateUrl: 'js/modules/newAnnotation/newAnnotationModal.tmpl.html',
                 parent: angular.element(document.body),
                 fullscreen: true,
                 targetEvent: ev,
-                userService: userService,
+                //Deps, part.2
                 fragment: fragment,
-                docUrl: model.docUrl,
                 subject: subject,
+                selectedText: selectedText,
+                //Deps
+                userService: userService,
                 clickOutsideToClose: true
             })
             .then(function(answer) {
@@ -124,15 +138,30 @@ export default function NewAnnotationController($mdConstant, $mdDialog, $statePa
 
         //dialog.fragment = fragment;
 
+        // Inizializza il modello
         dialog.annotation = {
-            hasTitle: {},
-            hasAuthor: {authors: []},
-            hasPublicationYear: {},
-            hasURL: {},
-            hasDOI: {},
+            hasTitle: {
+                title: dialog.selectedText
+            },
+            hasAuthor: {
+                authors: dialog.selectedText ? [dialog.selectedText] : []
+            },
+            hasPublicationYear: {
+                // Un preset plausibile
+                year: parseInt(dialog.selectedText) || new Date().getFullYear()
+            },
+            hasURL: {
+                url: dialog.selectedText
+            },
+            hasDOI: {
+                doi: dialog.selectedText
+            },
             hasComment: {},
             denotesRethoric: {},
-            cites: {authors: []}
+            cites: {
+                title: dialog.selectedText,
+                authors: []
+            }
         };
 
         /////////////////////
@@ -143,6 +172,7 @@ export default function NewAnnotationController($mdConstant, $mdDialog, $statePa
             let type = dialog.typeSelected;
             let content = dialog.annotation[type];
             content.type = type;
+            dialog.provenance.time = new Date();  // Vogliamo l'ora aggiornata
             content.provenance = dialog.provenance;
             content.fragment = dialog.fragment;
             content.url = model.docUrl;

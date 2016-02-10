@@ -128,7 +128,6 @@ export default function annotationService($http, documentService) {
             for (let i in items) {
                 let keep = false;
                 let elem = items[i];
-                if (!elem.type) continue;
                 // Genera elem.type se non esiste
                 if (!elem.type && !elem.typeLabel) {
                     continue;
@@ -205,7 +204,7 @@ WHERE {
     ?body rdf:subject <${expr}>;
         rdf:predicate ?predicate;
         rdf:object ?object.
-  	OPTIONAL{?body rdfs:label ?bodyLabel.}
+    OPTIONAL{?body rdfs:label ?bodyLabel.}
     OPTIONAL{?object rdfs:label ?objectLabel.}
     OPTIONAL{?object rdf:subject ?innerObject. }
     OPTIONAL{
@@ -216,7 +215,7 @@ WHERE {
             oa:start ?start;
             oa:end ?end.
     }
-} 
+}
     `; // Sono backtick, non virgolette semplici
     }
 

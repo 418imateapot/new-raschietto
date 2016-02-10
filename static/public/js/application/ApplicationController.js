@@ -158,7 +158,7 @@ export default function ApplicationController($scope, $stateParams, $compile, $m
                 type = val.type.value;
                 provenance = val.provenance.value;
             } catch (e) {
-                console.warn('Malformed annotation?');
+                console.warn('Incomplete annotation?');
                 return;
             }
 

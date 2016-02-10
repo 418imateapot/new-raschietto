@@ -5,16 +5,6 @@ export default function appService() {
 
     var service = this;
 
-    const DLIB_ORIGINAL_PREFIX = /.*\/tr\/td\[2\]/;
-    const DLIB_RASCHIETTO_PREFIX = '//*[@id="document-view"]/span';
-
-    const STAT_ORIGINAL_PREFIX = /\/html\/body\/div[\[\d\]]?\/div[\[\d\]]?\/div[\[\d\]]?\/div[\[\d\]]?/;
-    /* Molti articoli di statistica sono salvati con questo xpath che non
-     * restituisce nulla...         */
-    const STAT_WRONG_PREFIX = '/html/body/div/div[2]/div[2]/div[3]';
-    const STAT_RASCHIETTO_PREFIX = '//*[@id="document-view"]/span/div';
-
-
     /**
      * Restituisce un elemento del DOM corrispondente
      * all'annotazione (si spera).
@@ -31,19 +21,12 @@ export default function appService() {
         // in uno raschiettoso varia
         switch (source) {
             case 'dlib':
-
-                //xpath = xpath.replace(DLIB_ORIGINAL_PREFIX, DLIB_RASCHIETTO_PREFIX);
                 xpath = Dlib.convertToRaschietto(xpath, type, provenance);
                 if (!xpath) return;
                 break;
             case 'statistica':
-                // delle due l'una...
                 xpath = Statistica.convertToRaschietto(xpath, type, provenance);
                 if (!xpath) return;
-                /*
-                xpath = xpath.replace(STAT_ORIGINAL_PREFIX, STAT_RASCHIETTO_PREFIX)
-                            .replace(STAT_WRONG_PREFIX, STAT_RASCHIETTO_PREFIX);
-                */
                 break;
         }
         return getElementByXpath(xpath);
