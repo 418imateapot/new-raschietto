@@ -99,7 +99,7 @@ def setupNodeDeps():
         print "Installing npm dependencies"
         print "(This may take a while... )"
         print "==========================="
-        os.chdir('static')
+        os.chdir('static/public')
         npm_path = which('npm')
         execv(npm_path, ('npm', 'i'))
     else:
@@ -110,20 +110,17 @@ def setupNodeDeps():
 
 
 @_spacer
-def buildStaticFiles():
-    """Esegue *gulp build* per compilare i file statici"""
+def setupJspm():
+    """Esegue *jspm install* per preparare il package manager"""
     pid = fork()
     if pid == 0:
-        print "==================="
-        print "Starting gulp build"
-        print "==================="
-        os.chdir('static')
-        gulp_path = which('gulp')
-        execv(gulp_path, ('gulp', 'build'))
+        os.chdir('static/public')
+        jspm_path = 'node_modules/.bin/jspm'
+        execv(jspm_path, (jspm_path, 'i'))
     else:
         status = waitpid(pid, 0)
         if status[1] != 0:
-            print "ERROR! gulp exited with status {}".format(status)
+            print "ERROR! npm exited with status {}".format(status)
             sys.exit(1)
 
 
@@ -152,22 +149,6 @@ def setupApacheStuff():
     print "Done!"
 
 
-def makeIcon():
-    """
-    Crea il file *.desktop* per RaschiettoManager
-    """
-    with open('Manager.desktop', 'w') as f:
-        desktop_file = """
-[Desktop Entry]
-Name=Raschietto Manager
-Type=Application
-Exec=python {}/manage.py gui
-Terminal=false
-""".format(REPO_DIR)
-        f.write(desktop_file)
-    os.chmod('Manager.desktop', 0o744)
-
-
 @_spacer
 def lastMessage():
     """
@@ -184,8 +165,6 @@ per installare il sito su macchina locale,
 oppure copiare a mano le cartelle e il file
 "apache_files/renameme.htaccess" sul server
 remoto per mettere su tutta la baracca
-
-NEW => prova il nuovo favoloso "raschietto manager"!
 """
 
 
@@ -201,9 +180,8 @@ def setup():
     makeVirtualenv('env')
     installPyLibs(REQ_FILE)
     setupNodeDeps()
-    buildStaticFiles()
+    setupJspm()
     setupApacheStuff()
-    makeIcon()
     lastMessage()
 
 
