@@ -21,8 +21,9 @@ Progetto di techweb 2015/16!!
   ```bash
   $ raschietto/setup.py
   ```
-3a. Installare i file di configurazione appropriata dalla subdirectory "apache_files" (dopo aver letto il secondo README che li accompagna).
-    --OPPURE--
-3b. Eseguire lo script di installazione nella dalla subdirectory "apache_files" con permessi di root e sperare per il meglio...
+3. Configurare apache con una di queste procedure
+  * Installare i file di configurazione appropriata dalla subdirectory "apache_files" (dopo aver letto il secondo README che li accompagna).
+    <br>**OPPURE**
+  * Eseguire lo script di installazione nella dalla subdirectory "apache_files" con permessi di root e sperare per il meglio...
 
 4. Nel dubbio, riavviare apache non ha mai fatto male a nessuno.
