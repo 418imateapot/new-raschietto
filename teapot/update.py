@@ -5,7 +5,7 @@ import unicodedata
 
 
 
-# denotesRhetoric ha come oggetto un resource semplice, 
+# denotesRhetoric ha come oggetto un resource semplice,
 # hasAuthor oggetto: resource con {id, label}
 # cites oggetto: resource con {id, label}
 ## gli altri tipi di annotazione hanno come oggetto un literal (cioè nel json c'è quella come chiave)
@@ -23,7 +23,7 @@ def generateGraphFromJSON(jsonAnn):
     SCHEMA = Namespace("http://schema.org/")
     SKOS = Namespace("http://www.w3.org/2004/02/skos/core#")
 
-    g = Graph() 
+    g = Graph()
 
     uriEmail = URIRef("mailto:" + jsonAnn['provenance']['author']['email'])
 
@@ -31,16 +31,17 @@ def generateGraphFromJSON(jsonAnn):
     targetId = Literal(jsonAnn['target']['id'])
     targetStart = Literal(jsonAnn['target']['start'], datatype=XSD.nonNegativeInteger)
     targetEnd = Literal(jsonAnn['target']['end'], datatype=XSD.nonNegativeInteger)
-    
+
     annTime = Literal(jsonAnn['provenance']['time'], datatype=XSD.dateTime)
     autName = Literal(jsonAnn['provenance']['author']['name'])
     autEmail = Literal(jsonAnn['provenance']['author']['email'])
 
     g.add((uriEmail, FOAF.name, autName))  # dettagli provenance
     g.add((uriEmail, SCHEMA.email, autEmail))
-  
-    
+
+
     for annotation in jsonAnn['annotations']:
+        bodyObject = None
         ann = BNode()
         body = BNode()
         target = BNode()
@@ -61,7 +62,7 @@ def generateGraphFromJSON(jsonAnn):
         g.add((target, RDF.type, OA.SpecificResource))
         g.add((target, OA.hasSource, targetSource))
         g.add((target, OA.hasSelector, fragmentSel))  # inizia fragmentSelector
-     
+
         g.add((fragmentSel, RDF.type, OA.FragmentSelector))
         g.add((fragmentSel, RDF.value, targetId))
         g.add((fragmentSel, OA.start, targetStart))
@@ -86,15 +87,16 @@ def generateGraphFromJSON(jsonAnn):
                 bodyObject = Literal(annotation['body']['literal'], datatype=XSD.anyURI)
         elif annotation['type'] == 'denotesRethoric':
             bodyObject = URIRef(annotation['body']['resource'])
-            g.add((bodyObject, RDF.type, SKOS.Concept))            
+            g.add((bodyObject, RDF.type, SKOS.Concept))
         else:
-            bodyObject = URIRef(annotation['body']['resource']['id'])
-            resourceLabel = Literal(annotation['body']['resource']['label'])
-            g.add((bodyObject, RDFS.label, resourceLabel))
             if annotation['type'] == 'hasAuthor':
+                bodyObject = URIRef(string2rschAuthor(annotation['body']['resource']['label']))
                 g.add((bodyObject, RDF.type, FOAF.Person))
             else:  # type == 'cites'
+                bodyObject = URIRef(annotation['body']['resource']['id'])
                 g.add((bodyObject, RDF.type, FABIO.Expression))
+            resourceLabel = Literal(annotation['body']['resource']['label'])
+            g.add((bodyObject, RDFS.label, resourceLabel))
 
         g.add((body, RDF.object, bodyObject))
 
@@ -115,7 +117,7 @@ j = {
                     "label": "Heather Lea Moulaison"
                 }
             }
-    }] , 
+    }],
     "target": {
         "source": "dlib:03moulaison.html" ,
         "id": "form1_table3_tbody1_tr1_td1_table5_tbody1_tr1_td2_p2" ,
@@ -125,7 +127,7 @@ j = {
     "provenance": {
         "author": {
             "name": "Pinco Pallino" ,
-            "email": "pinco.pallino@studio.unibo.it" 
+            "email": "pinco.pallino@studio.unibo.it"
         } ,
         "time": "2015-03-12T15:46"
     }
@@ -166,7 +168,7 @@ k = {
     "provenance": {
         "author": {
             "name": "Pinco Pallino",
-            "email": "pinco.pallino@studio.unibo.it" 
+            "email": "pinco.pallino@studio.unibo.it"
         } ,
         "time": "2014-03-12T15:46"
     }
@@ -194,13 +196,13 @@ r = {
     "provenance": {
         "author": {
             "name": "Pinco Pallino" ,
-            "email": "pinco.pallino@studio.unibo.it" 
+            "email": "pinco.pallino@studio.unibo.it"
         } ,
         "time": "2015-03-12T15:46"
     }
 }
 
-print generateGraphFromJSON(k)
+print(generateGraphFromJSON(k))
 #print generateGraphFromJSON(j)
 #print generateGraphFromJSON(r)
 
@@ -228,14 +230,14 @@ def string2rschAuthor(fullname):
     Genera un nome nel formato di Raschietto a partire dalla stringa passata come argomento.
     :param string: fullname il nome e cognome di un autore.
     :returns string: il nome opportunamente modificato
-    """    
-    fullname = unicodedata.normalize('NFKD',unicode(fullname,"utf-8")).encode("ascii","ignore")
+    """
+    # fullname = unicodedata.normalize('NFKD',unicode(fullname,"utf-8")).encode("ascii","ignore")
     # sostituisce i caratteri accentati con i "corrispettivi" caratteri ASCII
     # http://stackoverflow.com/questions/3704731/replace-non-ascii-chars-from-a-unicode-string-in-python
 
     fullname = fullname.lower()  # trasforma eventuali maiuscole in minuscole
 
-    for n in (range(33, 48) + range(58, 97) + range(123, 127)):  # rimuove la punteggiatura  
+    for n in (range(33, 48) + range(58, 97) + range(123, 127)):  # rimuove la punteggiatura
         fullname = fullname.replace(chr(n),'')
 
     parts = fullname.split()

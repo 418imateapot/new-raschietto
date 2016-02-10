@@ -1,6 +1,9 @@
 newAnnotationService.$inject = ['$cookies'];
 
-export default function newAnnotationService($cookies) {
+export
+default
+
+function newAnnotationService($cookies) {
 
     const service = this;
 
@@ -15,29 +18,11 @@ export default function newAnnotationService($cookies) {
         $cookies.putObject('pending', newAnnotations);
     }
 
-function _generateAnnotation(data){
-  console.log(data);
-    if(data.type=='hasAuthor') {
-      let  autori=data.authors;
-    let results = autori.map(function(val){
-      data.authorname = val;
-      _generateRealAnnotation(data);
-    });
-    return results;
 
-    }
-      else{ return _generateRealAnnotation(data); }
-      }
-
-
-    function _generateRealAnnotation(data) {
+    function _generateAnnotation(data) {
         console.log(data);
         let result = {
-            "annotations": [{
-                "type": data.type,
-                "label": _genLabel(data.type),
-                "body": _makeBody(data)
-            }],
+            "annotations": _makeAnnotations(data),
             "target": {
                 "source": data.url, // URL
                 "id": data.fragment ? data.fragment.path : '', // Fragment
@@ -56,77 +41,125 @@ function _generateAnnotation(data){
         return result;
     }
 
-    function _makeBody(data) {
 
-        let result = {};
+    function _addTypeInfo(annotations, type) {
+        console.log(annotations);
+        annotations.forEach(obj => {
+            obj.type = type;
+            obj.label = _genLabel(type);
+        });
+    }
+
+    function _makeAnnotations(data) {
+
+        let result;
 
         switch (data.type) {
             case 'hasTitle':
-                result = {
-                    "label": `Il titolo di questo articolo è ${data.title}`,
-                    "subject": data.subject,
-                    "predicate": "dcterms:title",
-                    "literal": data.title
-                };
+                result = [{
+                    "body": {
+                        "label": `Il titolo di questo articolo è ${data.title}`,
+                        "subject": data.subject,
+                        "predicate": "dcterms:title",
+                        "literal": data.title
+                    }
+                }];
                 break;
             case 'hasPublicationYear':
-                result = {
-                    "label": `L'anno di pubblicazione di questo articolo è ${data.year}`,
-                    "subject": data.subject,
-                    "predicate": "fabio:hasPublicationYear",
-                    "literal": data.year
-                };
+                result = [{
+                    "body": {
+                        "label": `L'anno di pubblicazione di questo articolo è ${data.year}`,
+                        "subject": data.subject,
+                        "predicate": "fabio:hasPublicationYear",
+                        "literal": data.year
+                    }
+                }];
                 break;
             case 'hasAuthor':
-                result = {
-                    "label": `Un autore del documento è ${data.authorname}`,
-                    "subject": data.subject,
-                    "predicate": "dcterms:creator",
-                    "literal": data.authorname
-                };
+                result = data.authors.map(name => {
+                    return {
+                        "body": {
+                            "label": `Un autore del documento è ${name}`,
+                            "subject": data.subject,
+                            "predicate": "dcterms:creator",
+                            "resource": {
+                                "label": name
+                            }
+                        }
+                    };
+                });
                 break;
             case 'hasURL':
-                result = {
-                    "label": `L'URL di questo documento è ${data.url}`,
-                    "subject": data.subject,
-                    "predicate": "fabio:hasURL",
-                    "literal": data.url
-                };
+                result = [{
+                    "body": {
+                        "label": `L'URL di questo documento è ${data.url}`,
+                        "subject": data.subject,
+                        "predicate": "fabio:hasURL",
+                        "literal": data.url
+                    }
+                }];
                 break;
             case 'hasDOI':
-                result = {
-                    "label": `Il DOI di questo documento è ${data.doi}`,
-                    "subject": data.subject,
-                    "predicate": "prism:doi",
-                    "literal": data.doi
-                };
+                result = [{
+                    "body": {
+                        "label": `Il DOI di questo documento è ${data.doi}`,
+                        "subject": data.subject,
+                        "predicate": "prism:doi",
+                        "literal": data.doi
+                    }
+                }];
                 break;
             case 'hasComment':
-                result = {
-                    "subject": data.subject,
-                    "predicate": "schema:comment",
-                    "object": data.comment
-                };
+                result = [{
+                    "body": {
+                        "label": `${data.provenance.name || data.provenance.email} ha commentato: '${data.comment}'`,
+                        "subject": data.subject,
+                        "predicate": "schema:comment",
+                        "literal": data.comment
+                    }
+                }];
                 break;
             case 'denotesRethoric':
-                result = {
-                    //TODO LABEL?
-                    "subject": `${data.subject}#${data.fragment.path}-${data.fragment.start}-${data.fragment.end}`, //url+fragment
-                    "predicate": "sem:denotes",
-                    "resource": data.rethoric
-                };
+                result = [{
+                    "body": {
+                        "label": `La funzione retorica di questo frammento è '${data.rethoric}'`,
+                        "subject": `${data.subject}#${data.fragment.path}-${data.fragment.start}-${data.fragment.end}`, //url+fragment
+                        "predicate": "http://www.ontologydesignpatterns.org/cp/owl/semiotics.owl#",
+                        "resource": data.rethoric
+                    }
+                }];
                 break;
             case 'cites':
-                result = {
-                    "label": `Questo articolo cita ‘${data.title}’`,
-                    "subject": data.subject,
-                    "predicate": "cito:cites",
-                    "resource": {
-                        "id": data.subject + '_cited_',
-                        "label": "sometext"
+                let id = data.subject + '_cited_';
+                result = [{
+                    // Le citazioni hanno il nome annotato
+                    // a mano per evitare danni con le chiamate ricorsive
+                    "type": data.type,
+                    "label": _genLabel(data.type),
+                    "body": {
+                        "label": `Questo articolo cita ‘${data.cited.title}’`,
+                        "subject": data.subject,
+                        "predicate": "cito:cites",
+                        "resource": {
+                            "id": id,
+                            "label": data.cited.title
+                        }
                     }
-                };
+                }];
+                $.each(data.cited, (k, v) => {
+                    let metaData = {
+                        subject: id,
+                        type: _genType(k)
+                    };
+                    console.log(k, metaData.type);
+                    metaData[k] = v;
+                    result = result.concat(_makeAnnotations(metaData));
+                });
                 break;
+        }
+        if(data.type !== 'cites') {
+            // Le citazioni hanno gia' il tipo
+            _addTypeInfo(result, data.type);
         }
         return result;
     }
@@ -162,5 +195,30 @@ function _generateAnnotation(data){
         }
         return null;
     }
+
+
+    function _genType(label) {
+        if (/tit/i.test(label)) {
+            return 'hasTitle';
+        } else if (/pub/i.test(label)) {
+            return 'hasPublicationYear';
+        } else if (/year/i.test(label)) {
+            return 'hasPublicationYear';
+        } else if (/aut/i.test(label)) {
+            return 'hasAuthor';
+        } else if (/URL/i.test(label)) {
+            return 'hasURL';
+        } else if (/DOI/i.test(label)) {
+            return 'hasDOI';
+        } else if (/comment/i.test(label)) {
+            return 'hasComment';
+        } else if (/ret/i.test(label)) {
+            return 'denotesRethoric';
+        } else if (/cit/i.test(label)) {
+            return 'cites';
+        }
+        return null;
+    }
+
 
 }

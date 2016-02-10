@@ -153,7 +153,7 @@ export default function ApplicationController($scope, $stateParams, $compile, $m
         model.annotations.forEach((val, index) => {
             let source, fragment, type, provenance;
             try {
-                source = val.src.value.indexOf('dlib') !== -1 ? 'dlib' : 'statistica';
+                source = val.src.value.indexOf('dlib') !== -1 ? 'dlib' : 'riviste';
                 fragment = val.fragment.value;
                 type = val.type.value;
                 provenance = val.provenance.value;

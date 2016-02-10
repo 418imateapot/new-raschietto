@@ -1,0 +1,38 @@
+<md-subheader class="md-raised md-primary">
+    <md-menu>
+      <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="ctrl.openMenu($mdOpenMenu, $event)">
+        tipo
+      </md-button>
+      <md-menu-content width="4">
+        <md-menu-item>
+          <md-button ng-click="ctrl.redial($event)">
+            <md-icon md-svg-icon="call:dialpad" md-menu-align-target></md-icon>
+            Redial
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button disabled="disabled" ng-click="ctrl.checkVoicemail()">
+            <md-icon md-svg-icon="call:voicemail"></md-icon>
+            Check voicemail
+          </md-button>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <md-menu-item>
+          <md-button ng-click="ctrl.toggleNotifications()">
+            <md-icon md-svg-icon="social:notifications-{{ctrl.notificationsEnabled ? 'off' : 'on'}}"></md-icon>
+            {{ctrl.notificationsEnabled ? 'Disable' : 'Enable' }} notifications
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+</md-subheader>
+
+
+<md-content layout="row" layout-padding layout-wrap layout-align="center center"
+ng-repeat="(key, val) in toolbox.filters">
+    <span flex>
+            <md-checkbox ng-checked="toolbox.exists(key)" ng-click="toolbox.toggle(key)">
+                {{val.name}}
+            </md-checkbox>
+            </span>
+</md-content>

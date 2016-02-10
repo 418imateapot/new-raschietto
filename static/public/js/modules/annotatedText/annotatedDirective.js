@@ -38,8 +38,6 @@ export default function annotatedText() {
             console.log('ww');
             console.log(h);
         }
-        console.log(el);
-        console.log(h);
 
         let ancestor = range.commonAncestorContainer;
         if (ancestor.nodeType === ancestor.TEXT_NODE) {
@@ -52,7 +50,6 @@ export default function annotatedText() {
         // ricompilare la direttiva e succedono
         // Brutte Cose (R)
         ctrl.element.bind('click', ctrl.showAnnotations);
-        if (annoType === 'hasTitle') console.log(ctrl.element);
 
     }
 

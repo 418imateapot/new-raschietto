@@ -1,6 +1,6 @@
-AnnotatedTextController.$inject = ['$scope'];
+AnnotatedTextController.$inject = ['$scope', '$mdDialog'];
 
-export default function AnnotatedTextController($scope) {
+export default function AnnotatedTextController($scope, $mdDialog) {
 
     let model = this;
 
@@ -9,8 +9,8 @@ export default function AnnotatedTextController($scope) {
     // model.theSpan             -> L'elemento cui è legata l'annotazione
     // model.getAnnotations      -> Recupera le annotazioni
 
-    model.managedAnnotations = [];
-    model.activeAnnotations = [];
+    model.managedAnnotations = [];  // Tutte le annotazioni gestite
+    model.activeAnnotations = [];   // Tutte le annotazioni NON filtrate
 
     model.elementConfig = _elementConfig;
     model.showAnnotations = _showAnnotation;
@@ -22,6 +22,14 @@ export default function AnnotatedTextController($scope) {
 
     function _showAnnotation(event) {
         event.preventDefault();
+        $mdDialog.show({
+            controller: function(){},
+            controllerAs: 'dialog',
+            templateUrl: 'js/modules/annotatedText/annotationModalView.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: true
+        });
         console.log(model.activeAnnotations);
     }
 

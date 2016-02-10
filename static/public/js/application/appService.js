@@ -1,4 +1,4 @@
-import Statistica from './Statistica.js';
+import Riviste from './Riviste.js';
 import Dlib from './Dlib.js';
 
 export default function appService() {
@@ -24,8 +24,8 @@ export default function appService() {
                 xpath = Dlib.convertToRaschietto(xpath, type, provenance);
                 if (!xpath) return;
                 break;
-            case 'statistica':
-                xpath = Statistica.convertToRaschietto(xpath, type, provenance);
+            case 'riviste':
+                xpath = Riviste.convertToRaschietto(xpath, type, provenance);
                 if (!xpath) return;
                 break;
         }

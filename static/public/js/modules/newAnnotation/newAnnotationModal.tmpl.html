@@ -31,14 +31,14 @@
                 <!--title-->
                 <md-input-container ng-show="dialog.showFields('hasTitle')">
                     <label>Titolo del documento</label>
-                    <input ng-model="dialog.annotation.hasTitle.title">{{dialog.text}}
+                    <input ng-model="dialog.annotations.hasTitle.title">{{dialog.text}}
                     </input>
                 </md-input-container>
 
                 <!--author-->
                 <span ng-show="dialog.showFields('hasAuthor')">
                  <md-chips
-                      ng-model="dialog.annotation.hasAuthor.authors"
+                      ng-model="dialog.annotations.hasAuthor.authors"
                       md-separator-keys="dialog.keys"
                       placeholder="Autore del documento"
                       secondary-placeholder="Autori, separati da virgola"></md-chips>
@@ -48,19 +48,19 @@
                 <!--pubYear-->
                 <md-input-container ng-show="dialog.showFields('hasPublicationYear')">
                     <label>Anno di pubblicazione</label>
-                    <input type="number" ng-model="dialog.annotation.hasPublicationYear.year">
+                    <input type="number" ng-model="dialog.annotations.hasPublicationYear.year">
                 </md-input-container>
 
                 <!--doi-->
                 <md-input-container ng-show="dialog.showFields('hasDOI')">
                     <label>DOI del documento</label>
-                    <input ng-model="dialog.annotation.hasDOI.doi">
+                    <input ng-model="dialog.annotations.hasDOI.doi">
                 </md-input-container>
 
                 <!--url-->
                 <md-input-container ng-show="dialog.showFields('hasURL')">
                     <label>URL del documento</label>
-                    <input ng-model="dialog.annotation.hasURL.url">
+                    <input ng-model="dialog.annotations.hasURL.url">
                 </md-input-container>
 
                 <!--comment-->
@@ -71,7 +71,7 @@
                     </span>
                     <md-input-container class="md-block" ng-show="dialog.selectedText">
                         <label>Inserisci un commento</label>
-                        <textarea ng-model="dialog.annotation.hasComment.comment" rows="5" md-select-on-focus>
+                        <textarea ng-model="dialog.annotations.hasComment.comment" rows="5" md-select-on-focus>
                         </textarea>
                     </md-input-container>
                     <md-content ng-hide="dialog.selectedText">Attenzione: questo tipo di annotazione richiede una selezione
@@ -87,7 +87,7 @@
                     </span>
                     <md-input-container>
                         <h3 ng-show="dialog.selectedText">Funzione retorica del frammento selezionato:</h3>
-                        <md-radio-group layout="row" ng-show="dialog.fragment" ng-model="dialog.annotation.denotesRethoric.rethoric">
+                        <md-radio-group layout="row" ng-show="dialog.fragment" ng-model="dialog.annotations.denotesRethoric.rethoric">
                             <md-radio-button value="sro:Abstract" class="md-primary">Abstract</md-radio-button>
                             <md-radio-button value="deo:Introduction" class="md-primary">Introduction</md-radio-button>
                             <md-radio-button value="deo:Materials" class="md-primary">Materials</md-radio-button>
@@ -108,10 +108,10 @@
                     <h3>Informazioni sull'articolo citato</h3>
                     <md-input-container>
                         <label>Titolo</label>
-                        <input ng-model="dialog.annotation.cites.title"/>
+                        <input ng-model="dialog.annotations.cites.cited.title"/>
                     </md-input-container>
                  <md-chips
-                      ng-model="dialog.annotation.cites.authors"
+                      ng-model="dialog.annotations.cites.cited.authors"
                       md-separator-keys="dialog.keys"
                       placeholder="Autore del documento"
                       secondary-placeholder="Autori, separati da virgola">
@@ -119,15 +119,15 @@
                     <br/>
                     <md-input-container>
                         <label>Anno di pubblicazione</label>
-                        <input/ ng-model="dialog.annotation.cites.year">
+                        <input/ ng-model="dialog.annotations.cites.cited.year">
                     </md-input-container>
                     <md-input-container>
                         <label>DOI</label>
-                        <input/ ng-model="dialog.annotation.cites.doi">
+                        <input/ ng-model="dialog.annotations.cites.cited.doi">
                     </md-input-container>
                     <md-input-container>
                         <label>URL</label>
-                        <input/ ng-model="dialog.annotation.cites.url">
+                        <input/ ng-model="dialog.annotations.cites.cited.url">
                     </md-input-container>
                     </span>
                 <md-content ng-hide="dialog.selectedText">Attenzione: questo tipo di annotazione richiede una selezione testuale.

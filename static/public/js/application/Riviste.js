@@ -1,4 +1,4 @@
-export default class Statistica {
+export default class Riviste {
 
     static get LOCAL_PREFIX() {
         return '//*[@id="document-view"]/div';
@@ -17,7 +17,7 @@ export default class Statistica {
     // ha speranza di funzionare in raschietto
     static convertToRaschietto(xpath, type, provenance) {
 
-        if (Statistica.BLACKLIST.indexOf(provenance) !== -1)
+        if (Riviste.BLACKLIST.indexOf(provenance) !== -1)
             return null;
 
         let re = '^(?:/html/body)?';
@@ -32,7 +32,7 @@ export default class Statistica {
             return null;
         }
         let suffix = xpath.replace(re, '');
-        let result = Statistica.LOCAL_PREFIX + suffix;
+        let result = Riviste.LOCAL_PREFIX + suffix;
 
         //console.log(type, xpath, prefix+suffix);
         return result;
@@ -51,7 +51,7 @@ export default class Statistica {
         localPath = localPath.slice(localPath.indexOf('div[1]'));
         localPath = localPath.slice(localPath.indexOf('/'));
 
-        return Statistica.REMOTE_PREFIX + localPath;
+        return Riviste.REMOTE_PREFIX + localPath;
     }
 
     static add_tbody(xpath) {
