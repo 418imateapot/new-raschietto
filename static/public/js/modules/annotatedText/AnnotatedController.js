@@ -20,24 +20,28 @@ export default function AnnotatedTextController($scope, $mdDialog) {
     //  Inner fun  //
     /////////////////
 
-    function _showAnnotation(event) {
-        event.preventDefault();
+    function _showAnnotation(event, annotations) {
         $mdDialog.show({
             controller: function(){},
             controllerAs: 'dialog',
-            templateUrl: 'js/modules/annotatedText/annotationModalView.html',
+            template: '<p>{{dialog.annotations | json}}</p>',
+            //templateUrl: 'js/modules/annotatedText/annotationModalView.html',
+            annotations: annotations,
+            bindToController: {annotations: annotations},
             parent: angular.element(document.body),
             targetEvent: event,
             clickOutsideToClose: true
         });
-        console.log(model.activeAnnotations);
+        console.log(annotations);
     }
 
     function _elementConfig(attrs) {
         let annotationIndexes = attrs.annotations.trim().split(' ');
+        /*
         let minStartRange = 0;
         let maxEndRange = 0;
         let annoType = '';
+        */
 
         model.managedAnnotations = model.getAnnotations({
             indexes: annotationIndexes
@@ -50,7 +54,7 @@ export default function AnnotatedTextController($scope, $mdDialog) {
         });
 
         /* Individua il range più grande delle annotazioni  *
-         * su questo elemento, inoltra determina il tipo    */
+         * su questo elemento, inoltra determina il tipo    *
         model.activeAnnotations.forEach((elem, index) => {
             if (index === 0) {
                 minStartRange = elem.start.value;
@@ -68,6 +72,7 @@ export default function AnnotatedTextController($scope, $mdDialog) {
             maxEndRange: maxEndRange,
             annoType: annoType
         };
+        */
     }
 
 }

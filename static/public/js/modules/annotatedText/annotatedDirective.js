@@ -1,4 +1,9 @@
-export default function annotatedText() {
+annotatedText.$inject = ['$compile'];
+
+export
+default
+
+function annotatedText($compile) {
     return {
         restrict: 'AE',
         transclude: true,
@@ -15,42 +20,137 @@ export default function annotatedText() {
 
     function annotatedTextLink(scope, el, attrs, ctrl, transclude) {
 
-        let annotationInfo = ctrl.elementConfig(attrs);
-        let annoType = annotationInfo.annoType;
-
-        let range = buildRange(el.get(0), annotationInfo.minStartRange, annotationInfo.maxEndRange);
-
         // Usa rangy.highlighter per applicare le classi
         // ed evidenziare il testo sul nostro range
         let h = rangy.createHighlighter();
-        //h.addClassApplier(rangy.createClassApplier('annotation'));
-        h.addClassApplier(rangy.createClassApplier(`anno-${annoType}`));
-        try {
-            //h.highlightRanges('annotation', [range]);
-            h.highlightRanges(`anno-${annoType}`, [range]);
-        } catch (e) {
-            console.error(e);
-            console.error(annotationInfo);
+        ctrl.rangesInfo = []; // tutti i range correntemente evidenziati e i loro metadati
+        ctrl.elementConfig(attrs);
+
+        /**
+         *  rangeinfo = {
+         *      rangeBookmark: bookmark,
+         *      type: string,
+         *      annotations: array
+         *  };
+         */
+        /**
+         * Crea una lista di range, fondendo insieme i range che sono in
+         * sovrapposizione
+         */
+        ctrl.activeAnnotations.forEach(annot => {
+            let newRange = rangy.createRange();
+            let newRangeBookmark = {
+                containerNode: el.get(0),
+                end: annot.end.value,
+                start: annot.start.value
+            };
+            newRange.moveToBookmark(newRangeBookmark);
+            //let newRange = buildRange(el.get(0), annot.start.value, annot.end.value);
+            let annoType = annot.type.value;
+            let annotations = [annot];
+
+            // Se ci sono intersezioni, unisci le annotazioni
+            for (let i in ctrl.rangesInfo) {
+                let oldRangeInfo = ctrl.rangesInfo[i];
+                let oldRange = rangy.createRange();
+                oldRange.moveToBookmark(oldRangeInfo.rangeBookmark);
+
+                if (newRange.intersectsRange(oldRange)) {
+                    newRange = newRange.union(oldRange);
+                    if (oldRangeInfo.type !== annoType) {
+                        annoType = 'anno-mixed';
+                    }
+                    annotations = oldRangeInfo.annotations.concat([annot]);
+                    // E qui abbiamo finito
+                    let result = {
+                        rangeBookmark: newRange.getBookmark(),
+                        type: annoType,
+                        annotations: annotations
+                    };
+                    ctrl.rangesInfo[i] = result;
+                    return;
+                }
+            }
+
+            let result = {
+                rangeBookmark: newRangeBookmark,
+                type: annoType,
+                annotations: annotations
+            };
+            ctrl.rangesInfo.push(result);
+        });
+
+        /**
+         * Per ogni range determinato al passo precedente,
+         * applica la classe con l'highlight e assegna
+         * la funzione callback per click.
+         */
+        ctrl.rangesInfo.forEach((rInfo, index) => {
+            // Il range è sempre ricostruito dal bookmark perchè il riferimento
+            // che avevamo potrebbe non essere più valido (se il DOM è mutato)
+            let range = rangy.createRange();
+            let className = `anno-${rInfo.type}`;
+            range.moveToBookmark(rInfo.rangeBookmark);
+
+            // Evidenzia il range
+            h.addClassApplier(rangy.createClassApplier(className));
+            try {
+                h.highlightRanges(className, [range]);
+            } catch (e) {
+                console.warn(className + ' ha qualche problema?');
+            }
+
+            // Determina su che elemento attaccare l'event listener per i click
+            let container = GetAllCreatedElements(rInfo.rangeBookmark, className);
+            /*
+            let container = range.getNodes(false, (el) => {
+                return el.className && el.className.match(className);
+            });
+            */
+            if (container.length === 0) {
+                // A volte il primo metodo fallisce..
+                container = range.commonAncestorContainer;
+                if (container.nodeType === container.TEXT_NODE) {
+                    // Se l'antenato è un text node dobbiamo
+                    // risalire, se no element.bind non funziona
+                    container = container.parentNode;
+                }
+                container = [container];
+            }
+
+            // Assegna la callback
+            container.forEach(c => {
+                c = angular.element(c);
+                c.attr('bound', true);
+                c.bind('click', (event) => {
+                    event.preventDefault();
+                    ctrl.showAnnotations(event, rInfo.annotations);
+                });
+            });
+
+        });
+
+    }
+
+    /**
+     * SO, cosa farei senza di te..
+     * https://stackoverflow.com/questions/14710290/rangy-how-can-i-get-the-span-element-that-is-created-using-the-highlighter-modu
+     */
+    function GetAllCreatedElements(rangeBookmark, className) {
+        var range = rangy.createRange();
+        range.moveToBookmark(rangeBookmark);
+        var nodes = range.getNodes(false, function(el) {
+            return el.className && el.className.match(className);
+            //return el.parentNode && el.parentNode.className == className;
+        });
+
+        var spans = [];
+
+        for (var i = 0; i < nodes.length; i++) {
+            spans.push(nodes[i].parentNode);
         }
 
-        // DEBUG
-        if (el.get(0).nodeName === 'p') {
-            console.log('ww');
-            console.log(h);
-        }
-
-        let ancestor = range.commonAncestorContainer;
-        if (ancestor.nodeType === ancestor.TEXT_NODE) {
-            // Se l'antenato è un text node dobbiamo
-            // risalire, se no element.bind non funziona
-            ancestor = ancestor.parentNode;
-        }
-        ctrl.element = angular.element(ancestor);
-        // Non posso usare ng-click se no mi tocca
-        // ricompilare la direttiva e succedono
-        // Brutte Cose (R)
-        ctrl.element.bind('click', ctrl.showAnnotations);
-
+        return nodes;
     }
 
     /**
@@ -65,10 +165,12 @@ export default function annotatedText() {
         $.each(el.childNodes, function(i, node) {
             if (node.nodeType === node.TEXT_NODE) {
                 // se è un text_node lo vogliamo
+                /* A quanto pare i nodi vuoti sono importanti
                 if (node.data.match(/^\s+$/)) {
                     // scarta i nodi vuoti
                     return;
                 }
+                */
                 result.push(node);
             } else {
                 // se no, andiamo di ricorsione..
