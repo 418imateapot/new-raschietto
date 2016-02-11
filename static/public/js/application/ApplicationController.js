@@ -136,6 +136,7 @@ export default function ApplicationController($scope, $stateParams, $compile, $m
                     model.annotations = annotationService.tidy(response.body);
                     model.annotationsLoading = false;
                     model.filters = _initFilters(); // crea i filtri in base ai gruppi
+                    console.log(response);
                     _highlight();
                 });
             });

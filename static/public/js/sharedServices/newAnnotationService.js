@@ -7,7 +7,10 @@ function newAnnotationService($cookies) {
 
     const service = this;
 
-    service.generateAnnotation = _generateAnnotation;
+    //service.generateAnnotation = _generateAnnotation;
+    service.generateAnnotation = _saveLocal;
+    service.saveLocal = _saveLocal;
+    service.retrieveLocal = _retrieveLocal;
 
 
     ////////////////////
@@ -15,7 +18,34 @@ function newAnnotationService($cookies) {
     ////////////////////
 
     function _saveLocal(newAnnotations) {
+        //let unsaved = _retrieveLocal();
         $cookies.putObject('pending', newAnnotations);
+    }
+
+    function _retrieveLocal() {
+        return $cookies.getObject('pending');
+    }
+
+    function _fusekify(anno) {
+        let result = [];
+
+        anno.annotations.forEach(entry => {
+            return {
+                bodyLabel: {value: entry.body.label},
+                end: {value: anno.fragment.end},
+                fragment: {value: anno.fragment.id},
+                object: {value: ''},
+                objectLabel: {value: ''},
+                predicate: {value: ''},
+                provenance: {value: anno.provenance.author.email},
+                src: {value: entry.target.source},
+                start: {value: anno.fragment.start},
+                type: {value: ''},
+                typeLabel: {value: ''}
+            };
+        });
+
+        return result;
     }
 
 
@@ -37,6 +67,7 @@ function newAnnotationService($cookies) {
                 "time": data.provenance.time.toUTCString()
             }
         };
+        _saveLocal(result);
 
         return result;
     }
@@ -163,15 +194,6 @@ function newAnnotationService($cookies) {
         }
         return result;
     }
-
-    /*
-            "label": "Questo articolo cita ‘Institutional repositories, open access, and scholarly communication: A study of conflicting paradigms.’",
-            "subject": "dlib:03moulaison_ver1",
-            "predicate": "cito:cites",
-            "resource": {
-                "id": "dlib:03moulaison_ver1_cited_3",
-                "label": "[3] Cullen, R., & Chawner, B. (2011). Institutional repositories, open access, and scholarly communication: A study of conflicting paradigms. The Journal of Academic Librarianship, 37(6), 460-470. http://doi.org/10.1016/j.acalib.2011.07.002"
-    */
 
     // Copiaincollata per pigrizia...
     function _genLabel(type) {
