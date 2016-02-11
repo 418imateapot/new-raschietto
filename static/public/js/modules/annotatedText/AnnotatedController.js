@@ -6,7 +6,6 @@ export default function AnnotatedTextController($scope, $mdDialog) {
 
     // Definite nella dase di link:
     // model.managedAnnotations  -> Lista di tutte le annotazioni sul frammento
-    // model.theSpan             -> L'elemento cui è legata l'annotazione
     // model.getAnnotations      -> Recupera le annotazioni
 
     model.managedAnnotations = [];  // Tutte le annotazioni gestite
@@ -22,17 +21,22 @@ export default function AnnotatedTextController($scope, $mdDialog) {
 
     function _showAnnotation(event, annotations) {
         $mdDialog.show({
-            controller: function(){},
+            controller: _showAnnotationController,
             controllerAs: 'dialog',
-            template: '<p>{{dialog.annotations | json}}</p>',
-            //templateUrl: 'js/modules/annotatedText/annotationModalView.html',
+            templateUrl: 'js/modules/annotatedText/annotationModalView.html',
             annotations: annotations,
             bindToController: {annotations: annotations},
             parent: angular.element(document.body),
             targetEvent: event,
             clickOutsideToClose: true
         });
-        console.log(annotations);
+    }
+
+    function _showAnnotationController() {
+        const dialog = this;
+
+        console.log(dialog.annotations);
+        dialog.isFiltered = () => false;
     }
 
     function _elementConfig(attrs) {

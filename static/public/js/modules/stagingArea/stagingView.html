@@ -1,0 +1,52 @@
+<!-- filtri 
+<md-content layout="row" layout-padding layout-wrap layout-align="center center">
+    <md-checkbox ng-checked="metaArea.exists('hasTitle', metaArea.selected)" ng-click="metaArea.toggle('hasTitle', metaArea.selected)">
+        Titolo
+    </md-checkbox>
+    <md-checkbox ng-checked="metaArea.exists('hasAuthor', metaArea.selected)" ng-click="metaArea.toggle('hasAuthor', metaArea.selected)">
+        Autore
+    </md-checkbox>
+    <md-checkbox ng-checked="metaArea.exists('hasPublicationYear', metaArea.selected)"
+    ng-click="metaArea.toggle('hasPublicationYear', metaArea.selected)">
+        Anno di Pubblicazione
+    </md-checkbox>
+    <md-checkbox ng-checked="metaArea.exists('hasURL', metaArea.selected)" ng-click="metaArea.toggle('hasURL', metaArea.selected)">
+        URL
+    </md-checkbox>
+    <md-checkbox ng-checked="metaArea.exists('hasDOI', metaArea.selected)" ng-click="metaArea.toggle('hasDOI', metaArea.selected)">
+        DOI
+    </md-checkbox>
+    <md-checkbox ng-checked="metaArea.exists('hasComment', metaArea.selected)" ng-click="metaArea.toggle('hasComment', metaArea.selected)">
+        Commento
+    </md-checkbox>
+    <md-checkbox ng-checked="metaArea.exists('denotesRethoric', metaArea.selected)"
+    ng-click="metaArea.toggle('denotesRethoric', metaArea.selected)">
+        Retorica
+    </md-checkbox>
+    <md-checkbox ng-checked="metaArea.exists('cites', metaArea.selected)" ng-click="metaArea.toggle('cites', metaArea.selected)">
+        Citazione
+    </md-checkbox>
+        <md-checkbox ng-checked="metaArea.exists('all', metaArea.selected)" ng-click="metaArea.toggle('all', metaArea.selected)">
+        alllllllllllll
+    </md-checkbox>
+
+</md-content>
+<hr>
+-->
+<!-- Cards con le annotazioni -->
+
+<!-- loading... -->
+<span layout="column" layout-align="center center" ng-show="metaArea.loading">
+    <md-progress-circular md-mode="indeterminate" md-diameter="80"></md-progress-circular>
+</span>
+
+<!-- Le cards! -->
+<md-content ng-hide="metaArea.loading" class="md-padding" layout="row" layout-wrap
+layout-align="center start" layout-xs="column">
+
+    <div ng-repeat="anno in metaArea.annotations" flex="50" flex-xs="100" layout="column"
+    ng-if="app.isFiltered(anno)">
+        <annotation-card annotation="anno" flex/>
+    </div>
+
+</md-content>

@@ -1,5 +1,3 @@
-import angular from 'angular';
-
 import MetaController from './MetaAreaController.js';
 import metaAreaDirective from './metaAreaDirective.js';
 

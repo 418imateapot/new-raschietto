@@ -6,7 +6,7 @@
         </h2>
         </div>
     </md-toolbar>
-    <md-dialog-content layout-padding>
+    <md-dialog-content class="newAnno-content" layout-padding>
 
         <form layout="column" ng-submit="dialog.submit()">
             <!-- select -->
@@ -65,7 +65,7 @@
 
                 <!--comment-->
                 <div ng-show="dialog.showFields('hasComment')">
-                    <span ng-show="dialog.selectedText">
+                    <span class="newAnno-selected" ng-show="dialog.selectedText">
                         <h3>Testo selezionato:</h3>
                         <p>{{dialog.selectedText}}</p>
                     </span>
@@ -81,7 +81,7 @@
 
                 <!--rethoric-->
                 <div ng-show="dialog.showFields('denotesRethoric')">
-                    <span ng-show="dialog.selectedText">
+                    <span class="newAnno-selected" ng-show="dialog.selectedText">
                         <h3>Testo selezionato:</h3>
                         <p>{{dialog.selectedText}}</p>
                     </span>
@@ -140,13 +140,13 @@
                 <br>{{dialog.provenance.time | date: medium}}
             </p>
 
-            <md-dialog-actions class="newAnnoButtons" layout="row" flex layout-align="end end">
-                <hr/>
-                <md-button class="md-raised" type="submit">Salva</md-button>
-                <md-button class="md-raised" type="reset">Annulla</md-button>
-            </md-dialog-actions>
-
-        </form>
-
     </md-dialog-content>
+    <md-dialog-actions class="newAnnoButtons" layout="row" flex layout-align="end end">
+        <hr/>
+        <md-button class="md-raised" type="submit">Salva</md-button>
+        <md-button class="md-raised" type="reset">Annulla</md-button>
+    </md-dialog-actions>
+
+    </form>
+
 </md-dialog>

@@ -59,12 +59,18 @@ function AnnotationCardController($sanitize) {
                 break;
             case 'denotesRethoric':
                 model.icon = '&nbsp;R';
+                model.header= 'Funzione retorica';
+                model.text = model.annotation.labe.valuel;
                 break;
             case 'hasComment':
                 model.icon = 'Com';
+                model.header= 'Commento';
+                model.text = model.annotation.labe.valuel;
                 break;
             case 'cites':
                 model.icon = 'Cit';
+                model.header= 'Citazione';
+                model.text = model.annotation.bodyLabel.value;
                 break;
         }
     }

@@ -1,1 +1,16 @@
-FUNZIONA
+<md-dialog>
+    <md-toolbar class="md-toolbar teapot-tb-secondary">
+        <div class="md-toolbar-tools">
+            <h2>
+          <span>Annotazioni sul frammento</span>
+        </h2>
+        </div>
+    </md-toolbar>
+    <md-dialog-content class="md-padding" layout="row" layout-wrap layout-align="center start"
+    layout-xs="column">
+
+        <span ng-repeat="anno in dialog.annotations" flex="50" flex-xs="100" layout="column">
+    <annotation-card class="annocard" flex-noshrink annotation="anno"></annotation-card>
+</span>
+    </md-dialog-content>
+</md-dialog>

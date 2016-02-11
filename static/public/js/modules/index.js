@@ -13,6 +13,7 @@ import topbar from './topbar/index.js';
 import annotatedText from './annotatedText/index.js';
 import newAnnotation from './newAnnotation/index.js';
 import annotationFilter from './annotationFilter/index.js';
+import stagingArea from './stagingArea/index.js';
 
 export default angular.module('teapot.modules', [
     annotationCard,
@@ -24,6 +25,7 @@ export default angular.module('teapot.modules', [
     newAnnotation,
     annotationFilter,
     annotatedText,
+    stagingArea,
     toolbox,
     login
 ]).name;
