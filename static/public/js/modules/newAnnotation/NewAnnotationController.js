@@ -25,7 +25,7 @@ export default function NewAnnotationController($mdConstant, $mdDialog, $statePa
      * poi la mostra
      */
     function _showModal(ev) {
-        let selection = _selection();
+        let selection = rangy.getSelection();
         let selectedText = selection.toString();
         let fragment = null;
         let subject = model.docUrl.replace(/\.html$/, '');
@@ -43,9 +43,13 @@ export default function NewAnnotationController($mdConstant, $mdDialog, $statePa
             }
             let focus = selection.focusOffset;
             let anchor = selection.anchorOffset;
+            let anchorNode = selection.anchorNode;
             //TODO controllare gli offset che genera
             let start = Math.min(focus, anchor);
             let end = Math.max(focus, anchor);
+            if(focus === 0 && anchorNode.nodeType === anchorNode.TEXT_NODE) { // Double click selection?
+                end = anchorNode.length;
+            }
 
             // Se non c'è testo selezionato, niente path
             if (selectedText !== '') {
@@ -159,7 +163,7 @@ export default function NewAnnotationController($mdConstant, $mdDialog, $statePa
             content.subject = dialog.subject;
             let payload = newAnnotationService.generateAnnotation(content);
             payload = angular.toJson(payload);
-            console.log(payload);
+            //console.log(payload);
         }
 
     }

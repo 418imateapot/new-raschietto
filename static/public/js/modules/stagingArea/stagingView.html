@@ -1,1 +1,12 @@
-asd
+<!-- Cards con le annotazioni -->
+
+<!-- Le cards! -->
+<md-content class="md-padding" layout="row" layout-wrap
+layout-align="center start" layout-xs="column">
+
+    <div ng-repeat="anno in stage.pending" flex="50" flex-xs="100" layout="column">
+<!--        ng-if="app.isFiltered(anno)">-->
+        <annotation-card annotation="anno" flex/>
+    </div>
+
+</md-content>

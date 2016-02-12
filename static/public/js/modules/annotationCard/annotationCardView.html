@@ -16,7 +16,7 @@
             {{annoCard.text}}
         </p>
     </md-card-content>
-    <md-card-actions layout="row" layout-align="end center">
+    <md-card-actions ng-show="annoCard.isEditable()" layout="row" layout-align="end center">
         <md-button>Modifica</md-button>
         <md-button>Cancella</md-button>
     </md-card-actions>

@@ -1,7 +1,7 @@
-AnnotationCardController.$inject = ['$sanitize'];
+AnnotationCardController.$inject = ['$sanitize', 'userService'];
 export
 default
-function AnnotationCardController($sanitize) {
+function AnnotationCardController($sanitize, userService) {
 
     var model = this;
 
@@ -10,6 +10,7 @@ function AnnotationCardController($sanitize) {
     model.provenance = '';
     model.email = '';
     model.text = '';
+    model.isEditable = () => model.annotation.provenance.value === userService.userEmail;
 
     _init();
 
@@ -60,12 +61,12 @@ function AnnotationCardController($sanitize) {
             case 'denotesRethoric':
                 model.icon = '&nbsp;R';
                 model.header= 'Funzione retorica';
-                model.text = model.annotation.labe.valuel;
+                model.text = model.annotation.bodyLabel.value;
                 break;
             case 'hasComment':
                 model.icon = 'Com';
                 model.header= 'Commento';
-                model.text = model.annotation.labe.valuel;
+                model.text = model.annotation.objectLabel.value;
                 break;
             case 'cites':
                 model.icon = 'Cit';

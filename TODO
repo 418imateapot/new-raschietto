@@ -1,11 +1,15 @@
 Raschietto TODO
 ===============
-xx* Autenticazione (Semplice!)
-xxx* modificare teapot/boris/getdoc.py per gestire siti oltre a dlib.org.
-???* scrivere uno script per aggiungere automaticamente nuovi documenti (Expression, Item, Work e creator) al triple store
 
-* Visualizzare i risultati delle query.
-* Creare i filtri per le query (es: visualizzare solo "hasAuthor")
+Collegare newanno client e newanno server
+filtri migliori
+Pulsante indietro per newAnnoModal
+Dialog editFragment
+link per staging area
+logica server per DELETE
+collega scraper e staging area
+scraper migliorato
+
 
 * LO SCRAPER!
     Per il momento deve ricavare dal documento:
@@ -17,12 +21,3 @@ xxx* modificare teapot/boris/getdoc.py per gestire siti oltre a dlib.org.
     inoltre per fare l'annotazione ci serve l'xpath di ?
 
 
-* Inserire nuove annotazioni (lato client)
-* Inserire nuove annotazioni (lato server)
-
--------------------------------------
-Agginugere annotazioni ->
-    tasto + che appare in mod. annotator
-    barra laterale dx. per visualizzare le annotazioni in linea (a scomparsa su cell?)
-
-DIVIDERE/FILTRARE annotazioni per gruppo

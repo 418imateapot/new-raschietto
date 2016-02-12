@@ -8,9 +8,10 @@ function newAnnotationService($cookies) {
     const service = this;
 
     //service.generateAnnotation = _generateAnnotation;
-    service.generateAnnotation = _saveLocal;
+    service.generateAnnotation = _generateAnnotation;
     service.saveLocal = _saveLocal;
     service.retrieveLocal = _retrieveLocal;
+    service.fusekify = _fusekify;
 
 
     ////////////////////
@@ -18,8 +19,9 @@ function newAnnotationService($cookies) {
     ////////////////////
 
     function _saveLocal(newAnnotations) {
-        //let unsaved = _retrieveLocal();
-        $cookies.putObject('pending', newAnnotations);
+        let unsaved = _retrieveLocal() || [];
+        unsaved.push(newAnnotations);
+        $cookies.putObject('pending', unsaved);
     }
 
     function _retrieveLocal() {
@@ -27,30 +29,31 @@ function newAnnotationService($cookies) {
     }
 
     function _fusekify(anno) {
+        console.log(anno);
         let result = [];
 
-        anno.annotations.forEach(entry => {
+        result = anno.annotations.map(entry => {
             return {
                 bodyLabel: {value: entry.body.label},
-                end: {value: anno.fragment.end},
-                fragment: {value: anno.fragment.id},
+                end: {value: anno.target.end},
+                fragment: {value: anno.target.id},
                 object: {value: ''},
-                objectLabel: {value: ''},
-                predicate: {value: ''},
+                objectLabel: {value: anno.resource ? anno.resource.label : anno.literal},
+                predicate: {value: entry.body.predicate},
                 provenance: {value: anno.provenance.author.email},
-                src: {value: entry.target.source},
-                start: {value: anno.fragment.start},
-                type: {value: ''},
-                typeLabel: {value: ''}
+                src: {value: anno.target.source},
+                start: {value: anno.target.start},
+                type: {value: entry.type},
+                typeLabel: {value: entry.label}
             };
         });
 
+        console.log(result);
         return result;
     }
 
 
     function _generateAnnotation(data) {
-        console.log(data);
         let result = {
             "annotations": _makeAnnotations(data),
             "target": {
@@ -74,7 +77,6 @@ function newAnnotationService($cookies) {
 
 
     function _addTypeInfo(annotations, type) {
-        console.log(annotations);
         annotations.forEach(obj => {
             obj.type = type;
             obj.label = _genLabel(type);
