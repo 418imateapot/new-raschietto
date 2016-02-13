@@ -80,6 +80,16 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
             clickOutsideToClose: true
         });
     }
+    //funzione tutorial   ---> ?
+
+  function _tutorial(ev) {
+        $mdDialog.show({
+	    templateUrl: 'js/modules/tutorial/tutorialView.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true
+        });
+    }
 
     /**
      * Seleziona il colore e il contenuto dell'intestazione del
