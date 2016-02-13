@@ -21,6 +21,7 @@ import ngAnimate from 'angular-animate';
 import material from 'angular-material';
 import ngMessages from 'angular-messages';
 import router from 'angular-ui-router';
+import localStorage from 'angular-local-storage';
 
 // Componenti dell'applicazione
 import conf from './conf/index.js';
@@ -32,6 +33,7 @@ import appService from './application/appService.js';
 var app = angular.module('teapot', [
     'ui.router',
     'ngAnimate',
+    'LocalStorageModule',
     material,
     ngMessages,
     sharedServices,

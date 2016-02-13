@@ -10,7 +10,7 @@
     layout-xs="column">
 
         <span ng-repeat="anno in dialog.annotations" flex="50" flex-xs="100" layout="column">
-    <annotation-card class="annocard" flex-noshrink annotation="anno"></annotation-card>
+    <annotation-card refresh="app.reload()" class="annocard" flex-noshrink annotation="anno"></annotation-card>
 </span>
     </md-dialog-content>
 </md-dialog>

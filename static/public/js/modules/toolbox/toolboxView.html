@@ -9,8 +9,12 @@
     <md-tab label="Annotazioni" md-on-select="syncURL('annotations')">
         <md-content class="md-padding">
             <meta-area is-filtered="app.isFiltered(item)" is-loading="{{toolbox.annotationsLoading}}"
-            annotations="toolbox.annotations"></meta-area>
+            annotations="toolbox.annotations" refresh="app.reload()"></meta-area>
         </md-content>
+    </md-tab>
+
+    <md-tab label="Annotazioni non salvate" md-on-select="syncURL('staging')">
+        <staging-area></staging-area>
     </md-tab>
 
     <md-tab label="Filtri" md-on-select="syncURL('filters')">
@@ -22,9 +26,6 @@
             </md-checkbox>
             </span>
         </md-content>
-    </md-tab>
-    <md-tab label="Annotazioni non salvate" md-on-select="syncURL('staging')">
-        <staging-area></staging-area>
     </md-tab>
 
 

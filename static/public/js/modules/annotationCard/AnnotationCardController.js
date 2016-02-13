@@ -1,7 +1,7 @@
-AnnotationCardController.$inject = ['$sanitize', 'userService'];
+AnnotationCardController.$inject = ['$sanitize', '$state', 'userService', 'newAnnotationService'];
 export
 default
-function AnnotationCardController($sanitize, userService) {
+function AnnotationCardController($sanitize, $state, userService, newAnnotationService) {
 
     var model = this;
 
@@ -11,6 +11,7 @@ function AnnotationCardController($sanitize, userService) {
     model.email = '';
     model.text = '';
     model.isEditable = () => model.annotation.provenance.value === userService.userEmail;
+    model.delete = _delete;
 
     _init();
 
@@ -66,7 +67,7 @@ function AnnotationCardController($sanitize, userService) {
             case 'hasComment':
                 model.icon = 'Com';
                 model.header= 'Commento';
-                model.text = model.annotation.objectLabel.value;
+                model.text = model.annotation.bodyLabel.value;
                 break;
             case 'cites':
                 model.icon = 'Cit';
@@ -74,6 +75,12 @@ function AnnotationCardController($sanitize, userService) {
                 model.text = model.annotation.bodyLabel.value;
                 break;
         }
+    }
+
+    function _delete() {
+        newAnnotationService.delete(model.annotation);
+        model.refresh();
+        $state.go('.', {}, {reload: true});
     }
 
 }

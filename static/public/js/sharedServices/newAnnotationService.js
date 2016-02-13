@@ -1,9 +1,9 @@
-newAnnotationService.$inject = ['$cookies'];
+newAnnotationService.$inject = ['$cookies', 'localStorageService'];
 
 export
 default
 
-function newAnnotationService($cookies) {
+function newAnnotationService($cookies, localStorageService) {
 
     const service = this;
 
@@ -12,6 +12,7 @@ function newAnnotationService($cookies) {
     service.saveLocal = _saveLocal;
     service.retrieveLocal = _retrieveLocal;
     service.fusekify = _fusekify;
+    service.delete = _deleteLocal;
 
 
     ////////////////////
@@ -19,17 +20,27 @@ function newAnnotationService($cookies) {
     ////////////////////
 
     function _saveLocal(newAnnotations) {
-        let unsaved = _retrieveLocal() || [];
+        let unsaved = _retrieveLocal();
         unsaved.push(newAnnotations);
-        $cookies.putObject('pending', unsaved);
+        localStorageService.set('pending', unsaved);
+        //$cookies.putObject('pending', unsaved);
     }
 
     function _retrieveLocal() {
-        return $cookies.getObject('pending');
+        //return $cookies.getObject('pending');
+        return localStorageService.get('pending') || [];
+    }
+
+    // UNSAVED = jsonone
+    // data = fuseki
+    function _deleteLocal(data) {
+        console.log(data);
+        let unsaved = _retrieveLocal();
+        _defusekify(data);
+        //localStorageService.set('pending', unsaved);
     }
 
     function _fusekify(anno) {
-        console.log(anno);
         let result = [];
 
         result = anno.annotations.map(entry => {
@@ -41,15 +52,63 @@ function newAnnotationService($cookies) {
                 objectLabel: {value: anno.resource ? anno.resource.label : anno.literal},
                 predicate: {value: entry.body.predicate},
                 provenance: {value: anno.provenance.author.email},
+                provenanceLabel: {value: anno.provenance.author.name},
                 src: {value: anno.target.source},
                 start: {value: anno.target.start},
+                time: {value: anno.provenance.time},
                 type: {value: entry.type},
                 typeLabel: {value: entry.label}
             };
         });
 
-        console.log(result);
         return result;
+    }
+
+
+    function _defusekify(data) {
+        let result = {};
+        result.url = data.src.value;
+        result.subject = result.url.replace(/\.html$/, '') + '_ver1';
+        result.fragment = {
+            path: data.fragment.value,
+            start: data.start.value,
+            end: data.end.value
+        };
+        result.provenance = {
+            name: data.provenanceLabel.value || '',
+            email: data.provenance.value,
+            time: new Date(data.time.value)
+        };
+        result.type = data.type.value;
+        switch (data.type.value) {
+            case 'hasTitle':
+                result.title = data.objectLabel.value;
+                break;
+            case 'hasAuthor':
+                result.authors = [data.objectLabel.value];
+                break;
+            case 'hasPublicationYear':
+                result.year = data.objectLabel.value;
+                break;
+            case 'hasDoi':
+                result.doi = data.objectLabel.value;
+                break;
+            case 'hasURL':
+                result.url = data.objectLabel.value;
+                break;
+            case 'hasComment':
+                result.comment = data.objectLabel.value;
+                break;
+            case 'denotesRethoric':
+                result.rethoric = data.objectLabel.value;
+                break;
+            case 'cites':
+                result.cited = {};
+                result.cited.title = data.object.label;
+                break;
+        }
+        console.log(_generateAnnotation(result));
+        //return _generateAnnotation(data)
     }
 
 
@@ -179,16 +238,18 @@ function newAnnotationService($cookies) {
                         }
                     }
                 }];
+                // Genera le annotazioni sull'articolo citato
                 $.each(data.cited, (k, v) => {
                     let metaData = {
                         subject: id,
                         type: _genType(k)
                     };
-                    console.log(k, metaData.type);
                     metaData[k] = v;
                     result = result.concat(_makeAnnotations(metaData));
                 });
                 break;
+            default:
+                console.warn("Missing type");
         }
         if(data.type !== 'cites') {
             // Le citazioni hanno gia' il tipo

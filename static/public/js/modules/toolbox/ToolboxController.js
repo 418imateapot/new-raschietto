@@ -1,9 +1,6 @@
 ToolboxController.$inject = ['$scope', '$state', '$stateParams'];
 
-export
-default
-
-function ToolboxController($scope, $state, $stateParams) {
+export default function ToolboxController($scope, $state, $stateParams) {
     var model = this;
 
     model.selected = {};
@@ -37,7 +34,7 @@ function ToolboxController($scope, $state, $stateParams) {
                 return '0';
             case 'annotations':
                 return '1';
-            case 'filters':
+            case 'staging':
                 return '2';
         }
     }

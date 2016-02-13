@@ -27,7 +27,7 @@ def _scrape_dlib(url_string):
     date = re.findall('\d\d\d\d', date)[0]
     url = url_string
 
-    result = {"title": title, "doi": doi, "authors": authors, "date": date, "url": url}
+    result = {"title": title, "doi": doi, "authors": authors, "year": date, "url": url}
     return JSONEncoder().encode(result)
 
 

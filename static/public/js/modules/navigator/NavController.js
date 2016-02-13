@@ -1,4 +1,4 @@
-NavController.$inject = ['$scope', '$rootScope', '$state', '$stateParams', '$mdDialog', '$mdSidenav', 'annotationService', 'userService', 'loginModal'];
+NavController.$inject = ['$scope', '$rootScope', '$state', '$stateParams', '$mdDialog', '$mdSidenav', 'annotationService', 'userService', 'loginModal', 'newAnnotationService'];
 /**
  * $mdSidenav e $mdDialog sono i servizi per interagire
  * rispettivamente con la barra laterale e la finestra modale
@@ -6,7 +6,7 @@ NavController.$inject = ['$scope', '$rootScope', '$state', '$stateParams', '$mdD
 export
 default
 
-function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdSidenav, annotationService, userService, loginModal) {
+function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdSidenav, annotationService, userService, loginModal, newAnnotationService) {
     var model = this;
 
     model.open = () => $mdSidenav('left').toggle(); // Funzione da invocare per aprire il dialog.
@@ -127,16 +127,59 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
 
     function _scrape() {
         annotationService.scrape($stateParams.doi)
-            .then(res => console.info(res))
+            .then(res => {
+                let alreadyPending = newAnnotationService.retrieveLocal();
+                let data = new Set(alreadyPending);
+                let subject = res.data.url.replace(/\.html$/, '') + '_ver1';
+                let provenance = {
+                    name: userService.userName,
+                    email: userService.userEmail,
+                    time: new Date()
+                };
+                // TODO Converti formato?
+                for (let key in res.data) {
+                    let item = {};
+                    item.type = _determineType(key);
+                    // Se l'annotazione dello scraper è ugule
+                    // ad una preesistente, scratiamola
+                    item[key] = res.data[key];
+                    item.type = _determineType(key);
+                    item.provenance = provenance;
+                    item.subject = subject;
+                    item.url = res.data.url;
+                    data.add(item);
+                }
+                data.forEach(annotation => newAnnotationService.generateAnnotation(annotation));
+
+            })
             .catch(err => console.warn(err));
+    }
+
+    function _determineType(key) {
+        switch (key) {
+            case 'title':
+                return 'hasTitle';
+            case 'doi':
+                return 'hasDOI';
+            case 'year':
+                return 'hasPublicationYear';
+            case 'authors':
+                return 'hasAuthor';
+            case 'url':
+                return 'hasURL';
+        }
     }
 
     function _logout() {
         userService.logout();
         model.isLoggedIn = userService.isLoggedIn;
         $rootScope.$broadcast('logout');
-        $state.go('.', {mode: 'reader'});
-        _showNavToolBar({mode: 'reader'});
+        $state.go('.', {
+            mode: 'reader'
+        });
+        _showNavToolBar({
+            mode: 'reader'
+        });
     }
 
 }

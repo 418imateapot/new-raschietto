@@ -1,6 +1,6 @@
-ApplicationController.$inject = ['$scope', '$stateParams', '$compile', '$mdSidenav', 'documentService', 'annotationService', 'userService', 'appService'];
+ApplicationController.$inject = ['$scope', '$stateParams', '$compile', '$mdSidenav', 'documentService', 'annotationService', 'userService', 'appService', 'newAnnotationService'];
 
-export default function ApplicationController($scope, $stateParams, $compile, $mdSidenav, documentService, annotationService, userService, appService) {
+export default function ApplicationController($scope, $stateParams, $compile, $mdSidenav, documentService, annotationService, userService, appService, newAnnotationService) {
 
     let model = this;
 
@@ -9,6 +9,7 @@ export default function ApplicationController($scope, $stateParams, $compile, $m
     model.annotations = [];
     model.filters = _initFilters(); //Se un tipo/gruppo non appartiene al set, va filtrato
     model.isFiltered = _isFiltered; // Funzione passata giu' per lo $scope
+    model.reload = _load_annotations;
     model.showFilterBar = false;
     model.annotationsLoading = false;
     model.retrieveAnnotations = _getAnnos;
@@ -133,11 +134,16 @@ export default function ApplicationController($scope, $stateParams, $compile, $m
         documentService.findByDoi(decodedDoi)
             .then(doc => {
                 let url = doc.url.value;
+                // Recupera le annotazioni remote + le annotazioni locali
                 annotationService.query(url).then(response => {
                     model.annotations = annotationService.tidy(response.body);
+                    // + le locali
+                    let pending = newAnnotationService.retrieveLocal();
+                    pending.forEach(anno => {
+                        model.annotations = model.annotations.concat(newAnnotationService.fusekify(anno));
+                    });
                     model.annotationsLoading = false;
                     model.filters = _initFilters(); // crea i filtri in base ai gruppi
-                    console.log(response);
                     _highlight();
                 });
             });

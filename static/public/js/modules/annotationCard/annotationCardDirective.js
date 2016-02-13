@@ -3,7 +3,8 @@ export default function annotationCardDirective ($parse) {
         restrict: 'AE',
         templateUrl: 'js/modules/annotationCard/annotationCardView.html',
         bindToController: {
-            annotation: '='
+            annotation: '=',
+            refresh: '&'
         },
         controller: 'AnnotationCardController',
         controllerAs: 'annoCard'

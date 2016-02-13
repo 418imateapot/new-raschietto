@@ -193,14 +193,17 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX frbr: <http://purl.org/vocab/frbr/core#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX raschietto: <http://vitali.web.cs.unibo.it/raschietto/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
-SELECT ?type ?typeLabel ?provenance ?predicate ?object ?objectLabel ?bodyLabel ?innerObject ?fragment ?start ?end ?src
+SELECT ?type ?typeLabel ?provenance ?provenanceLabel ?time ?predicate ?object ?objectLabel ?bodyLabel ?innerObject ?fragment ?start ?end ?src
 WHERE {
     ?x a oa:Annotation;
         oa:annotatedBy ?provenance;
         oa:hasBody ?body.
-    OPTIONAL{?x raschietto:type ?type.}
+    OPTIONAL {?x oa:annotatedAt ?time.}
+    OPTIONAL {?x raschietto:type ?type.}
     OPTIONAL {?x rdfs:label ?typeLabel.}
+    OPTIONAL {?provenance foaf:name ?provenanceLabel.}
     ?body rdf:subject <${expr}>;
         rdf:predicate ?predicate;
         rdf:object ?object.

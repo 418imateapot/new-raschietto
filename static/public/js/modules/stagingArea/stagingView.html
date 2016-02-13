@@ -6,7 +6,7 @@ layout-align="center start" layout-xs="column">
 
     <div ng-repeat="anno in stage.pending" flex="50" flex-xs="100" layout="column">
 <!--        ng-if="app.isFiltered(anno)">-->
-        <annotation-card annotation="anno" flex/>
+        <annotation-card refresh="app.reload()" annotation="anno" flex/>
     </div>
 
 </md-content>
