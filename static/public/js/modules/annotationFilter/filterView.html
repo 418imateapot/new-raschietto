@@ -1,38 +1,50 @@
-<md-subheader class="md-raised md-primary">
-    <md-menu>
-      <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="ctrl.openMenu($mdOpenMenu, $event)">
-        tipo
-      </md-button>
-      <md-menu-content width="4">
-        <md-menu-item>
-          <md-button ng-click="ctrl.redial($event)">
-            <md-icon md-svg-icon="call:dialpad" md-menu-align-target></md-icon>
-            Redial
-          </md-button>
-        </md-menu-item>
-        <md-menu-item>
-          <md-button disabled="disabled" ng-click="ctrl.checkVoicemail()">
-            <md-icon md-svg-icon="call:voicemail"></md-icon>
-            Check voicemail
-          </md-button>
-        </md-menu-item>
-        <md-menu-divider></md-menu-divider>
-        <md-menu-item>
-          <md-button ng-click="ctrl.toggleNotifications()">
-            <md-icon md-svg-icon="social:notifications-{{ctrl.notificationsEnabled ? 'off' : 'on'}}"></md-icon>
-            {{ctrl.notificationsEnabled ? 'Disable' : 'Enable' }} notifications
-          </md-button>
-        </md-menu-item>
-      </md-menu-content>
+<md-menu-bar flex="100" layout-padding layout="row" layout-align="space-around bottom"
+class="md-whiteframe-5dp">
+    <md-menu flex>
+        <button ng-click="filter.show=false">
+            <md-icon class="material-icons">filter_list</md-icon>
+            Filtri
+        </button>
+        <md-menu-content></md-menu-content>
     </md-menu>
-</md-subheader>
-
-
-<md-content layout="row" layout-padding layout-wrap layout-align="center center"
-ng-repeat="(key, val) in toolbox.filters">
-    <span flex>
-            <md-checkbox ng-checked="toolbox.exists(key)" ng-click="toolbox.toggle(key)">
-                {{val.name}}
-            </md-checkbox>
-            </span>
-</md-content>
+    <md-menu flex>
+        <button ng-click="$mdOpenMenu()">
+            Per tipologia
+        </button>
+        <md-menu-content>
+            <md-menu-item ng-repeat="(key, val) in filter.filters" ng-show="filter.isTypeFilter(key)"
+            layout-padding>
+                <md-button ng-click="ctrl.sampleAction('share', $event)">
+                    <md-icon class="material-icons" ng-show="true">check</md-icon>
+                    {{val.name}}
+                </md-button>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+    <md-menu flex>
+        <button ng-click="$mdOpenMenu()">
+            Per autore
+        </button>
+        <md-menu-content>
+            <md-menu-item class="md-indent" ng-repeat="(key, val) in filter.filters" ng-show="filter.isProvenanceFilter(key)"
+            layout-padding>
+                <md-button ng-click="ctrl.sampleAction('undo', $event)">
+                    <md-icon class="material-icons" ng-show="true">check</md-icon>
+                    {{val.name}}
+                </md-button>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+    <md-menu flex>
+        <button ng-click="$mdOpenMenu()">
+            Le mie annotazioni
+        </button>
+        <md-menu-content></md-menu-content>
+    </md-menu>
+    <md-menu flex>
+        <button ng-click="$mdOpenMenu()">
+            Tutte le annotazioni
+        </button>
+        <md-menu-content></md-menu-content>
+    </md-menu>
+</md-menu-bar>

@@ -9,6 +9,7 @@ export default function ApplicationController($scope, $stateParams, $compile, $m
     model.annotations = [];
     model.filters = _initFilters(); //Se un tipo/gruppo non appartiene al set, va filtrato
     model.isFiltered = _isFiltered; // Funzione passata giu' per lo $scope
+    model.showFilterBar = false;
     model.annotationsLoading = false;
     model.retrieveAnnotations = _getAnnos;
     model.highlight = _highlight;
