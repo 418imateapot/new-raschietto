@@ -6,11 +6,11 @@
         </h2>
         </div>
     </md-toolbar>
-    <md-dialog-content class="md-padding" layout="row" layout-wrap layout-align="center start"
-    layout-xs="column">
+    <md-dialog-content class="md-padding" layout="row" flex="100" layout-wrap layout-align="none"
+    layout-xs="column" >
 
-        <span ng-repeat="anno in dialog.annotations" flex="50" flex-xs="100" layout="column">
-    <annotation-card refresh="app.reload()" class="annocard" flex-noshrink annotation="anno"></annotation-card>
+        <span ng-repeat="anno in dialog.annotations"  > 
+    <annotation-card class="annocard" flex-noshrink layout="row" annotation="anno"></annotation-card>
 </span>
     </md-dialog-content>
 </md-dialog>
