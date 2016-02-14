@@ -7,11 +7,11 @@ function newAnnotationService($cookies, localStorageService) {
 
     const service = this;
 
-    //service.generateAnnotation = _generateAnnotation;
     service.generateAnnotation = _generateAnnotation;
     service.saveLocal = _saveLocal;
     service.retrieveLocal = _retrieveLocal;
     service.fusekify = _fusekify;
+    service.defusekify = _defusekify;
     service.delete = _deleteLocal;
 
 
@@ -19,10 +19,19 @@ function newAnnotationService($cookies, localStorageService) {
     // Implementation //
     ////////////////////
 
-    function _saveLocal(newAnnotations) {
-        let unsaved = _retrieveLocal();
-        unsaved.push(newAnnotations);
-        localStorageService.set('pending', unsaved);
+    /**
+     * Salva annotazioni in localstorage
+     * @param {Boolean} overwrite Sovrascrivere le annotazioni esistenti?
+     */
+    function _saveLocal(newAnnotations, overwrite) {
+        let unsaved;
+        if(overwrite) {
+            unsaved = new Set(newAnnotations);
+        } else {
+            unsaved = new Set(_retrieveLocal());
+            unsaved.add(newAnnotations);
+        }
+        localStorageService.set('pending', Array.from(unsaved));
         //$cookies.putObject('pending', unsaved);
     }
 
@@ -34,10 +43,28 @@ function newAnnotationService($cookies, localStorageService) {
     // UNSAVED = jsonone
     // data = fuseki
     function _deleteLocal(data) {
-        console.log(data);
         let unsaved = _retrieveLocal();
-        _defusekify(data);
-        //localStorageService.set('pending', unsaved);
+        let local = [];
+        for (let i in unsaved) {
+           local = local.concat(_separateAnnotations(unsaved[i]));
+        }
+        let delenda = _defusekify(data);
+        local = local.filter(el =>  JSON.stringify(delenda) !== JSON.stringify(el));
+        console.log(local);
+        localStorageService.set('pending', local);
+    }
+
+    function _separateAnnotations(anno) {
+        if (anno.annotations.length === 1)
+            return [anno];
+        return anno.annotations.map(a => {
+             return {
+                annotations: [a],
+                target: anno.target,
+                provenance: anno.provenance
+            };
+
+        });
     }
 
     function _fusekify(anno) {
@@ -49,7 +76,7 @@ function newAnnotationService($cookies, localStorageService) {
                 end: {value: anno.target.end},
                 fragment: {value: anno.target.id},
                 object: {value: ''},
-                objectLabel: {value: anno.resource ? anno.resource.label : anno.literal},
+                objectLabel: {value: entry.body.resource ? entry.body.resource.label : entry.body.literal},
                 predicate: {value: entry.body.predicate},
                 provenance: {value: anno.provenance.author.email},
                 provenanceLabel: {value: anno.provenance.author.name},
@@ -65,7 +92,8 @@ function newAnnotationService($cookies, localStorageService) {
     }
 
 
-    function _defusekify(data) {
+    function _defusekify(data, editFmt) {
+        console.warn(data);
         let result = {};
         result.url = data.src.value;
         result.subject = result.url.replace(/\.html$/, '') + '_ver1';
@@ -107,8 +135,8 @@ function newAnnotationService($cookies, localStorageService) {
                 result.cited.title = data.object.label;
                 break;
         }
-        console.log(_generateAnnotation(result));
-        //return _generateAnnotation(data)
+        if (editFmt) return result;
+        return _generateAnnotation(result);
     }
 
 

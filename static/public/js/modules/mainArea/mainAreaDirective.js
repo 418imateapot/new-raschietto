@@ -11,7 +11,8 @@ function mainAreaDirective() {
         templateUrl: 'js/modules/mainArea/mainView.html',
         bindToController: {
             content: '=', // Per avere content come this.content
-            highlight: '&render'  //la funzione per evidenziare le annotazioni
+            highlight: '&render',  //la funzione per evidenziare le annotazioni
+            edit: '@'
         },
         controller: 'MainAreaController',
         controllerAs: 'mainArea'

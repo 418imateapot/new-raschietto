@@ -56,7 +56,7 @@ function routerConfig($stateProvider, $urlRouterProvider, $locationProvider) {
             url: '/:doi',
             views: {
                 '@': {
-                    template: '<main-area render="app.highlight()" content="app.content"></main-area>'
+                    template: '<main-area edit="false" render="app.highlight()" content="app.content"></main-area>'
                 }
             }
 

@@ -4,7 +4,7 @@
     layout-padding ng-bind-html="mainArea.content">
         <!--<span layout-padding ng-bind-html="mainArea.content"></span>>-->
     </md-whiteframe>
-    <new-annotation doc-url="mainArea.url"></new-annotation>
+    <new-annotation ng-hide="Boolean(mainArea.edit)" doc-url="mainArea.url"></new-annotation>
 </span>
 <!-- loading icon-->
 <div layout="column" ng-show="mainArea.loading" layout-align="center center">

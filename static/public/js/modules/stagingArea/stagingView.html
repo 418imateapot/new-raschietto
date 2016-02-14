@@ -4,12 +4,16 @@
 <md-button class="md-raised md-warn" flex="80">Salva tutto</md-button>
 </span>
 <!-- Le cards! -->
-<md-content class="md-padding" layout="row" layout-wrap
+<md-content ng-hide="stage.loading" class="md-padding" layout="row" layout-wrap
 layout-align="center start" layout-xs="column">
 
     <div ng-repeat="anno in stage.pending" flex="50" flex-xs="100" layout="column">
 <!--        ng-if="app.isFiltered(anno)">-->
-        <annotation-card refresh="app.reload()" annotation="anno" flex/>
+        <annotation-card edit="" delete="stage.delete($index)" refresh="app.reload()" annotation="anno" flex/>
     </div>
 
 </md-content>
+<!-- loading icon-->
+<div layout="column" ng-show="stage.loading" layout-align="center center">
+    <md-progress-circular md-mode="indeterminate" md-diameter="80"></md-progress-circular>
+</div>

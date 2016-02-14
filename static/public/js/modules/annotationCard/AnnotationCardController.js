@@ -11,7 +11,7 @@ function AnnotationCardController($sanitize, $state, userService, newAnnotationS
     model.email = '';
     model.text = '';
     model.isEditable = () => model.annotation.provenance.value === userService.userEmail;
-    model.delete = _delete;
+    //model.delete -> passata dallo scope esterno
 
     _init();
 

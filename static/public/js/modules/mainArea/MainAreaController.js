@@ -6,6 +6,7 @@ MainAreaController.$inject = ['$scope', '$state', '$sanitize', 'documentService'
  */
 export default function MainAreaController($scope, $state, $sanitize, documentService) {
     var model = this;
+    console.warn(model.edit, typeof(model.edit));
 
     model.loading = true; /** Usato per l'animazione */
     /** model.content ->  Il contenuto del documento HTML passato da appctrl */
