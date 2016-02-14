@@ -98,6 +98,7 @@ export default function NewAnnotationController($mdConstant, $mdDialog, $statePa
 
         const dialog = this;
         dialog.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA]; // Separatori per i nomi
+        dialog.cancel = () => $mdDialog.cancel();
 
         dialog.showFields = (type) => type === dialog.typeSelected;
         dialog.submit = _submit;
