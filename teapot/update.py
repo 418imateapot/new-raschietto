@@ -202,7 +202,7 @@ r = {
     }
 }
 
-print(generateGraphFromJSON(k))
+#print(generateGraphFromJSON(k))
 #print generateGraphFromJSON(j)
 #print generateGraphFromJSON(r)
 
@@ -231,12 +231,26 @@ def string2rschAuthor(fullname):
     :param string: fullname il nome e cognome di un autore.
     :returns string: il nome opportunamente modificato
     """
-    # fullname = unicodedata.normalize('NFKD',unicode(fullname,"utf-8")).encode("ascii","ignore")
+    fullname = unicodedata.normalize('NFKD',unicode(fullname,"utf-8")).encode("ascii","ignore")
     # sostituisce i caratteri accentati con i "corrispettivi" caratteri ASCII
     # http://stackoverflow.com/questions/3704731/replace-non-ascii-chars-from-a-unicode-string-in-python
 
     fullname = fullname.lower()  # trasforma eventuali maiuscole in minuscole
 
+    if ',' in fullname: #  cioè è del tipo "Cognome, Nome" o "Cognome, N.eccetera"
+        parts = fullname.split(',', 1) 
+        for c in parts[1]: 
+            if ord(c) not in (range(65, 91) + range(97, 123)): # c non è un carattere, ovvero non è in quel range ascii
+                continue
+            # se sono qui vuol dire che c è il primo carattere
+            return c + '-' + parts[0]
+
+
+        # con parts[1].split() mi toglie gli eventuali spazi prima del primo carattere del nome
+        # ma potrebbero esserci altri segni di punteggiatura (improbabile ma non si sa mai)
+        return parts[1][1] + '-' + parts[0]
+
+    # se sono qui vuol dire che il fullname è una variazione sul tema "nome cognome"
     for n in (range(33, 48) + range(58, 97) + range(123, 127)):  # rimuove la punteggiatura
         fullname = fullname.replace(chr(n),'')
 
@@ -249,8 +263,20 @@ def string2rschAuthor(fullname):
         return fullname
 
 
+rovescio = "Lee,  ,7.\][]  W.C."
+#rovescio = Lee, W.C.
+#Yu, H.
+#Cohen, K. 
 
-# s = "M.A. Ròòsso"
-# print string2rschAuthor(s)
+#M.-Q. Nghiem
+#Nghiem M.-Q.
 
+# quanti punti ci possono essere nel cognome? zero
+# stringa senza punti seguita da , --> cognome
+# prima lettera dopo lo spazio --> nome
+# la virgola c'è solo nella versione invertita e assumiamo pure che ce ne sia una sola
+
+s = "M.A. Ròòsso"
+#print string2rschAuthor(s)
+print string2rschAuthor(rovescio)
 ##########################################################################################################################
