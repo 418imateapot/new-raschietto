@@ -2,12 +2,12 @@
 import Dlib from '../../application/Dlib.js';
 import Riviste from '../../application/Riviste.js';
 
-NewAnnotationController.$inject = ['$mdConstant', '$mdDialog', '$stateParams', '$mdToast', 'userService', 'newAnnotationService'];
+NewAnnotationController.$inject = ['$rootScope', '$mdConstant', '$mdDialog', '$state', '$stateParams', '$mdToast', 'userService', 'newAnnotationService'];
 
 /**
  * Controller per il pulsante 'nuova annotazione'
  */
-export default function NewAnnotationController($mdConstant, $mdDialog, $stateParams, $mdToast, userService, newAnnotationService) {
+export default function NewAnnotationController($rootScope, $mdConstant, $mdDialog, $state, $stateParams, $mdToast, userService, newAnnotationService) {
 
     const model = this;
 
@@ -86,7 +86,8 @@ export default function NewAnnotationController($mdConstant, $mdDialog, $statePa
                 clickOutsideToClose: true
             })
             .then(function(answer) {
-                model.status = 'You said the information was "' + answer + '".';
+                $rootScope.$broadcast('force_reload', {doc_url: model.docUrl});
+                $state.go('.', {}, {reload: true});
             }, function() {
                 model.status = 'You cancelled the dialog.';
             });

@@ -1,6 +1,6 @@
-AnnotatedTextController.$inject = ['$scope', '$mdDialog'];
+AnnotatedTextController.$inject = ['$scope', '$state', '$mdDialog'];
 
-export default function AnnotatedTextController($scope, $mdDialog) {
+export default function AnnotatedTextController($state, $scope, $mdDialog) {
 
     let model = this;
 
@@ -34,18 +34,14 @@ export default function AnnotatedTextController($scope, $mdDialog) {
 
     function _showAnnotationController() {
         const dialog = this;
-
-        console.log(dialog.annotations);
         dialog.isFiltered = () => false;
+        dialog.edit = () => {
+            
+        };
     }
 
     function _elementConfig(attrs) {
         let annotationIndexes = attrs.annotations.trim().split(' ');
-        /*
-        let minStartRange = 0;
-        let maxEndRange = 0;
-        let annoType = '';
-        */
 
         model.managedAnnotations = model.getAnnotations({
             indexes: annotationIndexes
@@ -57,26 +53,6 @@ export default function AnnotatedTextController($scope, $mdDialog) {
                 model.activeAnnotations.push(elem);
         });
 
-        /* Individua il range più grande delle annotazioni  *
-         * su questo elemento, inoltra determina il tipo    *
-        model.activeAnnotations.forEach((elem, index) => {
-            if (index === 0) {
-                minStartRange = elem.start.value;
-                maxEndRange = elem.end.value;
-                annoType = elem.type.value;
-            } else {
-                minStartRange = (minStartRange < elem.start.value) ? minStartRange : elem.start.value;
-                maxEndRange = (maxEndRange > elem.end.value) ? maxEndRange : elem.end.value;
-                annoType = (annoType === elem.type.value) ? annoType : 'mixed';
-            }
-        });
-
-        return {
-            minStartRange: minStartRange,
-            maxEndRange: maxEndRange,
-            annoType: annoType
-        };
-        */
     }
 
 }

@@ -17,7 +17,7 @@
         </p>
     </md-card-content>
     <md-card-actions ng-show="annoCard.isEditable()" layout="row" layout-align="end center">
-        <edit-annotation edit="annoCard.annotation"></edit-annotation>
-        <md-button ng-click="annoCard.delete()">Cancella</md-button>
+        <edit-annotation ng-show="annoCard.edit" edit="annoCard.annotation"></edit-annotation>
+        <md-button ng-show="annoCard.delete" ng-click="annoCard.delete()">Cancella</md-button>
     </md-card-actions>
 </md-card>
