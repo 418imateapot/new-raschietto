@@ -12,7 +12,7 @@ function newAnnotationService($http, localStorageService) {
     service.retrieveLocal = _retrieveLocal;
     service.fusekify = _fusekify;
     service.defusekify = _defusekify;
-    //service.delete = _deleteLocal;
+    service.nuke = _deleteLocal;
     service.updateRemote = _updateRemote;
     service.deleteRemote = _deleteRemote;
 
@@ -52,16 +52,8 @@ function newAnnotationService($http, localStorageService) {
 
     // UNSAVED = jsonone
     // data = fuseki
-    function _deleteLocal(data) {
-        let unsaved = _retrieveLocal();
-        let local = [];
-        for (let i in unsaved) {
-           local = local.concat(_separateAnnotations(unsaved[i]));
-        }
-        let delenda = _defusekify(data);
-        local = local.filter(el =>  JSON.stringify(delenda) !== JSON.stringify(el));
-        console.log(local);
-        localStorageService.set('pending', local);
+    function _deleteLocal() {
+        localStorageService.clearAll();
     }
 
     function _separateAnnotations(anno) {

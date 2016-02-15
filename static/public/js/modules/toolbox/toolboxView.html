@@ -14,19 +14,7 @@
     </md-tab>
 
     <md-tab label="Annotazioni non salvate" md-on-select="syncURL('staging')">
-        <staging-area></staging-area>
+        <staging-area filters="toolbox.filters"></staging-area>
     </md-tab>
-
-    <md-tab label="Filtri" md-on-select="syncURL('filters')">
-        <md-content layout="row" layout-padding layout-wrap layout-align="center center"
-        ng-repeat="(key, val) in toolbox.filters">
-            <span flex>
-            <md-checkbox ng-checked="toolbox.exists(key)" ng-click="toolbox.toggle(key)">
-                {{val.name}}
-            </md-checkbox>
-            </span>
-        </md-content>
-    </md-tab>
-
 
 </md-tabs>

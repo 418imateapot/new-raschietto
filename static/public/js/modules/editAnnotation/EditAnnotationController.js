@@ -137,7 +137,6 @@ export default function EditAnnotationController($mdConstant, $mdDialog, $stateP
             content.url = model.docUrl;
             content.subject = dialog.subject;
             let newAnno = newAnnotationService.generateAnnotation(content);
-            newAnnotationService.delete(model.edit);
             newAnnotationService.saveLocal(newAnno);
             $mdToast.showSimple('Annotazione modificata.');
             $mdDialog.hide();

@@ -7,7 +7,7 @@
 <md-content ng-hide="stage.loading" class="md-padding" layout="row" layout-wrap
 layout-align="center start" layout-xs="column">
 
-    <div ng-repeat="anno in stage.pending" flex="50" flex-xs="100" layout="column">
+    <div ng-show="stage.isVisible(anno)" ng-repeat="anno in stage.pending" flex="50" flex-xs="100" layout="column">
 <!--        ng-if="app.isFiltered(anno)">-->
         <annotation-card edit="" delete="stage.delete($index)" refresh="app.reload()" annotation="anno" flex/>
     </div>
