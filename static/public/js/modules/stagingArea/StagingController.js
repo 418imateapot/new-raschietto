@@ -33,7 +33,8 @@ export default function StagingController($mdToast, newAnnotationService) {
             .then(r => {
                 $mdToast.showSimple('Annotazioni salvate');
                 newAnnotationService.nuke();
-                newAnnotationService.saveLocal(model.pending);
+                model.pending = [];
+                //newAnnotationService.saveLocal(model.pending);
             })
             .catch(e => $mdToast.showSimple('C\'è stato un problema!'));
     }

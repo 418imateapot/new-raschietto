@@ -10,3 +10,4 @@ doc/server/_build/doctrees/
 *.swp
 *.desktop
 *~
+dist.tgz

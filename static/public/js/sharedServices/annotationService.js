@@ -14,7 +14,10 @@ annotationService.$inject = ['$http', 'documentService'];
  *
  * @todo Cancella i rami else di debug
  */
-export default function annotationService($http, documentService) {
+export
+default
+
+function annotationService($http, documentService) {
     var promise;
 
     return {
@@ -30,8 +33,8 @@ export default function annotationService($http, documentService) {
                 let url = encodeURIComponent(result.url.value);
                 let request_url = `/api/scraper?url=${url}`;
                 return $http.get(request_url)
-                   .then(result => result)
-                   .catch(err => err);
+                    .then(result => result)
+                    .catch(err => err);
             })
             .catch(err => err);
     }
@@ -44,7 +47,8 @@ export default function annotationService($http, documentService) {
      * @returns {Promise} La risposta alla query dallo SPARQL endpoint
      */
     function query(url) {
-        var encodedQuery = encodeURIComponent(_build_query(url));
+        let expr = url.replace(/\.html$/, '') + '_ver1';
+        var encodedQuery = encodeURIComponent(_build_query(expr));
         var endpoint = 'http://tweb2015.cs.unibo.it:8080/data';
         //var endpoint = 'http://localhost:3030/data';
         var opts = 'format=json&callback=JSON_CALLBACK';
@@ -67,7 +71,7 @@ export default function annotationService($http, documentService) {
 
 
     function _genLabel(type) {
-        switch(type) {
+        switch (type) {
             case 'hasTitle':
                 return 'Titolo';
             case 'hasPublicationYear':
@@ -89,24 +93,24 @@ export default function annotationService($http, documentService) {
     }
 
     function _genType(label) {
-            if (/tit/i.test(label)) {
-                return 'hasTitle';
-            } else if (/pub/i.test(label)) {
-                return 'hasPublicationYear';
-            } else if (/aut/i.test(label)) {
-                return 'hasAuthor';
-            } else if (/URL/i.test(label)) {
-                return 'hasURL';
-            } else if (/DOI/i.test(label)) {
-                return 'hasDOI';
-            } else if (/comment/i.test(label)) {
-                return 'hasComment';
-            } else if (/ret/i.test(label)) {
-                return 'denotesRethoric';
-            } else if (/cit/i.test(label)) {
-                return 'cites';
-            }
-            return null;
+        if (/tit/i.test(label)) {
+            return 'hasTitle';
+        } else if (/pub/i.test(label)) {
+            return 'hasPublicationYear';
+        } else if (/aut/i.test(label)) {
+            return 'hasAuthor';
+        } else if (/URL/i.test(label)) {
+            return 'hasURL';
+        } else if (/DOI/i.test(label)) {
+            return 'hasDOI';
+        } else if (/comment/i.test(label)) {
+            return 'hasComment';
+        } else if (/ret/i.test(label)) {
+            return 'denotesRethoric';
+        } else if (/cit/i.test(label)) {
+            return 'cites';
+        }
+        return null;
     }
 
     /**
@@ -122,20 +126,23 @@ export default function annotationService($http, documentService) {
             let items = data.results.bindings;
             let result = [];
             for (let i in items) {
-                let keep = true;
+                let keep = false;
                 let elem = items[i];
                 // Genera elem.type se non esiste
                 if (!elem.type && !elem.typeLabel) {
                     continue;
                 } else if (!elem.type) {
                     let type = _genType(elem.typeLabel.value);
-                    elem.type = {value: type};
+                    elem.type = {
+                        value: type
+                    };
                 } else if (!elem.typeLabel) {
                     let label = _genLabel(elem.type.value);
-                    elem.typeLabel = {value: label};
+                    elem.typeLabel = {
+                        value: label
+                    };
                 }
                 let type = elem.type.value;
-                /*
                 switch (type) {
                     case 'hasTitle':
                         keep = (elem.predicate.value === 'dcterms:title' ||
@@ -176,16 +183,17 @@ export default function annotationService($http, documentService) {
                             elem.predicate.value.match(/\"?<?http:\/\/purl.org\/spar\/cito\/cites>?\"?/));
                         break;
                 } // END switch (type)
-                */
-                if (keep) {result.push(elem);}
+                if (keep) {
+                    result.push(elem);
+                }
                 //else {console.warn(`discarded`);console.warn(elem);}
             } // END for (var i in items)
             return result;
         } // END tidy(data)
 
-    function _build_query(url) {
+    function _build_query(expr) {
         // Usa i nuovi template string di ES6
-            return `
+        return `
 PREFIX oa: <http://www.w3.org/ns/oa#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX frbr: <http://purl.org/vocab/frbr/core#>
@@ -195,11 +203,11 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
 SELECT ?type ?typeLabel ?subject ?provenance ?provenanceLabel ?time ?predicate ?object ?objectLabel ?bodyLabel ?innerObject ?fragment ?start ?end ?src
 WHERE {
-    ?x a oa:Annotation.
-  	?x oa:hasTarget ?target.
-  	?target oa:hasSource <${url}>.
+    ?x a oa:Annotation;
+  	oa:hasTarget ?target.
     ?x oa:annotatedBy ?provenance;
         oa:hasBody ?body.
+    ?body rdf:subject <${expr}>.
     OPTIONAL {?x oa:annotatedAt ?time.}
     OPTIONAL {?x raschietto:type ?type.}
     OPTIONAL {?x rdfs:label ?typeLabel.}
@@ -223,24 +231,27 @@ WHERE {
     }
 
     function _validateRethoric(type) {
-        switch (type) {
-            case 'http://salt.semanticauthoring.org/ontologies/sro#Abstract':
-                return true;
-            case 'http://salt.semanticauthoring.org/ontologies/sro#Discussion':
-                return true;
-            case 'http://salt.semanticauthoring.org/ontologies/sro#Conclusion':
-                return true;
-            case 'http://purl.org/spar/deo/Introduction':
-                return true;
-            case 'http://purl.org/spar/deo/Materials':
-                return true;
-            case 'http://purl.org/spar/deo/Methods':
-                return true;
-            case 'http://purl.org/spar/deo/Results':
-                return true;
-            default:
-                return false;
-        }
+        let valid = [
+            'http://salt.semanticauthoring.org/ontologies/sro#Abstract',
+            'http://salt.semanticauthoring.org/ontologies/sro#Discussion',
+            'http://salt.semanticauthoring.org/ontologies/sro#Conclusion',
+            'http://purl.org/spar/deo/Introduction',
+            'http://purl.org/spar/deo/Materials',
+            'http://purl.org/spar/deo/Methods',
+            'http://purl.org/spar/deo/Results',
+            'sro#Abstract',
+            'sro#Discussion',
+            'sro#Conclusion',
+            'deo/Introduction',
+            'deo/Materials',
+            'deo/Methods',
+            'deo/Results'
+        ];
+
+        if (valid.indexOf(type) !== -1)
+            return true;
+        else
+            return false;
     }
 
 }
