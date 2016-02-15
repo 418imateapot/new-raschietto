@@ -15,6 +15,7 @@ export default function ApplicationController($scope, $stateParams, $compile, $m
     model.retrieveAnnotations = _getAnnos;
     model.highlight = _highlight;
     model.openNav = (ev) => $mdSidenav('left').open();
+    model.getAnnotations = () => model.annotations; // Per recuperare le annot da altri controller
 
     //model.showTabDialog = () => {};
 

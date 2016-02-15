@@ -22,6 +22,7 @@ System.config({
     "angular-messages": "github:angular/bower-angular-messages@1.4.8",
     "angular-sanitize": "github:angular/bower-angular-sanitize@1.4.8",
     "angular-ui-router": "github:angular-ui/ui-router@0.2.15",
+    "angular-utils-pagination": "npm:angular-utils-pagination@0.10.0",
     "babel": "npm:babel-core@5.8.34",
     "babel-runtime": "npm:babel-runtime@5.8.34",
     "christopherthielen/ui-router-extras": "github:christopherthielen/ui-router-extras@0.1.0",

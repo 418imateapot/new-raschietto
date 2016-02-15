@@ -3,7 +3,7 @@ export default function metaDirective () {
         restrict: "AE",
         templateUrl: 'js/modules/metaArea/metaView.html',
         bindToController: {
-            annotations: '=', // bound to appctrl
+            getAnnotations: '&', // bound to appctrl
             isLoading: '@',
             isFiltered: '&'
         },

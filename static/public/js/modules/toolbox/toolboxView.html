@@ -9,7 +9,7 @@
     <md-tab label="Annotazioni" md-on-select="syncURL('annotations')">
         <md-content class="md-padding">
             <meta-area is-filtered="app.isFiltered(item)" is-loading="{{toolbox.annotationsLoading}}"
-            annotations="toolbox.annotations" refresh="app.reload()"></meta-area>
+            get-annotations="app.getAnnotations()" refresh="app.reload()"></meta-area>
         </md-content>
     </md-tab>
 

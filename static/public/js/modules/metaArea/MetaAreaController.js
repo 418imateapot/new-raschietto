@@ -11,6 +11,8 @@ export default function MetaController($scope, $stateParams, documentService, an
     model.loading
     model.annotations
     */
+   model.annotations = model.getAnnotations();
+   console.log(model.getAnnotations);
 
     // Copiato pari pari da google
     model.selected = [

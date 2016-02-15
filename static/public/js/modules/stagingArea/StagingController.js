@@ -32,7 +32,7 @@ export default function StagingController($mdToast, newAnnotationService) {
         newAnnotationService.updateRemote(model.pending)
             .then(r => {
                 $mdToast.showSimple('Annotazioni salvate');
-                model.pending = [];
+                newAnnotationService.nuke();
                 newAnnotationService.saveLocal(model.pending);
             })
             .catch(e => $mdToast.showSimple('C\'è stato un problema!'));

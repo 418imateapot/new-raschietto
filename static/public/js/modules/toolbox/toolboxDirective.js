@@ -4,7 +4,7 @@ export default function toolboxDirective () {
         templateUrl: 'js/modules/toolbox/toolboxView.html',
         bindToController: {
             annotationsLoading: '@',
-            annotations: '=',
+            getAnnotations: '&',
             filters: '='
         },
         controller: 'ToolboxController',

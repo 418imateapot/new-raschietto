@@ -22,6 +22,7 @@ import material from 'angular-material';
 import ngMessages from 'angular-messages';
 import router from 'angular-ui-router';
 import localStorage from 'angular-local-storage';
+import pagination from 'angular-utils-pagination';
 
 // Componenti dell'applicazione
 import conf from './conf/index.js';
@@ -34,6 +35,7 @@ var app = angular.module('teapot', [
     'ui.router',
     'ngAnimate',
     'LocalStorageModule',
+    'angularUtils.directives.dirPagination',
     material,
     ngMessages,
     sharedServices,
