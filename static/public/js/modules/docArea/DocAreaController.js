@@ -1,6 +1,6 @@
 import fuzzy from 'fuzzy';
 
-DocumentController.$inject = ['$scope', '$state', 'documentService'];
+DocumentController.$inject = ['$scope', '$state', '$mdToast', 'documentService'];
 
 /**
  * Controller per la docArea.
@@ -8,13 +8,17 @@ DocumentController.$inject = ['$scope', '$state', 'documentService'];
  * visualizzabili, e di  richiedere il caricamento di un nuovo documento
  * tramite modifica dell'URL
  */
-export default function DocumentController($scope, $state, documentService) {
+export
+default
+
+function DocumentController($scope, $state, $mdToast, documentService) {
 
     var model = this;
 
     model.docs = [];
     model.load = _load;
     model.search = _search;
+    model.newDoc = _newDoc;
 
     _init();
 
@@ -39,7 +43,9 @@ export default function DocumentController($scope, $state, documentService) {
      */
     function _search(text) {
         if (text) {
-            let options = {extract: (el) => el.title.value};
+            let options = {
+                extract: (el) => el.title.value
+            };
             let results = fuzzy.filter(text.toString(), model.docs, options);
             return results.map(el => el.original); //Vogliamo l'oggetto originale e basta
         } else {
@@ -58,9 +64,24 @@ export default function DocumentController($scope, $state, documentService) {
 
         let encodedDoi = documentService.encodeDoi(doi);
         $state.go('mode.docs.document', {
-            doi: encodedDoi
-        }) // Punta l'url al nuovo doc
-        .then(()=>$scope.show = false); // Nascondi la barra
+                doi: encodedDoi
+            }) // Punta l'url al nuovo doc
+            .then(() => $scope.show = false); // Nascondi la barra
+    }
+
+    function _newDoc(url) {
+        let valid = Boolean(url.match(/unibo/) || url.match(/dlib/));
+
+        if (!valid) {
+            $mdToast.showSimple('url non supportato');
+        } else {
+            if (url.match(/^http:\/\//)) {
+                url = 'http://' + url;
+            }
+            documentService.add(url)
+            .then(r=> $mdToast.showSimple('Documento aggiunto alla lista'))
+            .catch(e=> $mdToast.showSimple('Non sono riuscto ad aggiungere il documento'));
+        }
     }
 
 }

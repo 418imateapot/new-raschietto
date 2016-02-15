@@ -44,11 +44,7 @@ export default function annotationService($http, documentService) {
      * @returns {Promise} La risposta alla query dallo SPARQL endpoint
      */
     function query(url) {
-        // Converti brutalmente da fabio:Item a fabio:Expression
-        // Prima elimina il suffisso html, se presente, poi appende _ver1
-        var expression = url.replace(/\.html$/, '')
-                            .replace(/$/, '_ver1');
-        var encodedQuery = encodeURIComponent(_build_query(expression));
+        var encodedQuery = encodeURIComponent(_build_query(url));
         var endpoint = 'http://tweb2015.cs.unibo.it:8080/data';
         //var endpoint = 'http://localhost:3030/data';
         var opts = 'format=json&callback=JSON_CALLBACK';
@@ -126,7 +122,7 @@ export default function annotationService($http, documentService) {
             let items = data.results.bindings;
             let result = [];
             for (let i in items) {
-                let keep = false;
+                let keep = true;
                 let elem = items[i];
                 // Genera elem.type se non esiste
                 if (!elem.type && !elem.typeLabel) {
@@ -139,6 +135,7 @@ export default function annotationService($http, documentService) {
                     elem.typeLabel = {value: label};
                 }
                 let type = elem.type.value;
+                /*
                 switch (type) {
                     case 'hasTitle':
                         keep = (elem.predicate.value === 'dcterms:title' ||
@@ -179,13 +176,14 @@ export default function annotationService($http, documentService) {
                             elem.predicate.value.match(/\"?<?http:\/\/purl.org\/spar\/cito\/cites>?\"?/));
                         break;
                 } // END switch (type)
+                */
                 if (keep) {result.push(elem);}
                 //else {console.warn(`discarded`);console.warn(elem);}
             } // END for (var i in items)
             return result;
         } // END tidy(data)
 
-    function _build_query(expr) {
+    function _build_query(url) {
         // Usa i nuovi template string di ES6
             return `
 PREFIX oa: <http://www.w3.org/ns/oa#>
@@ -199,7 +197,7 @@ SELECT ?type ?typeLabel ?subject ?provenance ?provenanceLabel ?time ?predicate ?
 WHERE {
     ?x a oa:Annotation.
   	?x oa:hasTarget ?target.
-  	?target oa:hasSource <http://www.dlib.org/dlib/november14/beel/11beel.html>.
+  	?target oa:hasSource <${url}>.
     ?x oa:annotatedBy ?provenance;
         oa:hasBody ?body.
     OPTIONAL {?x oa:annotatedAt ?time.}

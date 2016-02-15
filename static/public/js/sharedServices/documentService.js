@@ -19,6 +19,7 @@ function documentService($http) {
 
     return {
         retrieve: retrieve,
+        add: add,
         list: list,
         encodeDoi: encodeDoi,
         decodeDoi: decodeDoi,
@@ -124,4 +125,9 @@ function documentService($http) {
         });
         return promise;
     }
+
+    function add(url) {
+       return $http.post('/api/docs', {url: url});
+    }
+
 }

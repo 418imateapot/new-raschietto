@@ -1,4 +1,12 @@
 <h1 class="md-display-2">Documenti disponibili</h1>
+<form layput="row" ng-submit="docArea.newDoc(docArea._newDocUrl)">
+
+    <md-input-container>
+        <label>URL del documento</label>
+        <input ng-model="docArea._newDocUrl"/>
+    </md-input-container>
+    <md-button type="submit" class="md-raised md-warn" flex="80">Aggiungi un documento</md-button>
+</form>
 <md-list ng-repeat="doc in docArea.docs">
     <md-list-item class="md-3-line">
         <div class="md-list-item-text" layout="column">

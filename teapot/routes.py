@@ -3,20 +3,25 @@
 Gestisce il routing per l'api server-side di raschietto
 """
 from flask import request, Response
+from json.decoder import JSONDecoder
 
 from .boris.documents import get_doc
 from .boris.remoteScraping import scrapeit
 from .update import generateGraphFromJSON, edit_graph
-from json.decoder import JSONDecoder
+from boris.docloader import add_document_to_fuseki
 from . import app
 
 
-@app.route('/docs', methods=['GET'])
+@app.route('/docs', methods=['GET', 'POST'])
 def get_document():
     """Dato un URL come *querystring*,
     restituisce l'html del documento corrispondente"""
-    doc_url = request.args.get('url')
-    return get_doc(doc_url)
+    if request.method == 'POST':
+        doc_url = JSONDecoder().decode(request.data)['url']
+        return add_document_to_fuseki(doc_url)
+    elif request.method == 'GET':
+        doc_url = request.args.get('url')
+        return get_doc(doc_url)
 
 
 @app.route('/annotations', methods=['POST', 'PUT'])
