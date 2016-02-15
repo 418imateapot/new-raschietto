@@ -2,12 +2,12 @@
 import Dlib from '../../application/Dlib.js';
 import Riviste from '../../application/Riviste.js';
 
-EditAnnotationController.$inject = ['$mdConstant', '$mdDialog', '$stateParams', 'userService', 'newAnnotationService'];
+EditAnnotationController.$inject = ['$mdConstant', '$mdDialog', '$stateParams', '$mdToast', 'userService', 'newAnnotationService'];
 
 /**
  * Controller per il pulsante 'nuova annotazione'
  */
-export default function EditAnnotationController($mdConstant, $mdDialog, $stateParams, userService, newAnnotationService) {
+export default function EditAnnotationController($mdConstant, $mdDialog, $stateParams, $mdToast, userService, newAnnotationService) {
 
     const model = this;
 
@@ -139,6 +139,7 @@ export default function EditAnnotationController($mdConstant, $mdDialog, $stateP
             let newAnno = newAnnotationService.generateAnnotation(content);
             newAnnotationService.delete(model.edit);
             newAnnotationService.saveLocal(newAnno);
+            $mdToast.showSimple('Annotazione modificata.');
             $mdDialog.hide();
         }
 

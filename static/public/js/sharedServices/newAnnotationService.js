@@ -168,7 +168,6 @@ function newAnnotationService($http, localStorageService) {
                 "time": data.provenance.time.toUTCString()
             }
         };
-        _saveLocal(result);
 
         return result;
     }

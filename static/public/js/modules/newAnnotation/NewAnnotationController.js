@@ -2,12 +2,12 @@
 import Dlib from '../../application/Dlib.js';
 import Riviste from '../../application/Riviste.js';
 
-NewAnnotationController.$inject = ['$mdConstant', '$mdDialog', '$stateParams', 'userService', 'newAnnotationService'];
+NewAnnotationController.$inject = ['$mdConstant', '$mdDialog', '$stateParams', '$mdToast', 'userService', 'newAnnotationService'];
 
 /**
  * Controller per il pulsante 'nuova annotazione'
  */
-export default function NewAnnotationController($mdConstant, $mdDialog, $stateParams, userService, newAnnotationService) {
+export default function NewAnnotationController($mdConstant, $mdDialog, $stateParams, $mdToast, userService, newAnnotationService) {
 
     const model = this;
 
@@ -165,8 +165,9 @@ export default function NewAnnotationController($mdConstant, $mdDialog, $statePa
             content.url = model.docUrl;
             content.subject = dialog.subject;
             let payload = newAnnotationService.generateAnnotation(content);
-            payload = angular.toJson(payload);
-            //console.log(payload);
+            newAnnotationService.saveLocal(payload);
+            $mdToast.showSimple('Annotazione creata.');
+            $mdDialog.hide();
         }
 
     }
