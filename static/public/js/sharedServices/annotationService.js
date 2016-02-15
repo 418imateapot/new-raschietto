@@ -195,16 +195,18 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX raschietto: <http://vitali.web.cs.unibo.it/raschietto/>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
-SELECT ?type ?typeLabel ?provenance ?provenanceLabel ?time ?predicate ?object ?objectLabel ?bodyLabel ?innerObject ?fragment ?start ?end ?src
+SELECT ?type ?typeLabel ?subject ?provenance ?provenanceLabel ?time ?predicate ?object ?objectLabel ?bodyLabel ?innerObject ?fragment ?start ?end ?src
 WHERE {
-    ?x a oa:Annotation;
-        oa:annotatedBy ?provenance;
+    ?x a oa:Annotation.
+  	?x oa:hasTarget ?target.
+  	?target oa:hasSource <http://www.dlib.org/dlib/november14/beel/11beel.html>.
+    ?x oa:annotatedBy ?provenance;
         oa:hasBody ?body.
     OPTIONAL {?x oa:annotatedAt ?time.}
     OPTIONAL {?x raschietto:type ?type.}
     OPTIONAL {?x rdfs:label ?typeLabel.}
     OPTIONAL {?provenance foaf:name ?provenanceLabel.}
-    ?body rdf:subject <${expr}>;
+    ?body rdf:subject ?subject;
         rdf:predicate ?predicate;
         rdf:object ?object.
     OPTIONAL{?body rdfs:label ?bodyLabel.}
@@ -219,7 +221,7 @@ WHERE {
             oa:end ?end.
     }
 }
-    `; // Sono backtick, non virgolette semplici
+`; // Sono backtick, non virgolette semplici
     }
 
     function _validateRethoric(type) {

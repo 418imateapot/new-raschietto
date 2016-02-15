@@ -1,6 +1,6 @@
-AnnotatedTextController.$inject = ['$scope', '$state', '$mdDialog'];
+AnnotatedTextController.$inject = ['$scope', '$mdToast', '$state', '$mdDialog', 'newAnnotationService'];
 
-export default function AnnotatedTextController($state, $scope, $mdDialog) {
+export default function AnnotatedTextController($state, $mdToast, $scope, $mdDialog, newAnnotationService) {
 
     let model = this;
 
@@ -35,8 +35,22 @@ export default function AnnotatedTextController($state, $scope, $mdDialog) {
     function _showAnnotationController() {
         const dialog = this;
         dialog.isFiltered = () => false;
-        dialog.edit = () => {
-            
+        dialog.delete = (index) => {
+            let annot = dialog.annotations[index];
+
+            newAnnotationService.deleteRemote(annot)
+                .then(() => $mdToast.showSimple('Annotazione eliminata'))
+                .catch(() => $mdToast.showSimple('Whoops! C\'è stato un problema'));
+        };
+        dialog.edit = (index) => {
+            let annot = dialog.annotations[index];
+
+            newAnnotationService.saveLocal(annot);
+            newAnnotationService.deleteRemote(annot)
+                .then(() => {
+                    $mdToast.showSimple('Annotazione spostata in "Annotazioni non salvate"');
+                })
+                .catch(() => $mdToast.showSimple('Whoops! C\'è stato un problema'));
         };
     }
 

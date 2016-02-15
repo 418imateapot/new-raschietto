@@ -42,10 +42,19 @@ function newAnnotationService($http, localStorageService) {
         return localStorageService.get('pending') || [];
     }
 
-    function _deleteRemote() {}
+    function _deleteRemote(annot) {
+        if (!annot.annotations) { //formato sbagliato
+            annot = _defusekify(annot);
+        }
+        return $http.post('/api/annotations', {items: [annot]})
+            .then(response => response)
+            .catch(err => console.warn(err));
+    }
+
+
     function _updateRemote(annotationList) {
         annotationList = annotationList.map(anno=>_defusekify(anno));
-        return $http.post('/api/annotations', {items: annotationList})
+        return $http.put('/api/annotations', {items: annotationList})
             .then(response => response)
             .catch(err => console.warn(err));
     }

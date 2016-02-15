@@ -19,15 +19,17 @@ def get_document():
     return get_doc(doc_url)
 
 
-@app.route('/annotations', methods=['POST', 'DELETE'])
+@app.route('/annotations', methods=['POST', 'PUT'])
 def modify_annotations():
-    if request.method == 'POST':
-        annotations = JSONDecoder().decode(request.data)['items']
-        turtle = []
-        for a in annotations:
-            turtle.append(generateGraphFromJSON(a))
-        turtle = ''.join(turtle)
+    annotations = JSONDecoder().decode(request.data)['items']
+    turtle = []
+    for a in annotations:
+        turtle.append(generateGraphFromJSON(a))
+    turtle = ''.join(turtle)
+    if request.method == 'PUT':
         return edit_graph(turtle, action='INSERT')
+    elif request.method == 'POST':
+        return edit_graph(turtle, action='DELETE')
 
 
 @app.route('/scraper', methods=['GET'])
