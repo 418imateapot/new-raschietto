@@ -1,9 +1,9 @@
-newAnnotationService.$inject = ['$cookies', 'localStorageService'];
+newAnnotationService.$inject = ['$http', 'localStorageService'];
 
 export
 default
 
-function newAnnotationService($cookies, localStorageService) {
+function newAnnotationService($http, localStorageService) {
 
     const service = this;
 
@@ -12,7 +12,9 @@ function newAnnotationService($cookies, localStorageService) {
     service.retrieveLocal = _retrieveLocal;
     service.fusekify = _fusekify;
     service.defusekify = _defusekify;
-    service.delete = _deleteLocal;
+    //service.delete = _deleteLocal;
+    service.updateRemote = _updateRemote;
+    service.deleteRemote = _deleteRemote;
 
 
     ////////////////////
@@ -38,6 +40,14 @@ function newAnnotationService($cookies, localStorageService) {
     function _retrieveLocal() {
         //return $cookies.getObject('pending');
         return localStorageService.get('pending') || [];
+    }
+
+    function _deleteRemote() {}
+    function _updateRemote(annotationList) {
+        annotationList = annotationList.map(anno=>_defusekify(anno));
+        return $http.post('/api/annotations', {items: annotationList})
+            .then(response => response)
+            .catch(err => console.warn(err));
     }
 
     // UNSAVED = jsonone
@@ -75,8 +85,9 @@ function newAnnotationService($cookies, localStorageService) {
                 bodyLabel: {value: entry.body.label},
                 end: {value: anno.target.end},
                 fragment: {value: anno.target.id},
-                object: {value: ''},
-                objectLabel: {value: entry.body.resource ? entry.body.resource.label : entry.body.literal},
+                // objectLabel: {value: entry.body.resource ? entry.body.resource.label || entry.body.resource : entry.body.literal},
+                objectLabel: {value: entry.body.literal || entry.body.resource.label || entry.body.resource},
+                object: {value: entry.body.literal || entry.body.resource.label || entry.body.resource},
                 predicate: {value: entry.body.predicate},
                 provenance: {value: anno.provenance.author.email},
                 provenanceLabel: {value: anno.provenance.author.name},
@@ -250,7 +261,7 @@ function newAnnotationService($cookies, localStorageService) {
                 }];
                 break;
             case 'cites':
-                let id = data.subject + '_cited_';
+                let id = data.subject + '_cited_' + _getCitedNumber(data);
                 result = [{
                     // Le citazioni hanno il nome annotato
                     // a mano per evitare danni con le chiamate ricorsive
@@ -331,6 +342,15 @@ function newAnnotationService($cookies, localStorageService) {
             return 'cites';
         }
         return null;
+    }
+
+    function _getCitedNumber(annot) {
+        let tagNum = annot.target.id.match(/\d+$/);
+        if(tagNum) {
+            return tagNum[0];
+        } else {
+            return Math.floor(Math.random() * 50);
+        }
     }
 
 

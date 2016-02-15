@@ -114,7 +114,7 @@ def get_doc(url_string):
     """
     if "dlib.org" in url_string:
         return _dlib_get(url_string)
-    elif "rivista-statistica" in url_string:
+    elif "unibo" in url_string:
         return _statistica_(url_string)
     else:
         return "<h1>NOPE</h1>"

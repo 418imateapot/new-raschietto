@@ -55,7 +55,7 @@ def scrapeit(url_string):
 
     if "dlib.org" in url_string:
         return _scrape_dlib(url_string)
-    elif "rivista-statistica" in url_string:
+    elif "unibo" in url_string:
         return _scrape_statistica(url_string)
     else:
         return "<h1>NOPE</h1>"

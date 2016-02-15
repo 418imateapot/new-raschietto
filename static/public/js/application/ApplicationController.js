@@ -81,12 +81,7 @@ export default function ApplicationController($scope, $stateParams, $compile, $m
             'cites': {
                 name: 'Citazione',
                 display: true
-            },
-            'all': {
-                name: 'all',
-                display: true
             }
-
         };
 
         model.annotations.forEach(item => {

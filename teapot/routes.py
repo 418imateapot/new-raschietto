@@ -6,6 +6,8 @@ from flask import request, Response
 
 from .boris.documents import get_doc
 from .boris.remoteScraping import scrapeit
+from .update import generateGraphFromJSON, edit_graph
+from json.decoder import JSONDecoder
 from . import app
 
 
@@ -15,6 +17,17 @@ def get_document():
     restituisce l'html del documento corrispondente"""
     doc_url = request.args.get('url')
     return get_doc(doc_url)
+
+
+@app.route('/annotations', methods=['POST', 'DELETE'])
+def modify_annotations():
+    if request.method == 'POST':
+        annotations = JSONDecoder().decode(request.data)['items']
+        turtle = []
+        for a in annotations:
+            turtle.append(generateGraphFromJSON(a))
+        turtle = ''.join(turtle)
+        return edit_graph(turtle, action='INSERT')
 
 
 @app.route('/scraper', methods=['GET'])

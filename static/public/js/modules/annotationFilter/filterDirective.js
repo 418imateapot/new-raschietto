@@ -4,7 +4,7 @@ export default function filterDirective() {
         templateUrl: 'js/modules/annotationFilter/filterView.html',
         bindToController: {
             filters: '=',
-            show: '@'
+            reload: '&'
         },
         controller: 'FilterController',
         controllerAs: 'filter'

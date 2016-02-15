@@ -1,4 +1,4 @@
-NavController.$inject = ['$scope', '$rootScope', '$state', '$stateParams', '$mdDialog', '$mdSidenav', 'annotationService', 'userService', 'loginModal', 'newAnnotationService'];
+NavController.$inject = ['$scope', '$rootScope', '$state', '$stateParams', '$mdDialog', '$mdSidenav', '$mdToast', 'annotationService', 'userService', 'loginModal', 'newAnnotationService'];
 /**
  * $mdSidenav e $mdDialog sono i servizi per interagire
  * rispettivamente con la barra laterale e la finestra modale
@@ -6,7 +6,7 @@ NavController.$inject = ['$scope', '$rootScope', '$state', '$stateParams', '$mdD
 export
 default
 
-function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdSidenav, annotationService, userService, loginModal, newAnnotationService) {
+function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdSidenav, $mdToast, annotationService, userService, loginModal, newAnnotationService) {
     var model = this;
 
     model.open = () => $mdSidenav('left').toggle(); // Funzione da invocare per aprire il dialog.
@@ -73,18 +73,18 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
      * Apre la finestra 'about'
      */
     function _about(ev) {
-        $mdDialog.show({
-            template: '<iframe width="512" height="384" src="https://www.youtube.com/embed/ykwqXuMPsoc" frameborder="0" allowfullscreen></iframe>',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose: true
-        });
-    }
-    //funzione tutorial   ---> ?
+            $mdDialog.show({
+                template: '<iframe width="512" height="384" src="https://www.youtube.com/embed/ykwqXuMPsoc" frameborder="0" allowfullscreen></iframe>',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true
+            });
+        }
+        //funzione tutorial   ---> ?
 
-  function _tutorial(ev) {
+    function _tutorial(ev) {
         $mdDialog.show({
-	    templateUrl: 'js/modules/tutorial/tutorialView.html',
+            templateUrl: 'js/modules/tutorial/tutorialView.html',
             parent: angular.element(document.body),
             targetEvent: ev,
             clickOutsideToClose: true
@@ -126,6 +126,13 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
     }
 
     function _scrape() {
+        model.open(); //toggle
+        $mdToast.show(
+            $mdToast.simple()
+            .textContent('Scraping in corso..')
+            .position('top right')
+            .hideDelay(3000)
+        );
         annotationService.scrape($stateParams.doi)
             .then(res => {
                 let alreadyPending = newAnnotationService.retrieveLocal();
@@ -150,6 +157,7 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
                     data.add(item);
                 }
                 data.forEach(annotation => newAnnotationService.generateAnnotation(annotation));
+                $mdToast.updateTextContent('Finito! Ora puoi modificare le nuove annotazioni');
 
             })
             .catch(err => console.warn(err));

@@ -2,7 +2,9 @@ export default function topbarDirective () {
     return {
         restrict: "AE",
         templateUrl: 'js/modules/topbar/topbarView.html',
-        scope: {},
+        bindToController: {
+            showFilters: '='
+        },
         controller: 'TopbarController',
         controllerAs: 'topbar'
     };

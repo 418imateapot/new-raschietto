@@ -1,8 +1,30 @@
 # coding: utf-8
 
 from rdflib import Graph, Namespace, BNode, Literal, URIRef, RDF, RDFS, XSD
+from SPARQLWrapper import SPARQLWrapper
 import unicodedata
 
+
+
+def edit_graph(serialized_graph, action='INSERT'):
+    """
+    Upload stuff
+    """
+    tps_graph = "http://vitali.web.cs.unibo.it/raschietto/graph/ltw1543"
+
+    query = """%s DATA {
+        GRAPH <%s> { %s }
+    }""" % (action, tps_graph, serialized_graph)
+
+    # NB: Usare 'DELETE' al posto di 'INSERT' per rimuovere
+    # i dati dal triplestore
+
+    sparql = SPARQLWrapper(
+        "http://tweb2015.cs.unibo.it:8080/data/update?user{}&pass={}".format(
+            "ltw1543", "43het5=!X"))
+    sparql.setQuery(query)
+    sparql.setMethod('POST')
+    return str(sparql.query())
 
 
 # denotesRhetoric ha come oggetto un resource semplice,
@@ -100,128 +122,7 @@ def generateGraphFromJSON(jsonAnn):
 
         g.add((body, RDF.object, bodyObject))
 
-    return g.serialize(format="turtle")
-
-
-j = {
-    "annotations": [
-    {
-            "type": "hasAuthor" ,
-            "label": "Autore",
-            "body": {
-                "label": "Un autore del documento è Heather Lea Moulaison" ,
-                "subject": "dlib:03moulaison" ,
-                "predicate": "dcterms:creator",
-                "resource": {
-                    "id": "rsch:moulaison-h" ,
-                    "label": "Heather Lea Moulaison"
-                }
-            }
-    }],
-    "target": {
-        "source": "dlib:03moulaison.html" ,
-        "id": "form1_table3_tbody1_tr1_td1_table5_tbody1_tr1_td2_p2" ,
-        "start": 0,
-        "end": 21
-    } ,
-    "provenance": {
-        "author": {
-            "name": "Pinco Pallino" ,
-            "email": "pinco.pallino@studio.unibo.it"
-        } ,
-        "time": "2015-03-12T15:46"
-    }
-}
-
-k = {
-    "annotations": [
-        {
-            "type": "cites",
-            "label": "Citazione",
-            "body": {
-                "label": "Questo articolo cita ‘Institutional repositories, open access, and scholarly communication: A study of conflicting paradigms.’",
-                "subject": "dlib:03moulaison_ver1",
-                "predicate": "cito:cites",
-                "resource": {
-                    "id": "dlib:03moulaison_ver1_cited_3",
-                    "label": "[3] Cullen, R., & Chawner, B. (2011). Institutional repositories, open access, and scholarly communication: A study of conflicting paradigms. The Journal of Academic Librarianship, 37(6), 460-470. http://doi.org/10.1016/j.acalib.2011.07.002"
-                }
-            }
-        },
-        {
-            "type": "hasTitle",
-            "label": "Titolo",
-            "body": {
-                "label": "il titolo è blabla",
-                "subject": "dlib:03moulaison_ver1_cited_3",
-                "predicate": "dcterms:title",
-                "literal": "Institutional repositories, open access, and scholarly communication: A study of conflicting paradigms"
-            }
-        }
-    ],
-    "target": {
-        "source": "dlib:03moulaison.html",
-        "id": "form1_table3_tbody1_tr1_td1_table5_tbody1_tr1_td2_p38",
-        "start": 0,
-        "end": 21000
-    },
-    "provenance": {
-        "author": {
-            "name": "Pinco Pallino",
-            "email": "pinco.pallino@studio.unibo.it"
-        } ,
-        "time": "2014-03-12T15:46"
-    }
-}
-
-
-r = {
-    "annotations": [
-    {
-        "type": "denotesRhetoric" ,
-        "label": "retorica",
-        "body": {
-            "label": "Introduzione" ,
-            "subject": "dlib:03moulaison_ver1#form1_table3_tbody1_tr1_td1_table5_tbody1_tr1_td2_h34-0-12",
-            "predicate": "sem:denotes",
-            "resource": "deo:Introduction"
-        }
-    }],
-    "target": {
-        "source": "dlib:03moulaison.html" ,
-        "id": "form1_table3_tbody1_tr1_td1_table5_tbody1_tr1_td2_h34",
-        "start": 0,
-        "end": 12
-    } ,
-    "provenance": {
-        "author": {
-            "name": "Pinco Pallino" ,
-            "email": "pinco.pallino@studio.unibo.it"
-        } ,
-        "time": "2015-03-12T15:46"
-    }
-}
-
-#print(generateGraphFromJSON(k))
-#print generateGraphFromJSON(j)
-#print generateGraphFromJSON(r)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return g.serialize(format="nt")
 
 
 ##########################################################################################################################
@@ -231,7 +132,7 @@ def string2rschAuthor(fullname):
     :param string: fullname il nome e cognome di un autore.
     :returns string: il nome opportunamente modificato
     """
-    fullname = unicodedata.normalize('NFKD',unicode(fullname,"utf-8")).encode("ascii","ignore")
+    # fullname = unicodedata.normalize('NFKD',unicode(fullname,"utf-8")).encode("ascii","ignore")
     # sostituisce i caratteri accentati con i "corrispettivi" caratteri ASCII
     # http://stackoverflow.com/questions/3704731/replace-non-ascii-chars-from-a-unicode-string-in-python
 
@@ -260,7 +161,7 @@ def string2rschAuthor(fullname):
     elif len(parts) >= 2:
         return parts[0][0] + '-' + parts[-2] + parts[-1]
     else:
-        return fullname
+        return fullname.strip()
 
 
 rovescio = "Lee,  ,7.\][]  W.C."

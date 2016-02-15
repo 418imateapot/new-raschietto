@@ -1,6 +1,6 @@
 <!-- Standard toolbar -->
 <md-toolbar class="raschietto-toolbar animate-show md-whiteframe-z1 md-toolbar teapot-toolbar"
-    ng-hide="topbar.showSearch || topbar.showTools">
+ng-hide="topbar.showSearch || topbar.showTools">
     <div class="md-toolbar-tools">
         <md-button class="md-icon-button" ng-click="topbar.toggleSidenav('left')" aria-label="Menu">
             <md-icon class="material-icons" aria-label="Menu">menu</md-icon>
@@ -10,6 +10,10 @@
         </span>
         <!-- fill up the space between left and right area -->
         <span flex></span>
+        <md-button ng-click="topbar.toggleFilters()">
+            <md-icon class="material-icons">filter_list</md-icon>Mostra filtri
+        </md-button>
+        <span flex></span>
         <md-button class="md-icon-button" aria-label="Search" ng-click="topbar.toggleSearch()">
             <md-icon class="material-icons" aria-label="Search">search</md-icon>
         </md-button>
@@ -17,8 +21,7 @@
 </md-toolbar>
 
 <!-- Search toolbar -->
-<md-toolbar class="animate-show md-toolbar teapot-toolbar md-whiteframe-z1"
-    ng-show="topbar.showSearch && !topbar.showTools">
+<md-toolbar class="animate-show md-toolbar teapot-toolbar md-whiteframe-z1" ng-show="topbar.showSearch && !topbar.showTools">
     <div class="md-toolbar-tools">
         <md-button class="md-icon-button" ng-click="topbar.toggleSearch()" aria-label="Menu">
             <md-icon class="material-icons" aria-label="Back">arrow_back</md-icon>
@@ -38,6 +41,10 @@
             <md-icon class="material-icons" aria-label="Close dialog">arrow_back</md-icon>
         </md-button>
         <h3 role="button" ng-click="topbar.closeTools()">Indietro</h3>
+        <span flex></span>
+        <md-button ng-click="topbar.toggleFilters()">
+            <md-icon class="material-icons">filter_list</md-icon>Mostra filtri
+        </md-button>
         <span flex></span>
         <h2>Strumenti</h2>
     </div>

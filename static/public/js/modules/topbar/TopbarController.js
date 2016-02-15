@@ -6,6 +6,10 @@ export default function TopbarController($scope, $mdSidenav, $state, $stateParam
     model.showSearch = false;
     model.showTools = !!($stateParams.toolId);
 
+    model.toggleFilters = () => {
+        model.showFilters = !model.showFilters;
+    };
+
     model.toggleSidenav = side => $mdSidenav(side).toggle();
     model.toggleSearch = () => model.showSearch = !model.showSearch;
     model.closeTools = () => {

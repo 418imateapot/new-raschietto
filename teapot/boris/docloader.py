@@ -51,7 +51,7 @@ def _getURLandTitle(url):
         title = tree.xpath(
             '/html/body/form/table[3]/tr/td/table[5]/tr/td/table[1]/tr/td[2]/h3[2]/text()')  # noqa
         doi = tree.xpath('/html/head/meta[@name="DOI"]/@content')
-    elif "rivista-statistica" in url:
+    elif "unibo" in url:
         title = tree.xpath('//*[@id="articleTitle"]/h3/text()')
         doi = tree.xpath('//*[@id="pub-id::doi"]/text()')
     else:

@@ -1,7 +1,7 @@
 <md-menu-bar flex="100" layout-padding layout="row" layout-align="space-around bottom"
 class="md-whiteframe-5dp">
     <md-menu flex>
-        <button ng-click="filter.show=false">
+        <button ng-click="filter.hide()">
             <md-icon class="material-icons">filter_list</md-icon>
             Filtri
         </button>
@@ -14,8 +14,8 @@ class="md-whiteframe-5dp">
         <md-menu-content>
             <md-menu-item ng-repeat="(key, val) in filter.filters" ng-show="filter.isTypeFilter(key)"
             layout-padding>
-                <md-button ng-click="ctrl.sampleAction('share', $event)">
-                    <md-icon class="material-icons" ng-show="true">check</md-icon>
+                <md-button ng-click="filter.toggle(key)">
+                    <md-icon class="material-icons" ng-show="filter.exists(key)">check</md-icon>
                     {{val.name}}
                 </md-button>
             </md-menu-item>
@@ -28,21 +28,21 @@ class="md-whiteframe-5dp">
         <md-menu-content>
             <md-menu-item class="md-indent" ng-repeat="(key, val) in filter.filters" ng-show="filter.isProvenanceFilter(key)"
             layout-padding>
-                <md-button ng-click="ctrl.sampleAction('undo', $event)">
-                    <md-icon class="material-icons" ng-show="true">check</md-icon>
+                <md-button ng-click="filters.toggle(key)">
+                    <md-icon class="material-icons" ng-show="filter.exists(key)">check</md-icon>
                     {{val.name}}
                 </md-button>
             </md-menu-item>
         </md-menu-content>
     </md-menu>
     <md-menu flex>
-        <button ng-click="$mdOpenMenu()">
+        <button ng-click="filter.toggleOwn()">
             Le mie annotazioni
         </button>
         <md-menu-content></md-menu-content>
     </md-menu>
     <md-menu flex>
-        <button ng-click="$mdOpenMenu()">
+        <button ng-click="filter.toggleAll()">
             Tutte le annotazioni
         </button>
         <md-menu-content></md-menu-content>
