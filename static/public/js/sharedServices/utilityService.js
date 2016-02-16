@@ -29,6 +29,8 @@ export default function utilityService() {
                 return 'Funzione retorica';
             case 'cites':
                 return 'Citazione';
+            default:
+                console.log('Non so che farmene: ' + type);
         }
         return null;
     }
@@ -51,6 +53,7 @@ export default function utilityService() {
         } else if (/cit/i.test(label)) {
             return 'cites';
         }
+        console.log('Non so che farmene: ' + label);
         return null;
     }
 }

@@ -14,7 +14,8 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
     model.inactiveMode = ''; // Modalità inattiva
     model.modeColor = ''; // Nome di una classe CSS
     model.modeIcon = '?'; // Icona della modalità
-    model.openToolbox = _openToolbox;
+    model.openDocArea = _openDocArea;
+    model.openMetaArea = _openMetaArea;
     model.switchMode = _switchMode;
     model.scrape = _scrape;
     model.about = _about;
@@ -41,44 +42,49 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
     //////////////////////////
 
     /**
-     * Apre la toolbox alla pagina desiderata.
-     * Se nessun documento e' caricato, apre la lista
-     * @param {string} origin Il nome del pulsante che ha generato l'evento.
+     * Apre il modal con la docArea
      */
-    function _openToolbox(origin) {
-        // Setta qualche default se non sappiamo che fare;
-        let mode = $stateParams.mode || 'reader';
+    function _openDocArea() {
         $mdSidenav('left').close().then(function(ev) {
-
-                $mdDialog.show({
-                    controller: DialogController,
-                    template: '<doc-area></doc-area>',
-                    parent: angular.element(document.body),
-                    targetEvent: ev,
-                    clickOutsideToClose:true
-                })
-                .then(function(answer) {
-                $scope.status = 'You said the information was "' + answer + '".';
-                }, function() {
-                    $scope.status = 'You cancelled the dialog.';
-                });
-
-});
-
+            $mdDialog.show({
+                controller: DocTabController,
+                controllerAs: 'docDialog',
+                templateUrl: 'js/modules/navigator/docTabView.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true
+            });
+        });
     }
-            function DialogController($scope, $mdDialog) {
-                    $scope.hide = function() {
-                    $mdDialog.hide();
-                };
 
-                    $scope.cancel = function() {
-                    $mdDialog.cancel();
-                };
+    // Il controller del modal docarea
+    function DocTabController() {
+        const docTab = this;
+        docTab.close = () => $mdDialog.cancel();
+    }
 
-                    $scope.answer = function(answer) {
-                    $mdDialog.hide(answer);
-                };
-            }
+    /**
+     * Apre il modal con la metaArea
+     */
+    function _openMetaArea() {
+        $mdSidenav('left').close().then(function(ev) {
+            $mdDialog.show({
+                controller: MetaDialogController,
+                controllerAs: 'metaDialog',
+                templateUrl: 'js/modules/navigator/annotListView.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true
+            });
+        });
+    }
+
+    // Il controller del modal docarea
+    function MetaDialogController() {
+        const metaDialog = this;
+        metaDialog.close = () => $mdDialog.cancel();
+    }
+
 
     /**
      * Cambia modalita'

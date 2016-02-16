@@ -1,28 +1,23 @@
 MetaController.$inject = ['$scope', '$stateParams', 'documentService', 'annotationService'];
 
 /**
- * @class
  * Controller per la metaArea
  */
 export default function MetaController($scope, $stateParams, documentService, annotationService) {
     var model = this;
 
-    /* Passate da appctrl
-    model.loading
-    model.annotations
-    */
-   model.annotations = annotationService.annotations;
+    model.annotations = annotationService.annotations;
+    model.isFiltered = _isFiltered;
+    model.notEmpty = Boolean(model.annotations);
 
-    model.selected = [
-        'hasTitle',
-        'hasAuthor',
-        'hasPublicationYear',
-        'hasURL',
-        'hasDOI',
-        'hasComment',
-        'denotesRethoric',
-        'cites'
-    ];
+    // se true, l'annotazione è filtrata
+    function _isFiltered(annot) {
+        let groupFilter = annotationService.filters.get(annot.group);
+        let typeFilter = annotationService.filters.get(annot.type);
+        let provenanceFilter = annotationService.filters.get(annot.provenance.author.name);
+
+        return !(groupFilter.display && typeFilter.display && provenanceFilter.display);
+    }
 
     model.toggle = function(item, list) {
         var idx = list.indexOf(item);

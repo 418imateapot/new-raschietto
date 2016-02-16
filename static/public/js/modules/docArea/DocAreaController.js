@@ -1,6 +1,6 @@
 import fuzzy from 'fuzzy';
 
-DocumentController.$inject = ['$rootScope', '$state', '$mdToast','$stateParams', 'documentService'];
+DocumentController.$inject = ['$rootScope', '$state', '$mdDialog', '$mdToast','$stateParams', 'documentService'];
 
 /**
  * Controller per la docArea.
@@ -10,7 +10,7 @@ DocumentController.$inject = ['$rootScope', '$state', '$mdToast','$stateParams',
  */
 export
 default
-function DocumentController($rootScope, $state, $mdToast, $stateParams, documentService) {
+function DocumentController($rootScope, $state, $mdDialog, $mdToast, $stateParams, documentService) {
 
     var model = this;
 
@@ -21,6 +21,7 @@ function DocumentController($rootScope, $state, $mdToast, $stateParams, document
     model.load = _load;
     model.search = _search;
     model.newDoc = _newDoc;
+    model.close = () => $mdDialog.cancel();
 
     _init();
 
@@ -32,7 +33,6 @@ function DocumentController($rootScope, $state, $mdToast, $stateParams, document
         documentService.list()
             .then(data => {
                 model.docs = data;
-                console.log(data);
                 model.docsDlib=data.filter(item => item.url.value.match(/dlib/i));
                 model.docsStat=data.filter(item => item.url.value.match(/statistica/i));
                             })
@@ -75,6 +75,8 @@ function DocumentController($rootScope, $state, $mdToast, $stateParams, document
         } else {
             $rootScope.$broadcast('retrieveNewUrl', {doc_url:url});
         }
+
+        $mdDialog.hide();
 
     }
 

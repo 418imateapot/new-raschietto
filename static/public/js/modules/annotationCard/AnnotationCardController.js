@@ -7,72 +7,56 @@ function AnnotationCardController($sanitize, $state, userService, newAnnotationS
 
     model.icon = '';
     model.header = '';
-    model.provenance = '';
-    model.email = '';
+    model.email = model.annotation.provenance.author.mail;
+    model.author = model.annotation.provenance.author.name || model.email;
     model.text = '';
-    model.isEditable = () => model.annotation.provenance.value === userService.userEmail;
+    model.isEditable = (model.email === userService.userEmail);
     //model.delete -> passata dallo scope esterno
 
     _init();
 
     function _init() {
 
-        // Elimina il prefisso 'mailto:' dalla provenance, se presente
-        model.email = model.annotation.provenance.value;
-
-        if (model.annotation.groupName) {
-            model.provenance = model.annotation.groupName.value;
-        } else {
-            model.provenance = model.email.replace(/mailto:(.*)/, '$1');
-        }
-
-        switch (model.annotation.type.value) {
+        switch (model.annotation.type) {
             case 'hasTitle':
                 model.icon = '&nbsp;T';
                 model.header = 'Titolo del documento';
-                model.text = model.annotation.object.value;
+                model.text = model.annotation.content.value;
                 break;
             case 'hasAuthor':
                 model.icon = 'Au';
                 model.header = 'Autore del documento';
-                if (model.annotation.bodyLabel) {
-                    model.text = model.annotation.bodyLabel.value;
-                } else if(model.annotation.objectLabel){
-                    model.text = model.annotation.objectLabel.value;
-                } else {
-                    // Meglio l'abbreviazione che niente
-                    model.text = model.annotation.object.value.split('/').pop();
-                }
+                model.text = model.annotation.content.label;
                 break;
             case 'hasURL':
                 model.icon = '&nbsp;U';
                 model.header = 'URL del documento';
-                model.text = model.annotation.object.value;
+                model.text = model.annotation.content.value;
                 break;
             case 'hasDOI':
                 model.icon = '&nbsp;D';
                 model.header = 'DOI del documento';
-                model.text = model.annotation.object.value;
+                model.text = model.annotation.content.value;
                 break;
             case 'hasPublicationYear':
                 model.icon = '&nbsp;Y';
                 model.header = 'Anno di pubblicazione';
-                model.text = model.annotation.object.value;
+                model.text = model.annotation.content.value;
                 break;
             case 'denotesRethoric':
                 model.icon = '&nbsp;R';
                 model.header= 'Funzione retorica';
-                model.text = model.annotation.bodyLabel.value;
+                model.text = model.annotation.content.label;
                 break;
             case 'hasComment':
                 model.icon = 'Com';
                 model.header= 'Commento';
-                model.text = model.annotation.bodyLabel.value;
+                model.text = model.annotation.content.label;
                 break;
             case 'cites':
                 model.icon = 'Cit';
                 model.header= 'Citazione';
-                model.text = model.annotation.bodyLabel.value;
+                model.text = model.annotation.content.label;
                 break;
         }
     }

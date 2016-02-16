@@ -1,39 +1,22 @@
 <md-tabs md-dynamic-height md-border-bottom>
-        <md-tab label="Dlib">
-            <h1 class="md-display-2">Documenti disponibili</h1>
-            <form layput="row" ng-submit="docArea.newDoc(docArea._newDocUrl)">
-
-                <md-input-container>
-                    <label>URL del documento</label>
-                    <input ng-model="docArea._newDocUrl"/>
-                </md-input-container>
-                <md-button type="submit" class="md-raised md-warn" flex="80">Aggiungi un documento</md-button>
-            </form>
-            <md-list ng-repeat="doc in docArea.docsDlib">
-                <md-list-item class="md-3-line">
-                    <div class="md-list-item-text" layout="column">
-                        <h5 ng-click="docArea.load(doc.url.value)">{{doc.title.value}}</h5>
-                        <br/>
-                        <p>URL originale: <a href="{{doc.url.value}}">{{doc.url.value}}</a>
-                        </p>
+    <md-tab label="Dlib">
+        <md-list ng-repeat="doc in docArea.docsDlib">
+            <md-list-item class="md-3-line">
+                <div class="md-list-item-text" layout="column">
+                    <h5 ng-click="docArea.load(doc.url.value)">{{doc.title.value}}</h5>
+                    <br/>
+                    <p>URL originale: <a href="{{doc.url.value}}">{{doc.url.value}}</a>
+                    </p>
                     </br>
                     <p>DOI: {{doc.doi.value}}</p>
-                </br>
-            </div>
-        </md-list-item>
-        <md-divider></md-divider>
-    </md-list>
+                    </br>
+                </div>
+            </md-list-item>
+            <md-divider></md-divider>
+        </md-list>
     </md-tab>
     <md-tab label="Statistica">
         <h1 class="md-display-2">Documenti disponibili</h1>
-        <form layput="row" ng-submit="docArea.newDoc(docArea._newDocUrl)">
-
-            <md-input-container>
-                <label>URL del documento</label>
-                <input ng-model="docArea._newDocUrl"/>
-            </md-input-container>
-            <md-button type="submit" class="md-raised md-warn" flex="80">Aggiungi un documento</md-button>
-        </form>
         <md-list ng-repeat="doc in docArea.docsStat">
             <md-list-item class="md-3-line">
                 <div class="md-list-item-text" layout="column">
@@ -41,13 +24,22 @@
                     <br/>
                     <p>URL originale: <a href="{{doc.url.value}}">{{doc.url.value}}</a>
                     </p>
-                </br>
-                <p>DOI: {{doc.doi.value}}</p>
-            </br>
-        </div>
-    </md-list-item>
-    <md-divider></md-divider>
-</md-list>
+                    </br>
+                    <p>DOI: {{doc.doi.value}}</p>
+                    </br>
+                </div>
+            </md-list-item>
+            <md-divider></md-divider>
+        </md-list>
     </md-tab>
-    
+    <md-tab label="Altri">
+        <form layout="row" ng-submit="docArea.newDoc(docArea._newDocUrl)">
+            <md-input-container>
+                <label>URL del documento</label>
+                <input ng-model="docArea._newDocUrl" />
+            </md-input-container>
+            <md-button type="submit" class="md-raised md-warn" flex="80">Aggiungi un documento</md-button>
+        </form>
+    </md-tab>
+
 </md-tabs>

@@ -1,6 +1,6 @@
-userService.$inject = ['$cookies'];
+userService.$inject = ['$cookies', 'documentService'];
 
-export default function userService($cookies) {
+export default function userService($cookies, documentService) {
 
     const service = this;
 
@@ -8,15 +8,19 @@ export default function userService($cookies) {
     service.userName = '';
     service.userEmail = '';
 
-    service.storeLastDocument = function(url) {
-        if(service.userEmail) {
-            $cookies.set(service.userEmail, url);
+    service.storeLastDocument = function() {
+        if (documentService.currentUrl) {
+            if(service.userEmail) {
+                $cookies.put(service.userEmail, documentService.currentUrl);
+            } else {
+                $cookies.put('guest', documentService.currentUrl);
+            }
         }
     };
 
-
     service.lastDocument = function() {
-        return $cookies.get(service.userEmail);    
+        let key = service.userEmail || 'guest';
+        return $cookies.get(key);
     };
 
     /**
@@ -34,6 +38,9 @@ export default function userService($cookies) {
 
         $cookies.put('credenziali', JSON.stringify(credenziali));
         service.isLoggedIn = true;
+
+        service.storeLastDocument();
+
         return username;
     };
 

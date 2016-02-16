@@ -17,7 +17,8 @@ function annotationService($http, utilityService) {
 
     // Props
     service.annotations = null;
-    service.filters = [];
+    service.currentUrl = null;
+    service.filters = new Map();
     // Methods
     service.query = _query;
     service.tidy = _tidy;
@@ -43,7 +44,6 @@ function annotationService($http, utilityService) {
      * sul documento passato come arg.
      */
     function _query(url) {
-        console.log(url);
         const encodedQuery = encodeURIComponent(_build_query(url));
         const endpoint = 'http://tweb2015.cs.unibo.it:8080/data';
         //var endpoint = 'http://localhost:3030/data';
@@ -52,13 +52,14 @@ function annotationService($http, utilityService) {
 
         return $http.jsonp(url_string)
             .then(response => {
-                console.log(response.data);
                 service.annotations = service.tidy(response.data);
+                service.currentUrl = url;
                 return service.annotations;
             })
             .catch(error => {
                 console.error(error);
                 service.annotations = null;
+                service.currentUrl = null;
                 return null;
             });
     }
@@ -73,7 +74,6 @@ function annotationService($http, utilityService) {
     function _tidy(data) {
         let items = data.results.bindings;
         let result = [];
-        let filters = new Set();
         for (let i in items) {
             let elem = items[i];
             let annotation = {};
@@ -82,6 +82,7 @@ function annotationService($http, utilityService) {
             // Genera type/typelabel se non esistono
             if (!elem.type && !elem.typeLabel) {
                 // Dobbiamo poter dedurre il tipo in qualche modo..
+                console.log('Nessuna informazione di tipo');
                 continue;
             } else if (!elem.type) {
                 annotation.typeLabel = elem.typeLabel.value;
@@ -89,13 +90,10 @@ function annotationService($http, utilityService) {
             } else if (!elem.typeLabel) {
                 annotation.type = elem.type.value;
                 annotation.typeLabel = utilityService.labelFromType(elem.type.value);
-            }
-
-            annotation.value = _setValue(elem, annotation.type);
-            if(!annotation.value) {
-                // Non possiamo usarla
-                console.log('annotationService: annotazione scartata');
-                continue;
+            } else {
+                // Sappiamo già tutto, ci fidiamo?
+                annotation.type = elem.type.value;
+                annotation.typeLabel = elem.typeLabel.value;
             }
 
             annotation.target = {
@@ -113,20 +111,26 @@ function annotationService($http, utilityService) {
                 time: elem.time.value
             };
 
+            annotation.content = _setContent(elem, annotation.type);
+            if(!annotation.content) {
+                // Non possiamo usarla
+                console.log('annotationService: annotazione scartata - ' + annotation);
+                continue;
+            }
+
             // Aggiungi i filtri per quest'annotazione al set
-            filters.add({name: annotation.group, display: true, type: 'group'});
-            filters.add({name: annotation.type, display: true, type: 'type'});
-            filters.add({name: annotation.provenance.author.name, display: true, type: 'provenance'});
+            service.filters.set(annotation.group, {display: true, type: 'group'});
+            service.filters.set(annotation.type, {display: true, type: 'type'});
+            service.filters.set(annotation.provenance.author.name, {display: true, type: 'provenance'});
             // Ed ecco la nostra nuova annotazione splendente
             result.push(annotation);
         } // END for (i in items)
         // Converti il set in array
-        service.filters = Array.from(filters);
-        console.log(result);
+        console.log(service.filters);
         return result;
     }
 
-    function _setValue(annot, type) {
+    function _setContent(annot, type) {
         let result = {};
         switch (type) {
             case 'hasTitle':
@@ -143,7 +147,14 @@ function annotationService($http, utilityService) {
                 result.value = annot.objectLabel ? annot.objectLabel.value : result.label;
                 break;
             case 'cites':
-                result.value = annot.objectLabel.value;
+                if (annot.objectLabel) {
+                    result.value = annot.objectLabel.value;
+                } else if(annot.bodyLabel) {
+                    result.value = annot.bodyLabel.value;
+                } else {
+                    console.warn('Non so che fare con questa citazione');
+                    return null;
+                }
                 result.label = annot.bodyLabel ? annot.bodyLabel.value : undefined;
                 result.cited = annot.object.value;
                 break;

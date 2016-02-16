@@ -1,10 +1,14 @@
 <!-- Cards con le annotazioni -->
+<md-content class="md-padding" layout="row" layout-wrap
+ng-hide="metaArea.notEmpty" layout-align="center start" layout-xs="column">
+    <h4>Nessuna annotazione da visualizzare</h4>
+</md-content>
 <!-- Le cards! -->
-<md-content ng-hide="metaArea.loading" class="md-padding" layout="row" layout-wrap
+<md-content class="md-padding" layout="row" layout-wrap
 layout-align="center start" layout-xs="column">
 
-    <div ng-repeat="anno in metaArea.annotations" flex="50" flex-xs="100" layout="column"> 
-        <annotation-card annotation="anno" flex/>
+    <div ng-hide="metaArea.isFiltered(anno)" ng-repeat="anno in metaArea.annotations" flex="50" flex-xs="100" layout="column" ng-show="metaArea.notEmpty"> 
+        <annotation-card annotation="anno" flex></annotation-card>
     </div>
 
 </md-content>
