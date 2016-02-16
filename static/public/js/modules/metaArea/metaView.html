@@ -1,15 +1,9 @@
 <!-- Cards con le annotazioni -->
-<!-- loading... -->
-<span layout="column" layout-align="center center" ng-show="metaArea.loading">
-    <md-progress-circular md-mode="indeterminate" md-diameter="80"></md-progress-circular>
-</span>
-
 <!-- Le cards! -->
 <md-content ng-hide="metaArea.loading" class="md-padding" layout="row" layout-wrap
 layout-align="center start" layout-xs="column">
 
-    <div ng-repeat="anno in metaArea.annotations" flex="50" flex-xs="100" layout="column"
-    ng-if="app.isFiltered(anno)">
+    <div ng-repeat="anno in metaArea.annotations" flex="50" flex-xs="100" layout="column"> 
         <annotation-card annotation="anno" flex/>
     </div>
 

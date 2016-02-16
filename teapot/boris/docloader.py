@@ -135,7 +135,7 @@ def getArticles_in_issue(issueURL):
     """
     Data una issue di DLib o una rivista UniBo crea un elenco degli articoli di quel numero
 
-    :param issueURL: stringa con l'URL della issue 
+    :param issueURL: stringa con l'URL della issue
     :returns docs: un array con gli URL degli articoli
     """
     page = requests.get(issueURL)
@@ -149,7 +149,7 @@ def getArticles_in_issue(issueURL):
             ### l'xpath fatto in questo modo POTREBBE beccare anche eventuali conference reports
             ### ma nell'ultimo numero (gen/feb 2016) ci sono solo articoli standard, quindi tutto ok
             docs.append(pref + a.attrib.get('href'))
-    else:  
+    else:
         # trattasi di rivista unibo
         for i, a in enumerate(tree.xpath('//div[@class="tocTitle"]//a')):
             docs.append(a.attrib.get('href'))
@@ -166,20 +166,20 @@ def getArticles_in_issue(issueURL):
 #####                            #####
 ######################################
 
-articles = []
+if __name__ == '__main__':
+    articles = []
 
-articles += getArticles_in_issue("http://www.dlib.org/dlib/january16/01contents.html")
-articles += getArticles_in_issue("http://series.unibo.it/issue/view/549/showToc")
-articles += getArticles_in_issue("http://montesquieu.unibo.it/issue/view/509")
+    articles += getArticles_in_issue("http://www.dlib.org/dlib/january16/01contents.html")
+    articles += getArticles_in_issue("http://series.unibo.it/issue/view/549/showToc")
+    articles += getArticles_in_issue("http://montesquieu.unibo.it/issue/view/509")
 
-# articles += getArticles_in_issue("http://jfr.unibo.it/issue/view/554")
-# articles += getArticles_in_issue("http://antropologiaeteatro.unibo.it/")
-# articles += getArticles_in_issue("http://disegnarecon.unibo.it/issue/view/425/showToc")
-# articles += getArticles_in_issue("http://rivista-statistica.unibo.it/issue/view/544")
+    # articles += getArticles_in_issue("http://jfr.unibo.it/issue/view/554")
+    # articles += getArticles_in_issue("http://antropologiaeteatro.unibo.it/")
+    # articles += getArticles_in_issue("http://disegnarecon.unibo.it/issue/view/425/showToc")
+    # articles += getArticles_in_issue("http://rivista-statistica.unibo.it/issue/view/544")
 
-# # dlib con conference report, che tuttavia non causa problemi
-# articles += getArticles_in_issue("http://www.dlib.org/dlib/september15/09contents.html")
+    # # dlib con conference report, che tuttavia non causa problemi
+    # articles += getArticles_in_issue("http://www.dlib.org/dlib/september15/09contents.html")
 
-for article in articles:
-    add_document_to_fuseki(article)
-
+    for article in articles:
+        add_document_to_fuseki(article)

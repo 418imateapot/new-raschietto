@@ -8,18 +8,19 @@ export default function MainAreaController($rootScope, $scope, $state, $sanitize
 
     const model = this;
 
-    model.loading = true; /** Usato per l'animazione */
-    model.url = ''; // L'url del documento caricato
-    model.content='';//nuovo body del documento
+    model.loading = false; /** Usato per l'animazione */
+    model.content = documentService.currentDoc.content; //nuovo body del documento
 
-    $scope.$on('retriveNewUrl',change_document);
-    $scope.$on('force_reload', change_document);
+    $scope.$on('retrieveNewUrl',change_document);
 
     // Se possibile, carica l'ultimo documento
     if (!model.content) {
         let savedDoc = userService.lastDocument();
         if (savedDoc) {
             $rootScope.$broadcast('retrieveNewUrl', {doc_url: savedDoc});
+        } else {
+            // Se non abbiamo nulla, andiamo al tutorial
+            $state.go('teapot.mode.tutorial', {mode: 'reader'});
         }
     }
 
@@ -31,7 +32,7 @@ export default function MainAreaController($rootScope, $scope, $state, $sanitize
         documentService
             .retrieve(args.doc_url)
             .then(doc => {
-                model.content = doc.resp;
+                model.content = doc.content;
                 model.loading = false;
                 //model.highlight();
             });

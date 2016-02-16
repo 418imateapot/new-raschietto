@@ -62,15 +62,23 @@ function DocumentController($rootScope, $state, $mdToast, $stateParams, document
     /**
      * Dato un doi, punta l'URL della pagina al nuovo documento
      * NOTA: è il controller della main area che risolve il doi nel suo url
-     * @param {string} doi Il DOI del documento da caricare
      */
     function _load(url) {
-        console.log("click");
+        console.log("click: " + url);
 
-        $rootScope.$broadcast('retriveNewUrl',{doc_url:url});
+        if ($state.is('teapot.mode.tutorial')) {
+            documentService.retrieve(url)
+            .then(() => {
+                $state.go('teapot.mode')
+                .then(() => $rootScope.$broadcast('retrieveNewUrl',{doc_url: url}));
+            });
+        } else {
+            $rootScope.$broadcast('retrieveNewUrl', {doc_url:url});
+        }
 
     }
 
+    // Carica un documento nel triple store
     function _newDoc(url) {
         let valid = Boolean(url.match(/unibo/) || url.match(/dlib/));
 

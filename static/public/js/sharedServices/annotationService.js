@@ -17,6 +17,7 @@ function annotationService($http, utilityService, documentService) {
 
     // Props
     service.annotations = null;
+    service.filters = [];
     // Methods
     service.query = _query;
     service.tidy = _tidy;
@@ -63,10 +64,12 @@ function annotationService($http, utilityService, documentService) {
     /**
      * Convalida i risultati e li riorganizza
      * in un formato più appetibile
+     * Inoltre inizializza i filtri
      */
     function _tidy(data) {
         let items = data.results.bindings;
         let result = [];
+        let filters = new Set();
         for (let i in items) {
             let elem = items[i];
             let annotation = {};
@@ -100,15 +103,21 @@ function annotationService($http, utilityService, documentService) {
 
             annotation.provenance = {
                 author: {
-                    name: elem.provenanceLabel.value,
+                    name: elem.provenanceLabel.value || elem.provenanceMail.value,
                     mail: elem.provenanceMail.value
                 },
                 time: elem.time.value
             };
 
+            // Aggiungi i filtri per quest'annotazione al set
+            filters.add({name: annotation.group, display: true, type: 'group'});
+            filters.add({name: annotation.type, display: true, type: 'type'});
+            filters.add({name: annotation.provenance.author.name, display: true, type: 'provenance'});
             // Ed ecco la nostra nuova annotazione splendente
             result.push(annotation);
         } // END for (i in items)
+        // Converti il set in array
+        service.filters = Array.from(filters);
         return result;
     }
 
@@ -137,6 +146,7 @@ function annotationService($http, utilityService, documentService) {
                 return null;
         }
     }
+
 
     function _build_query(url) {
         // Usa i nuovi template string di ES6

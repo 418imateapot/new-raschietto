@@ -7,6 +7,7 @@ routerConfig.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvid
  */
 export
 default
+
 function routerConfig($stateProvider, $urlRouterProvider, $locationProvider) {
 
     /* html5Mode permette di avere url puliti (senza abuso di #) */
@@ -15,18 +16,29 @@ function routerConfig($stateProvider, $urlRouterProvider, $locationProvider) {
         requireBase: true
     });
     /* Default route, se nessun altro fa match */
-    $urlRouterProvider.otherwise('/reader');
+    $urlRouterProvider.otherwise(() => {
+        console.log('REDIRECT');
+        return '/teapot/reader';
+    });
 
     $stateProvider
     /* Il secondo segmento dell'url determina
      * la modalita' (reader o annotator)
      */
-        .state('mode', {
+        .state('teapot', {
+            url: '/teapot'
+        })
+        // reader || annotator
+        .state('teapot.mode', {
             url: '/{mode:reader|annotator}', // regex path matching
-            template: '<main-area></main-area>'
+            views: {
+                '@': {
+                    template: '<main-area></main-area>'
+                }
+            }
         })
         /* Pagina tutorial */
-        .state('mode.tutorial', {
+        .state('teapot.mode.tutorial', {
             url: '/tutorial',
             templateUrl: 'js/modules/tutorial/tutorialView.html',
             views: {

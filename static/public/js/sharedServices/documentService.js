@@ -24,7 +24,7 @@ export default function documentService($http,$rootScope) {
         Dservice.decodeDoi= decodeDoi;
         Dservice.findByDoi= findByDoi;
         Dservice.currentUrl='';
-        Dservice.currentBody='';
+        Dservice.currentDoc='';
 
     //-- FUNCTION DEFINITIONS --//
 
@@ -45,7 +45,7 @@ export default function documentService($http,$rootScope) {
                 cache: true,
             }).then(response => {
                 Dservice.currentUrl=url;
-                Dservice.currentBody=response.data;
+                Dservice.currentDoc=response.data;
                 
                 return response.data;
             })

@@ -11,10 +11,8 @@ export default function MetaController($scope, $stateParams, documentService, an
     model.loading
     model.annotations
     */
-   model.annotations = model.getAnnotations();
-   console.log(model.getAnnotations);
+   model.annotations = annotationService.annotations;
 
-    // Copiato pari pari da google
     model.selected = [
         'hasTitle',
         'hasAuthor',
@@ -34,7 +32,5 @@ export default function MetaController($scope, $stateParams, documentService, an
     model.exists = function(item, list) {
         return list.indexOf(item) > -1;
     };
-
-//    _load_annotations(); // Inizializzazione;
 
 }
