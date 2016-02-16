@@ -48,13 +48,37 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
     function _openToolbox(origin) {
         // Setta qualche default se non sappiamo che fare;
         let mode = $stateParams.mode || 'reader';
-        $mdSidenav('left').close().then(function() {
-            $state.go('mode.docs.document.tools.tab', {
-                mode: mode,
-                toolId: origin
-            });
-        });
+        $mdSidenav('left').close().then(function(ev) {
+
+                $mdDialog.show({
+                    controller: DialogController,
+                    template: '<doc-area></doc-area>',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose:true
+                })
+                .then(function(answer) {
+                $scope.status = 'You said the information was "' + answer + '".';
+                }, function() {
+                    $scope.status = 'You cancelled the dialog.';
+                });
+
+});
+
     }
+            function DialogController($scope, $mdDialog) {
+                    $scope.hide = function() {
+                    $mdDialog.hide();
+                };
+
+                    $scope.cancel = function() {
+                    $mdDialog.cancel();
+                };
+
+                    $scope.answer = function(answer) {
+                    $mdDialog.hide(answer);
+                };
+            }
 
     /**
      * Cambia modalita'
