@@ -1,48 +1,27 @@
-MainAreaController.$inject = ['$scope', '$state', '$sanitize', 'documentService','$rootScope'];
+MainAreaController.$inject = ['$rootScope', '$scope', '$state', '$sanitize', 'documentService', 'userService'];
 
 /**
  * Controller per la model
  * $sanitize permette di iniettare HTML nelle viste
  */
-export
-default
-function MainAreaController($scope, $state, $sanitize, documentService,$rootScope) {
-    var model = this;
-    console.warn(model.edit, typeof(model.edit));
+export default function MainAreaController($rootScope, $scope, $state, $sanitize, documentService, userService) {
+
+    const model = this;
 
     model.loading = true; /** Usato per l'animazione */
-    /** model.content ->  Il contenuto del documento HTML passato da appctrl */
     model.url = ''; // L'url del documento caricato
     model.content='';//nuovo body del documento
-    $scope.currentState = $state;
-    //$scope.$watch('currentState', _reload);
+
     $scope.$on('retriveNewUrl',change_document);
     $scope.$on('force_reload', change_document);
 
-    function _reload(){
-
-
-    }
-/*
-    function _reload() {
-        if (!newState.params.doi) {
-            // In teoria non succederà mai, però...
-            console.warn("Tried to load a document without a doi");
-            return;
+    // Se possibile, carica l'ultimo documento
+    if (!model.content) {
+        let savedDoc = userService.lastDocument();
+        if (savedDoc) {
+            $rootScope.$broadcast('retrieveNewUrl', {doc_url: savedDoc});
         }
-        console.log("LOAD DOC;");
-        let doi = decodeURIComponent(newState.params.doi);
-        doi = documentService.decodeDoi(doi);
-        documentService.findByDoi(doi).then((doc) => {
-            if (!doc) return; // Shit happens...
-            model.url = doc.url.value;
-            change_document('none', {
-                'doc_url': doc.url.value,
-                'doc_doi': doc.doi.value
-            });
-        });
     }
-*/
 
     /**
      * Carica un nuovo documento tramite documentService

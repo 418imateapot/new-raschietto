@@ -1,6 +1,6 @@
 import fuzzy from 'fuzzy';
 
-DocumentController.$inject = ['$scope', '$state', '$mdToast', 'documentService','$rootScope'];
+DocumentController.$inject = ['$rootScope', '$state', '$mdToast','$stateParams', 'documentService'];
 
 /**
  * Controller per la docArea.
@@ -10,8 +10,7 @@ DocumentController.$inject = ['$scope', '$state', '$mdToast', 'documentService',
  */
 export
 default
-
-function DocumentController($scope, $state, $mdToast, documentService,$rootScope) {
+function DocumentController($rootScope, $state, $mdToast, $stateParams, documentService) {
 
     var model = this;
 
@@ -67,6 +66,7 @@ function DocumentController($scope, $state, $mdToast, documentService,$rootScope
      */
     function _load(url) {
         console.log("click");
+
         $rootScope.$broadcast('retriveNewUrl',{doc_url:url});
 
     }

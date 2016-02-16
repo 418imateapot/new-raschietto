@@ -130,7 +130,7 @@ function newAnnotationService($http, localStorageService) {
             case 'hasPublicationYear':
                 result.year = data.objectLabel.value;
                 break;
-            case 'hasDoi':
+            case 'hasDOI':
                 result.doi = data.objectLabel.value;
                 break;
             case 'hasURL':

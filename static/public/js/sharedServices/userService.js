@@ -8,10 +8,15 @@ export default function userService($cookies) {
     service.userName = '';
     service.userEmail = '';
 
+    service.storeLastDocument = function(url) {
+        if(service.userEmail) {
+            $cookies.set(service.userEmail, url);
+        }
+    };
 
-    service.storeLastDocument = function(doi) {
-        //TODO implementation
-        console.info("Saving last open document");
+
+    service.lastDocument = function() {
+        return $cookies.get(service.userEmail);    
     };
 
     /**

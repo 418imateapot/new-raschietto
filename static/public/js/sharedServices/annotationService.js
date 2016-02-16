@@ -9,7 +9,9 @@ annotationService.$inject = ['$http', 'utilityService', 'documentService'];
  * Servizio che, dato un url, chiede al triplestore le annotazioni
  * sulla fabio:Expression corrispondente
  */
-export default function annotationService($http, utilityService, documentService) {
+export
+default
+function annotationService($http, utilityService, documentService) {
 
     const service = this;
 
@@ -43,20 +45,17 @@ export default function annotationService($http, utilityService, documentService
         //var endpoint = 'http://localhost:3030/data';
         const opts = 'format=json&callback=JSON_CALLBACK';
         const url_string = `${endpoint}?query=${encodedQuery}&${opts}`;
-        promise = $http.jsonp(url_string)
+
+        return $http.jsonp(url_string)
             .then(response => {
-                return {
-                    'status': 'ok',
-                    'body': response.data,
-                };
+                service.annotations = service.tidy(response.data);
+                return service.annotations;
             })
             .catch(error => {
-                return {
-                    'status': 'error',
-                    'error': error
-                };
+                console.error(err);
+                service.annotations = null;
+                return null;
             });
-        return promise;
     }
 
 
@@ -66,30 +65,78 @@ export default function annotationService($http, utilityService, documentService
      * in un formato più appetibile
      */
     function _tidy(data) {
-            let items = data.results.bindings;
-            let result = [];
-            for (let i in items) {
-                let keep = false;
-                let elem = items[i];
-                // Genera elem.type se non esiste
-                if (!elem.type && !elem.typeLabel) {
-                    continue;
-                } else if (!elem.type) {
-                    let type = _genType(elem.typeLabel.value);
-                    elem.type = {
-                        value: type
-                    };
-                } else if (!elem.typeLabel) {
-                    let label = _genLabel(elem.type.value);
-                    elem.typeLabel = {
-                        value: label
-                    };
-                }
-                let type = elem.type.value;
+        let items = data.results.bindings;
+        let result = [];
+        for (let i in items) {
+            let elem = items[i];
+            let annotation = {};
+            annotation.group = elem.group.value;
 
-            } // END for (var i in items)
-            return result;
-        } // END tidy(data)
+            // Genera type/typelabel se non esistono
+            if (!elem.type && !elem.typeLabel) {
+                // Dobbiamo poter dedurre il tipo in qualche modo..
+                continue;
+            } else if (!elem.type) {
+                annotation.typeLabel = elem.typeLabel.value;
+                annotation.type = utilityService.typeFromLabel(elem.typeLabel.value);
+            } else if (!elem.typeLabel) {
+                annotation.type = elem.type.value;
+                annotation.typeLabel = utilityService.labelFromType(elem.type.value);
+            }
+
+            annotation.value = _setValue(elem, annotation.type);
+            if(!annotation.value) {
+                // Non possiamo usarla
+                console.log('annotationService: annotazione scartata');
+                continue;
+            }
+
+            annotation.target = {
+                source: elem.src.value,
+                id: elem.fragment.value,
+                start: elem.start.value,
+                end: elem.end.value
+            };
+
+            annotation.provenance = {
+                author: {
+                    name: elem.provenanceLabel.value,
+                    mail: elem.provenanceMail.value
+                },
+                time: elem.time.value
+            };
+
+            // Ed ecco la nostra nuova annotazione splendente
+            result.push(annotation);
+        } // END for (i in items)
+        return result;
+    }
+
+    function _setValue(annot, type) {
+        let result = {};
+        switch (type) {
+            case 'hasTitle':
+            case 'hasPublicationYear':
+            case 'hasDOI':
+            case 'hasURL':
+            case 'hasComment':
+            case 'denotesRethoric':
+                result.value = annot.object.value;
+                result.label = annot.bodyLabel ? annot.bodyLabel.value : undefined;
+                break;
+            case 'hasAuthor':
+                result.value = annot.objectLabel.value;
+                result.label = annot.bodyLabel ? annot.bodyLabel.value : undefined;
+                break;
+            case 'cites':
+                result.value = annot.objectLabel.value;
+                result.label = annot.bodyLabel ? annot.bodyLabel.value : undefined;
+                result.cited = annot.object.value;
+                break;
+            default:
+                return null;
+        }
+    }
 
     function _build_query(url) {
         // Usa i nuovi template string di ES6
