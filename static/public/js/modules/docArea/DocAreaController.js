@@ -17,6 +17,8 @@ function DocumentController($scope, $state, $mdToast, documentService,$rootScope
 
 
     model.docs = [];
+    model.docsDlib = [];
+    model.docsStat = [];
     model.load = _load;
     model.search = _search;
     model.newDoc = _newDoc;
@@ -31,7 +33,10 @@ function DocumentController($scope, $state, $mdToast, documentService,$rootScope
         documentService.list()
             .then(data => {
                 model.docs = data;
-            })
+                console.log(data);
+                model.docsDlib=data.filter(item => item.url.value.match(/dlib/i));
+                model.docsStat=data.filter(item => item.url.value.match(/statistica/i));
+                            })
             .catch(err => {
                 console.log(err);
             });
