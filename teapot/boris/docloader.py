@@ -129,3 +129,57 @@ def add_document_to_fuseki(url):
         return False
     graph = makeGraph(url)
     return upload_graph(graph)
+
+
+def getArticles_in_issue(issueURL):
+    """
+    Data una issue di DLib o una rivista UniBo crea un elenco degli articoli di quel numero
+
+    :param issueURL: stringa con l'URL della issue 
+    :returns docs: un array con gli URL degli articoli
+    """
+    page = requests.get(issueURL)
+    tree = html.fromstring(page.content)
+
+    docs = []
+    if "dlib" in issueURL:
+        pref = issueURL.rsplit("/", 1).pop(0) + "/"  # ad esempio http://www.dlib.org/dlib/january16/
+        for i, a in enumerate(tree.xpath("(//p[@class='contents']/a)[position()<last()]")):
+            ### nota::
+            ### l'xpath fatto in questo modo POTREBBE beccare anche eventuali conference reports
+            ### ma nell'ultimo numero (gen/feb 2016) ci sono solo articoli standard, quindi tutto ok
+            docs.append(pref + a.attrib.get('href'))
+    else:  
+        # trattasi di rivista unibo
+        for i, a in enumerate(tree.xpath('//div[@class="tocTitle"]//a')):
+            docs.append(a.attrib.get('href'))
+    return docs
+
+
+
+
+
+
+######################################
+#####                            #####
+##### aggiungiamo roba a fuseki  #####
+#####                            #####
+######################################
+
+articles = []
+
+articles += getArticles_in_issue("http://www.dlib.org/dlib/january16/01contents.html")
+articles += getArticles_in_issue("http://series.unibo.it/issue/view/549/showToc")
+articles += getArticles_in_issue("http://montesquieu.unibo.it/issue/view/509")
+
+# articles += getArticles_in_issue("http://jfr.unibo.it/issue/view/554")
+# articles += getArticles_in_issue("http://antropologiaeteatro.unibo.it/")
+# articles += getArticles_in_issue("http://disegnarecon.unibo.it/issue/view/425/showToc")
+# articles += getArticles_in_issue("http://rivista-statistica.unibo.it/issue/view/544")
+
+# # dlib con confererce report, che tuttavia non causa problemi
+# articles += getArticles_in_issue("http://www.dlib.org/dlib/september15/09contents.html")
+
+for article in articles:
+    add_document_to_fuseki(article)
+
