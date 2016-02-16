@@ -17,8 +17,8 @@ import newAnnotationService from './newAnnotationService.js';
  * </ul>
  */
 export default angular.module('teapot.sharedServices', ['ngCookies'])
-    .factory('documentService', documentService)
-    .factory('annotationService', annotationService)
+    .service('documentService', documentService)
+    .service('annotationService', annotationService)
     .service('userService', userService)
     .service('newAnnotationService', newAnnotationService)
     .name;

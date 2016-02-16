@@ -1,4 +1,4 @@
-MainAreaController.$inject = ['$scope', '$state', '$sanitize', 'documentService'];
+MainAreaController.$inject = ['$scope', '$state', '$sanitize', 'documentService','$rootScope'];
 
 /**
  * Controller per la model
@@ -6,20 +6,25 @@ MainAreaController.$inject = ['$scope', '$state', '$sanitize', 'documentService'
  */
 export
 default
-function MainAreaController($scope, $state, $sanitize, documentService) {
+function MainAreaController($scope, $state, $sanitize, documentService,$rootScope) {
     var model = this;
     console.warn(model.edit, typeof(model.edit));
 
     model.loading = true; /** Usato per l'animazione */
     /** model.content ->  Il contenuto del documento HTML passato da appctrl */
     model.url = ''; // L'url del documento caricato
-
+    model.content='';//nuovo body del documento
     $scope.currentState = $state;
-    $scope.$watch('currentState', _reload);
-
+    //$scope.$watch('currentState', _reload);
+    $scope.$on('retriveNewUrl',change_document);
     $scope.$on('force_reload', change_document);
 
-    function _reload(newState, oldState) {
+    function _reload(){
+
+
+    }
+/*
+    function _reload() {
         if (!newState.params.doi) {
             // In teoria non succederà mai, però...
             console.warn("Tried to load a document without a doi");
@@ -37,19 +42,19 @@ function MainAreaController($scope, $state, $sanitize, documentService) {
             });
         });
     }
-
+*/
 
     /**
      * Carica un nuovo documento tramite documentService
      */
-    function change_document(event, args) {
+    function change_document(event,args) {
         model.loading = true; // Inizia l'animazione
         documentService
             .retrieve(args.doc_url)
             .then(doc => {
-                model.content = doc.resp.content;
+                model.content = doc.resp;
                 model.loading = false;
-                model.highlight();
+                //model.highlight();
             });
     }
 }

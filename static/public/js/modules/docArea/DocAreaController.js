@@ -1,6 +1,6 @@
 import fuzzy from 'fuzzy';
 
-DocumentController.$inject = ['$scope', '$state', '$mdToast', 'documentService'];
+DocumentController.$inject = ['$scope', '$state', '$mdToast', 'documentService','$rootScope'];
 
 /**
  * Controller per la docArea.
@@ -11,9 +11,10 @@ DocumentController.$inject = ['$scope', '$state', '$mdToast', 'documentService']
 export
 default
 
-function DocumentController($scope, $state, $mdToast, documentService) {
+function DocumentController($scope, $state, $mdToast, documentService,$rootScope) {
 
     var model = this;
+
 
     model.docs = [];
     model.load = _load;
@@ -59,14 +60,10 @@ function DocumentController($scope, $state, $mdToast, documentService) {
      * NOTA: è il controller della main area che risolve il doi nel suo url
      * @param {string} doi Il DOI del documento da caricare
      */
-    function _load(doi) {
-        if (!doi) return;
+    function _load(url) {
+        console.log("click");
+        $rootScope.$broadcast('retriveNewUrl',{doc_url:url});
 
-        let encodedDoi = documentService.encodeDoi(doi);
-        $state.go('mode.docs.document', {
-                doi: encodedDoi
-            }) // Punta l'url al nuovo doc
-            .then(() => $scope.show = false); // Nascondi la barra
     }
 
     function _newDoc(url) {

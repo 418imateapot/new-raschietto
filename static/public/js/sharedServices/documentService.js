@@ -24,8 +24,8 @@ function documentService($http,$rootScope) {
         Dservice.encodeDoi=encodeDoi;
         Dservice.decodeDoi= decodeDoi;
         Dservice.findByDoi= findByDoi;
-        Dservice.currentUrl=currentUrl;
-        Dservice.currentBody=currentBody;
+        Dservice.currentUrl='';
+        Dservice.currentBody='';
 
     //-- FUNCTION DEFINITIONS --//
 
@@ -45,8 +45,9 @@ function documentService($http,$rootScope) {
                 url: '/api/docs?url=' + encodeURIComponent(url),
                 cache: true,
             }).then(response => {
-                currentUrl=url;
-                currentBody=response.data;
+                Dservice.currentUrl=url;
+                Dservice.currentBody=response.data;
+                
                 return response.data;
             })
             .catch(error => {
