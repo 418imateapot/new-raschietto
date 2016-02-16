@@ -7,7 +7,7 @@
  * documento.
  */
 
-documentService.$inject = ['$http'];
+documentService.$inject = ['$http', '$rootScope'];
 
 
 /**
@@ -15,16 +15,17 @@ documentService.$inject = ['$http'];
  */
 export
 default
-function documentService($http) {
+function documentService($http,$rootScope) {
+    const Dservice=this;
 
-    return {
-        retrieve: retrieve,
-        add: add,
-        list: list,
-        encodeDoi: encodeDoi,
-        decodeDoi: decodeDoi,
-        findByDoi: findByDoi
-    };
+        Dservice.retrieve= retrieve;
+        Dservice.add=add;
+        Dservice.list= list;
+        Dservice.encodeDoi=encodeDoi;
+        Dservice.decodeDoi= decodeDoi;
+        Dservice.findByDoi= findByDoi;
+        Dservice.currentUrl=currentUrl;
+        Dservice.currentBody=currentBody;
 
     //-- FUNCTION DEFINITIONS --//
 
@@ -39,20 +40,18 @@ function documentService($http) {
      * documento richiesto.
      */
     function retrieve(url) {
+
         return $http({
                 url: '/api/docs?url=' + encodeURIComponent(url),
-                cache: true
+                cache: true,
             }).then(response => {
-                return {
-                    'status': 'ok',
-                    'resp': response.data
-                };
+                currentUrl=url;
+                currentBody=response.data;
+                return response.data;
             })
             .catch(error => {
-                return {
-                    'status': 'error',
-                    'error': error
-                };
+                console.error(error);
+                return null;
             });
     }
 
