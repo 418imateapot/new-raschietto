@@ -6,19 +6,21 @@
         </h2>
         </div>
     </md-toolbar>
-    <form layout="column" layout-padding ng-submit="loginModal.submit(loginModal._username, loginModal._email)">
+    <form name="LoginForm" layout="column" layout-padding ng-submit="loginModal.submit(loginModal._username, loginModal._email)">
         <md-dialog-content layout="column">
 
             <div flex="100">
                 <md-input-container class="md-block">
                     <label>Nome utente</label>
-                    <input  type="text" ng-model="loginModal._username" autofocus pattern="^[a-zA-Z]+$" required="required">
+                    <input name="nomeUtente" type="text" ng-model="loginModal._username" autofocus pattern="^[a-zA-Z1-9]+$" required="required">
+                    <span ng-show="LoginForm.nomeUtente.$invalid">Il nome deve contenere solo caratteri alfanumerici.</span>
                 </md-input-container>
             </div>
             <div flex="100">
                 <md-input-container class="md-block">
                     <label>Email</label>
-                    <input type="email" ng-model="loginModal._email" required="required">
+                    <input nome="emailUtente" type="email" ng-model="loginModal._email"  required="required">
+
                 </md-input-container>
             </div>
         </md-dialog-content>
