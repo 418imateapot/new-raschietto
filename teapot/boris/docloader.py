@@ -177,7 +177,7 @@ articles += getArticles_in_issue("http://montesquieu.unibo.it/issue/view/509")
 # articles += getArticles_in_issue("http://disegnarecon.unibo.it/issue/view/425/showToc")
 # articles += getArticles_in_issue("http://rivista-statistica.unibo.it/issue/view/544")
 
-# # dlib con confererce report, che tuttavia non causa problemi
+# # dlib con conference report, che tuttavia non causa problemi
 # articles += getArticles_in_issue("http://www.dlib.org/dlib/september15/09contents.html")
 
 for article in articles:
