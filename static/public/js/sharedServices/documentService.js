@@ -13,10 +13,9 @@ documentService.$inject = ['$http', '$rootScope'];
 /**
  * @namespace
  */
-export
-default
-function documentService($http,$rootScope) {
-    const Dservice=this;
+export default function documentService($http,$rootScope) {
+
+        const Dservice=this;
 
         Dservice.retrieve= retrieve;
         Dservice.add=add;

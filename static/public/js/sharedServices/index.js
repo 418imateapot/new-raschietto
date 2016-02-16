@@ -4,6 +4,7 @@ import documentService from './documentService.js';
 import annotationService from './annotationService.js';
 import userService from './userService.js';
 import newAnnotationService from './newAnnotationService.js';
+import utilityService from './utilityService.js';
 
 /**
  * @module teapot/sharedServices
@@ -21,4 +22,5 @@ export default angular.module('teapot.sharedServices', ['ngCookies'])
     .service('annotationService', annotationService)
     .service('userService', userService)
     .service('newAnnotationService', newAnnotationService)
+    .service('utilityService', utilityService)
     .name;
