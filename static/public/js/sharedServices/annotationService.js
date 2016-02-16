@@ -3,7 +3,7 @@
  */
 // TODO: Cancella i rami else di debug
 
-annotationService.$inject = ['$http', 'utilityService', 'documentService'];
+annotationService.$inject = ['$http', 'utilityService'];
 
 /**
  * Servizio che, dato un url, chiede al triplestore le annotazioni
@@ -11,7 +11,7 @@ annotationService.$inject = ['$http', 'utilityService', 'documentService'];
  */
 export
 default
-function annotationService($http, utilityService, documentService) {
+function annotationService($http, utilityService) {
 
     const service = this;
 
@@ -21,9 +21,10 @@ function annotationService($http, utilityService, documentService) {
     // Methods
     service.query = _query;
     service.tidy = _tidy;
-    service.scrape = _scrape;
+    //service.scrape = _scrape;
 
 
+    /*
     function _scrape(doi) {
         return documentService.findByDoi(documentService.decodeDoi(doi))
             .then(result => {
@@ -35,13 +36,15 @@ function annotationService($http, utilityService, documentService) {
             })
             .catch(err => err);
     }
+*/
 
     /**
      * Restituisce la promessa del risultato di una query gigante
      * sul documento passato come arg.
      */
     function _query(url) {
-        const encodedQuery = encodeURIComponent(_build_query(expr));
+        console.log(url);
+        const encodedQuery = encodeURIComponent(_build_query(url));
         const endpoint = 'http://tweb2015.cs.unibo.it:8080/data';
         //var endpoint = 'http://localhost:3030/data';
         const opts = 'format=json&callback=JSON_CALLBACK';
@@ -49,11 +52,12 @@ function annotationService($http, utilityService, documentService) {
 
         return $http.jsonp(url_string)
             .then(response => {
+                console.log(response.data);
                 service.annotations = service.tidy(response.data);
                 return service.annotations;
             })
             .catch(error => {
-                console.error(err);
+                console.error(error);
                 service.annotations = null;
                 return null;
             });
@@ -118,6 +122,7 @@ function annotationService($http, utilityService, documentService) {
         } // END for (i in items)
         // Converti il set in array
         service.filters = Array.from(filters);
+        console.log(result);
         return result;
     }
 
@@ -134,8 +139,8 @@ function annotationService($http, utilityService, documentService) {
                 result.label = annot.bodyLabel ? annot.bodyLabel.value : undefined;
                 break;
             case 'hasAuthor':
-                result.value = annot.objectLabel.value;
                 result.label = annot.bodyLabel ? annot.bodyLabel.value : undefined;
+                result.value = annot.objectLabel ? annot.objectLabel.value : result.label;
                 break;
             case 'cites':
                 result.value = annot.objectLabel.value;
@@ -143,8 +148,9 @@ function annotationService($http, utilityService, documentService) {
                 result.cited = annot.object.value;
                 break;
             default:
-                return null;
+                result = null;
         }
+        return result;
     }
 
 
@@ -157,35 +163,34 @@ PREFIX frbr: <http://purl.org/vocab/frbr/core#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX raschietto: <http://vitali.web.cs.unibo.it/raschietto/>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX schema: <http://schema.org/>
 
-SELECT ?group ?type ?typeLabel ?subject ?provenance ?provenanceLabel ?time ?predicate ?object ?objectLabel ?bodyLabel ?innerObject ?fragment ?start ?end ?src
+SELECT ?group ?type ?typeLabel ?subject ?provenanceMail ?provenanceLabel ?time ?predicate ?object ?objectLabel ?bodyLabel ?innerObject ?fragment ?start ?end ?src
 WHERE {
     GRAPH ?group {
         ?x a oa:Annotation;
             oa:hasTarget ?target.
         ?target oa:hasSource <${url}>.
-    ?x oa:annotatedBy ?provenance;
-        oa:hasBody ?body.
-    ?body rdf:subject ?subject.
-    OPTIONAL {?x oa:annotatedAt ?time.}
-    OPTIONAL {?x raschietto:type ?type.}
-    OPTIONAL {?x rdfs:label ?typeLabel.}
-    OPTIONAL {?provenance foaf:name ?provenanceLabel.}
-    ?body rdf:subject ?subject;
-        rdf:predicate ?predicate;
-        rdf:object ?object.
-    OPTIONAL{?body rdfs:label ?bodyLabel.}
-    OPTIONAL{?object rdfs:label ?objectLabel.}
-    OPTIONAL{?object rdf:subject ?innerObject. }
-    OPTIONAL{
+        ?x oa:annotatedBy ?provenance;
+            oa:hasBody ?body;
+            oa:annotatedAt ?time.
+        ?provenance schema:email ?provenanceMail.
+        ?body rdf:subject ?subject;
+            rdf:predicate ?predicate;
+            rdf:object ?object.
         ?x oa:hasTarget ?target.
         ?target oa:hasSelector ?selector.
         ?target oa:hasSource ?src.
         ?selector rdf:value ?fragment;
             oa:start ?start;
             oa:end ?end.
+        OPTIONAL {?x raschietto:type ?type.}
+        OPTIONAL {?x rdfs:label ?typeLabel.}
+        OPTIONAL {?provenance foaf:name ?provenanceLabel.}
+        OPTIONAL{?body rdfs:label ?bodyLabel.}
+        OPTIONAL{?object rdfs:label ?objectLabel.}
+        OPTIONAL{?object rdf:subject ?innerObject. }
     }
-  }
 }
 `; // Sono backtick, non virgolette semplici
     }

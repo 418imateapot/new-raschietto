@@ -7,34 +7,33 @@
  * documento.
  */
 
-documentService.$inject = ['$http', '$rootScope'];
-
+documentService.$inject = ['$http', '$rootScope', 'annotationService'];
 
 /**
- * @namespace
+ * Servizio che si occupa delle attività legate al
+ * documento
  */
-export default function documentService($http,$rootScope) {
+export default function documentService($http, $rootScope, annotationService) {
 
-        const Dservice=this;
+    const Dservice = this;
 
-        Dservice.retrieve= retrieve;
-        Dservice.add=add;
-        Dservice.list= list;
-        Dservice.encodeDoi=encodeDoi;
-        Dservice.decodeDoi= decodeDoi;
-        Dservice.findByDoi= findByDoi;
-        Dservice.currentUrl='';
-        Dservice.currentDoc='';
+    // Props
+    Dservice.currentUrl = '';
+    Dservice.currentDoc = '';
+
+    // Methods
+    Dservice.retrieve = retrieve;
+    Dservice.add = add;
+    Dservice.list = list;
 
     //-- FUNCTION DEFINITIONS --//
 
     /**
-     * @param {string} url L'URL http del documento da recuperare
-     * @description
      * Chiede al server tramite una richiesta GET asincrona
      * di scaricare il documento localizzato dall'URL passato
      * come parametro, e di inoltrarlo al client.
      *
+     * @param {string} url L'URL http del documento da recuperare
      * @return {Promise} Una promessa che, se risolta, restituisce il body del
      * documento richiesto.
      */
@@ -44,9 +43,9 @@ export default function documentService($http,$rootScope) {
                 url: '/api/docs?url=' + encodeURIComponent(url),
                 cache: true,
             }).then(response => {
-                Dservice.currentUrl=url;
-                Dservice.currentDoc=response.data;
-                
+                Dservice.currentUrl = url;
+                Dservice.currentDoc = response.data;
+
                 return response.data;
             })
             .catch(error => {
@@ -56,10 +55,6 @@ export default function documentService($http,$rootScope) {
     }
 
     /**
-     * @function
-     * @name list
-     *
-     * @description
      * Interroga il triple store per ottenere una lista dei documenti
      * annotabili e alcuni metadati utili su di essi, ovvero titolo, URL
      * e DOI.
@@ -97,36 +92,11 @@ export default function documentService($http,$rootScope) {
             });
     }
 
-    /**
-     * Queste servono perchè i DOI contengono caratteri "/"
-     * che fanno incazzare sia Apache che angular-ui-router,
-     * quindi è il caso di sostituirli.
-     * NEW: !! Facendo doppio encoding dell'URI gli slash
-     * vengono trattati a modo, quindi ci piace cosi'
-     */
-    function encodeDoi(doi) {
-        return encodeURIComponent(encodeURIComponent(doi));
-        //return doi.replace(/\//g, "__");
-    }
-    function decodeDoi(doi) {
-        return decodeURIComponent(decodeURIComponent(doi));
-        //return doi.replace(/__/g, "/");
-    }
-
-    function findByDoi(doi) {
-        let promise = this.list().then(function(docs) {
-            let result = docs.filter((el) => {
-                if (!el.doi) return false; // A volte per sfiga manca il doi
-                return el.doi.value === doi;
-            });
-            if (result === []) return false;
-            else return result[0];
-        });
-        return promise;
-    }
 
     function add(url) {
-       return $http.post('/api/docs', {url: url});
+        return $http.post('/api/docs', {
+            url: url
+        });
     }
 
 }
