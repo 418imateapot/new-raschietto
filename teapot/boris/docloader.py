@@ -169,7 +169,7 @@ if __name__ == '__main__':
     articles += getArticles_in_issue("http://rivista-statistica.unibo.it/issue/view/467")
     articles += getArticles_in_issue("http://www.dlib.org/dlib/july14/07contents.html")
     articles += getArticles_in_issue("http://series.unibo.it/issue/view/549/showToc")
-    articles += getArticles_in_issue("http://montesquieu.unibo.it/issue/view/509")
+    articles += getArticles_in_issue("http://montesquieu.unibo.it/issue/view/506")
 
     # articles += getArticles_in_issue("http://jfr.unibo.it/issue/view/554")
     # articles += getArticles_in_issue("http://antropologiaeteatro.unibo.it/")
