@@ -46,13 +46,8 @@ def _getURLandTitle(url):
     tree = html.fromstring(page.content)
 
     if "dlib" in url:
-        if "january16" in url:
-            title = tree.xpath('/html/head/title/text()')
-            doi = tree.xpath('//*[@id="DOI"]/@content')
-        else:
-            title = tree.xpath(
-                '/html/body/form/table[3]/tr/td/table[5]/tr/td/table[1]/tr/td[2]/h3[2]/text()')  # noqa
-            doi = tree.xpath('/html/head/meta[@name="DOI"]/@content')
+        title = tree.xpath('/html/body/form/table[3]/tr/td/table[5]/tr/td/table[1]/tr/td[2]/h3[2]/text()')  # noqa
+        doi = tree.xpath('/html/head/meta[@name="DOI"]/@content')
     elif "unibo" in url:
         title = tree.xpath('//*[@id="articleTitle"]/h3/text()')
         doi = tree.xpath('//*[@id="pub-id::doi"]/text()')
@@ -148,7 +143,7 @@ def getArticles_in_issue(issueURL):
         for i, a in enumerate(tree.xpath("(//p[@class='contents']/a)[position()<last()]")):
             ### nota:: [position()<last()]
             ### hack orrendo per non beccare l'ultimo articolo dell'issue
-            ### perché sia in nov14 che in gen16 è un conference report e non lo vogliamo
+            ### perché sia in nov14 che in jul14 è un conference report e non lo vogliamo
             docs.append(pref + a.attrib.get('href'))
     else:  
         # trattasi di rivista unibo
@@ -172,7 +167,7 @@ if __name__ == '__main__':
 
     articles += getArticles_in_issue("http://www.dlib.org/dlib/november14/11contents.html")
     articles += getArticles_in_issue("http://rivista-statistica.unibo.it/issue/view/467")
-    articles += getArticles_in_issue("http://www.dlib.org/dlib/january16/01contents.html")
+    articles += getArticles_in_issue("http://www.dlib.org/dlib/july14/07contents.html")
     articles += getArticles_in_issue("http://series.unibo.it/issue/view/549/showToc")
     articles += getArticles_in_issue("http://montesquieu.unibo.it/issue/view/509")
 
@@ -180,9 +175,6 @@ if __name__ == '__main__':
     # articles += getArticles_in_issue("http://antropologiaeteatro.unibo.it/")
     # articles += getArticles_in_issue("http://disegnarecon.unibo.it/issue/view/425/showToc")
     # articles += getArticles_in_issue("http://rivista-statistica.unibo.it/issue/view/544")
-
-    # # dlib con conference report, che tuttavia non causa problemi
-    # articles += getArticles_in_issue("http://www.dlib.org/dlib/september15/09contents.html")
 
     for article in articles:
         add_document_to_fuseki(article)
