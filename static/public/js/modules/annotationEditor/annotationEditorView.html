@@ -140,13 +140,11 @@
         </span>
 
     </md-dialog-content>
-    <md-dialog-actions flex class="newAnnoButtons" layout="column">
-        <span flex>
-            Autore: {{ editor.provenance.author.name}}
-            <br>{{editor.provenance.time | date: medium}}
-        <span flex>
-            <md-button class="md-raised" ng-click="editor.submit()">Conferma</md-button>
-        </span>
+    <md-dialog-actions layout="row">
+        Autore: {{editor.provenance.author.name}}
+        <br>{{editor.provenance.time | date: medium}}
+        <span flex></span>
+        <md-button class="md-raised" ng-click="editor.submit()">Conferma</md-button>
     </md-dialog-actions>
 
 </md-dialog>

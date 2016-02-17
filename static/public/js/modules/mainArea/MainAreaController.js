@@ -55,7 +55,7 @@ export default function MainAreaController($rootScope, $scope, $state, $sanitize
         $mdToast.showSimple('Sto caricando le annotazioni.');
         annotationService.query(documentService.currentUrl)
         .then(res => {
-            $rootScope.$broadcast('highlight');
+            $rootScope.$broadcast('annotations_loaded');
             $mdToast.showSimple(res.length + ' annotazioni caricate.');
         });
     }

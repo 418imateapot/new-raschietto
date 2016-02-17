@@ -4,7 +4,7 @@ md-search-text="docBar.searchText"
 md-item-text="item.title.value"
 md-items="item in docBar.search(docBar.searchText)"
 md-selected-item="docBar.selectedItem"
-md-selected-item-change="docBar.load(item.doi.value)"
+md-selected-item-change="docBar.load(item.url.value)"
 md-min-length="0">
     <md-item-template>
         <span md-highlight-text="docBar.searchText" md-highlight-flags="^i">{{item.title.value}}</span>

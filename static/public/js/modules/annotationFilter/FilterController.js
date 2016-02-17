@@ -1,39 +1,36 @@
-FilterController.$inject = ['$state', '$stateParams', 'userService'];
+FilterController.$inject = ['$scope', 'annotationService', 'userService', 'utilityService'];
 
 /**
  * Controller per i filtri delle annotazioni
  */
-export default function FilterController($state, $stateParams, userService) {
+export default function FilterController($scope, annotationService, userService, utilityService) {
 
     const model = this;
 
-    // model.filters ->injected by appCtrl
-    console.log(model.filters);
-
+    model.filters = annotationService.filters;
+    model.getLabel = (filter) => utilityService.labelFromType(filter);
     model.isTypeFilter = _isTypeFilter;
     model.isProvenanceFilter = _isProvenanceFilter;
+    model.isGroupFilter = _isGroupFilter;
     model.hide = () => filter.show = false;
     model.exists = _exists;
     model.toggle = _toggle;
     model.toggleOwn = _toggleOwn;
     model.toggleAll = _toggleAll;
+    model.hasAnnotations = Boolean(model.filters);
+
+    $scope.$on('annotations_loaded', () => model.filters = annotationService.filters);
 
     function _isTypeFilter(filter) {
-        const types = [
-            'hasTitle',
-            'hasAuthor',
-            'hasPublicationYear',
-            'hasDOI',
-            'hasURL',
-            'hasComment',
-            'denotesRethoric',
-            'cites'
-        ];
-        return types.indexOf(filter) !== -1;
+        return filter.type === 'type';
     }
 
     function _isProvenanceFilter(filter) {
-        return !_isTypeFilter(filter);
+        return filter.type === 'provenance';
+    }
+
+    function _isGroupFilter(filter) {
+        return filter.type === 'group';
     }
 
     function _toggleOwn() {
@@ -48,10 +45,8 @@ export default function FilterController($state, $stateParams, userService) {
 
     function _toggle(item) {
         // Bit flippin' man
-        model.filters[item].display = !model.filters[item].display;
-        if ($stateParams.toolId === undefined) {
-            $state.go('.', {}, {reload: true});
-        }
+        let entry = model.filters[item];
+        entry.display = !entry.display;
     }
 
     function _exists(item) {

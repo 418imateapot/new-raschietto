@@ -7,17 +7,9 @@ export default function MetaController($scope, $stateParams, documentService, an
     var model = this;
 
     model.annotations = annotationService.annotations;
-    model.isFiltered = _isFiltered;
+    model.isFiltered = annotationService.isFiltered;
     model.notEmpty = Boolean(model.annotations);
 
-    // se true, l'annotazione è filtrata
-    function _isFiltered(annot) {
-        let groupFilter = annotationService.filters.get(annot.group);
-        let typeFilter = annotationService.filters.get(annot.type);
-        let provenanceFilter = annotationService.filters.get(annot.provenance.author.name);
-
-        return !(groupFilter.display && typeFilter.display && provenanceFilter.display);
-    }
 
     model.toggle = function(item, list) {
         var idx = list.indexOf(item);

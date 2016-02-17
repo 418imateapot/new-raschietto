@@ -64,6 +64,10 @@ function DocumentController($rootScope, $state, $mdDialog, $mdToast, $stateParam
      * NOTA: è il controller della main area che risolve il doi nel suo url
      */
     function _load(url) {
+        if (!url) {
+            // Può succedere, giuro.
+            return;
+        }
         if ($state.is('teapot.mode.tutorial')) {
             documentService.retrieve(url)
             .then(() => {

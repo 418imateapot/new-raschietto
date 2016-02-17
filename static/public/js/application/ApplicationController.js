@@ -16,7 +16,7 @@ export default function ApplicationController($scope, $mdSidenav, documentServic
         model.user =  '';
     });
 
-    $scope.$on('highlight', (ev, args) => documentService.highlight($scope));
+    $scope.$on('annotations_loaded', (ev, args) => documentService.highlight($scope));
     console.info("Raschietto sta scaldando i motori...");
 
     //////////////////////////

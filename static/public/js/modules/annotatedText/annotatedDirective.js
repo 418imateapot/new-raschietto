@@ -33,7 +33,7 @@ function annotatedText($compile) {
          * Crea una lista di range, fondendo insieme i range che sono in
          * sovrapposizione
          */
-        ctrl.managedAnnotations.forEach(annot => {
+        ctrl.activeAnnotations.forEach(annot => {
             let newRange = rangy.createRange();
             let newRangeBookmark = {
                 containerNode: el.get(0),
@@ -73,11 +73,10 @@ function annotatedText($compile) {
                 type: annoType,
                 annotations: annotations
             };
-            console.log('pish');
             ctrl.rangesInfo.push(result);
         });
 
-        console.log(ctrl.rangesInfo);
+        // console.log(ctrl.rangesInfo);
 
         /**
          * Per ogni range determinato al passo precedente,

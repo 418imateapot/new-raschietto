@@ -11,7 +11,7 @@ ng-hide="topbar.showSearch || topbar.showTools">
         <!-- fill up the space between left and right area -->
         <span flex></span>
         <md-button ng-click="topbar.toggleFilters()">
-            <md-icon class="material-icons">filter_list</md-icon>Mostra filtri
+            <md-icon class="material-icons">filter_list</md-icon> {{topbar.infoText}}
         </md-button>
         <span flex></span>
         <md-button class="md-icon-button" aria-label="Search" ng-click="topbar.toggleSearch()">

@@ -1,18 +1,11 @@
 <md-menu-bar flex="100" layout-padding layout="row" layout-align="space-around bottom"
 class="md-whiteframe-5dp">
     <md-menu flex>
-        <button ng-click="filter.hide()">
-            <md-icon class="material-icons">filter_list</md-icon>
-            Filtri
-        </button>
-        <md-menu-content></md-menu-content>
-    </md-menu>
-    <md-menu flex>
         <button ng-click="$mdOpenMenu()">
             Per tipologia
         </button>
         <md-menu-content>
-            <md-menu-item ng-repeat="(key, val) in filter.filters" ng-show="filter.isTypeFilter(key)"
+            <md-menu-item ng-repeat="(key, val) in filter.filters" ng-show="filter.isTypeFilter(val)"
             layout-padding>
                 <md-button ng-click="filter.toggle(key)">
                     <md-icon class="material-icons" ng-show="filter.exists(key)">check</md-icon>
@@ -23,10 +16,25 @@ class="md-whiteframe-5dp">
     </md-menu>
     <md-menu flex>
         <button ng-click="$mdOpenMenu()">
-            Per autore
+            Per utente
         </button>
         <md-menu-content>
-            <md-menu-item class="md-indent" ng-repeat="(key, val) in filter.filters" ng-show="filter.isProvenanceFilter(key)"
+            <md-menu-item class="md-indent" ng-repeat="(key, val) in filter.filters" ng-show="filter.isProvenanceFilter(val)"
+            layout-padding>
+                <md-button ng-click="filters.toggle(key)">
+                    <md-icon class="material-icons" ng-show="filter.exists(key)">check</md-icon>
+                    {{val.name}}
+                </md-button>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+    </md-menu flex>
+    <md-menu flex>
+        <button ng-click="$mdOpenMenu()">
+            Per gruppo
+        </button>
+        <md-menu-content>
+            <md-menu-item class="md-indent" ng-repeat="(key, val) in filter.filters" ng-show="filter.isGroupFilter(val)"
             layout-padding>
                 <md-button ng-click="filters.toggle(key)">
                     <md-icon class="material-icons" ng-show="filter.exists(key)">check</md-icon>

@@ -58,6 +58,7 @@ export default function AnnotatedTextController($state, $mdToast, $scope, $mdDia
         let annotationIndexes = attrs.annotations.trim().split(' ');
 
         model.managedAnnotations = annotationIndexes.map(i => annotationService.annotations[i]);
+        model.activeAnnotations = model.managedAnnotations.filter(a => !annotationService.isFiltered(a));
 
         /* Scarta le annotazioni filtrate
         model.managedAnnotations.forEach((elem) => {

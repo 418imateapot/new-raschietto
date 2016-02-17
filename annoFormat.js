@@ -22,7 +22,7 @@ annotation.provenance = {
 annotation.content = {
     value: annot.object.value,
     label: annot.bodyLabel ? annot.bodyLabel.value : undefined,
-    subject: wat,
-    object: wattt,
+    subject: what,
+    object: whattt,
     cited: annot.object.value // Citation only
 };

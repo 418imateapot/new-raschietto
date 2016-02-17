@@ -11,6 +11,7 @@ annotationService.$inject = ['$http', 'utilityService'];
  */
 export
 default
+
 function annotationService($http, utilityService) {
 
     const service = this;
@@ -18,10 +19,11 @@ function annotationService($http, utilityService) {
     // Props
     service.annotations = null;
     service.currentUrl = null;
-    service.filters = new Map();
+    service.filters = {};
     // Methods
     service.query = _query;
     service.tidy = _tidy;
+    service.isFiltered = _isFiltered;
     //service.scrape = _scrape;
 
 
@@ -49,6 +51,7 @@ function annotationService($http, utilityService) {
         //var endpoint = 'http://localhost:3030/data';
         const opts = 'format=json&callback=JSON_CALLBACK';
         const url_string = `${endpoint}?query=${encodedQuery}&${opts}`;
+        service.filters = {};  // Reinizializza i filtri
 
         return $http.jsonp(url_string)
             .then(response => {
@@ -112,19 +115,37 @@ function annotationService($http, utilityService) {
             };
 
             annotation.content = _setContent(elem, annotation.type);
-            if(!annotation.content) {
+            if (!annotation.content) {
                 // Non possiamo usarla
                 console.log('annotationService: annotazione scartata - ' + annotation);
                 continue;
             }
 
             // Aggiungi i filtri per quest'annotazione al set
-            service.filters.set(annotation.group, {display: true, type: 'group'});
-            service.filters.set(annotation.type, {display: true, type: 'type'});
-            service.filters.set(annotation.provenance.author.name, {display: true, type: 'provenance'});
+            let groupLabel = annotation.group.split('/').pop();
+            let typeLabel = utilityService.labelFromType(annotation.type);
+            let provLabel = annotation.provenance.author.name || annotation.provenance.author.email;
+            let provKey = annotation.provenance.author.email || annotation.provenance.author.name;
+            service.filters[annotation.group] = {
+                name: groupLabel,
+                display: true,
+                type: 'group'
+            };
+            service.filters[annotation.type] = {
+                name: typeLabel,
+                display: true,
+                type: 'type'
+            };
+            service.filters[provKey] = {
+                name: provLabel,
+                display: true,
+                type: 'provenance'
+            };
             // Ed ecco la nostra nuova annotazione splendente
             result.push(annotation);
         } // END for (i in items)
+
+        console.log(service.filters);
         return result;
     }
 
@@ -150,9 +171,9 @@ function annotationService($http, utilityService) {
                     result.object = annot.innerObject.value;
                 }
                 if (!result.object && annot.object) {
-                    result.object =annot.object.value.match(/person/) ? annot.object.value : undefined;
+                    result.object = annot.object.value.match(/person/) ? annot.object.value : undefined;
                 }
-                if(!result.object) {
+                if (!result.object) {
                     // Chi cavolo è costui?
                     result = null;
                 }
@@ -160,7 +181,7 @@ function annotationService($http, utilityService) {
             case 'cites':
                 if (annot.objectLabel) {
                     result.value = annot.objectLabel.value;
-                } else if(annot.bodyLabel) {
+                } else if (annot.bodyLabel) {
                     result.value = annot.bodyLabel.value;
                 } else {
                     console.warn('Non so che fare con questa citazione');
@@ -229,6 +250,25 @@ WHERE {
         ];
         return (possibleValues.indexOf(fragment) === -1) ? fragment : '';
     }
+
+
+    // restituisce true se l'annotazione è filtrata
+    function _isFiltered(annot) {
+        let groupFilter = service.filters[annot.group];
+        let typeFilter = service.filters[annot.type];
+        let provenanceFilter = service.filters[annot.provenance.author.name];
+        let active = false;
+
+        try {
+            active = groupFilter.display &&
+                        typeFilter.display &&
+                        provenanceFilter.display;
+        } catch (e) {
+            active = true;
+        }
+        return !active;
+    }
+
 
     function _validateRethoric(type) {
         let valid = [

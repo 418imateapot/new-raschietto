@@ -29,7 +29,7 @@ export default function selectionService() {
                 if (!xpath) return;
                 break;
         }
-        console.log(xpath);
+        // console.log(xpath);  // Il grande amico del debug alle 4 di notte
         return getElementByXpath(xpath);
     };
 
