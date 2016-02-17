@@ -1,6 +1,8 @@
 utilityService.$inject = [];
 
-export default function utilityService() {
+export
+default
+function utilityService() {
 
     const service = this;
 
@@ -124,7 +126,7 @@ export default function utilityService() {
 
     function _getCitedNumber(annot) {
         let tagNum = annot.target.id.match(/\d+$/);
-        if(tagNum) {
+        if (tagNum) {
             return tagNum[0];
         } else {
             return Math.floor(Math.random() * 50);

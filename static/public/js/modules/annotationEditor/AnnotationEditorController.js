@@ -72,14 +72,15 @@ function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userServic
         annotation.type = model.typeSelected;
         annotation.content = model.annotations[annotation.type];
 
-        // Pigrizia...
-        if (annotation.type === 'denotesRethoric') {
-            annotation.content.value = _expandRethoricURI(annotation.content.value);
-        }
-
         model.provenance.time = new Date(); // Vogliamo l'ora aggiornata
         annotation.provenance = model.provenance;
         annotation.target = model.target;
+
+        _fillTheBlanks(annotation);
+
+        // TODO 
+        // if author -> separa l'annotazione
+        // if cites ->  crea le multi annotazioni
 
         newAnnotationService.saveLocal(annotation);
 
@@ -87,46 +88,51 @@ function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userServic
         $mdDialog.hide();
     }
 
-
-    /**
-     * type OK
-     * target OK
-     * provenance OK
-     *
-     * value OK TRANNE CIT
-     *
-     * typelabel
-     * group
-     * label
-     * object
-     * subject
-     * ?cited?
-     *
-     */
     function _fillTheBlanks(annot) {
-        let typeLabel = utilityService.labelFromType(annot.type);
-        let group = 'http://vitali.web.cs.unibo.it/raschietto/graph/ltw1543';
+        annot.typeLabel = utilityService.labelFromType(annot.type);
+        annot.group = 'http://vitali.web.cs.unibo.it/raschietto/graph/ltw1543';
 
         // Genera subject
         let subject = annot.target.source.replace(/\.html$/, '') + '_ver1';
         switch (annot.type) {
+            case 'hasTitle':
+                annot.content.label = `Il titolo del documento è "${annot.content.value}"`;
+                annot.content.object = annot.content.value;
+                break;
+            case 'hasPublicationYear':
+                annot.content.label = `Questo documento è stato pubblicato nel ${annot.content.value}`;
+                annot.content.object = annot.content.value;
+                break;
+            case 'hasAuthor':
+                annot.content.label = `Un autore del documento è ${annot.content.value}`;
+                annot.content.object = annot.content.value;
+                break;
+            case 'hasURL':
+                annot.content.label = `L'URL del documento è ${annot.content.value}`;
+                annot.content.object = annot.content.value;
+                break;
+            case 'hasDOI':
+                annot.content.label = `Il DOI associato a questo documento è ${annot.content.value}`;
+                annot.content.object = annot.content.value;
+                break;
+            case 'hasComment':
+                annot.content.label = `${annot.provenance.author.name} ha commentato: ${annot.content.value}`;
+                annot.content.object = annot.content.value;
+                break;
             case 'denotesRethoric':
-                subject = `${subject}#${annot.target.id}-${annot.target.start}-${annot.target.end}`;
+                annot.content.value = utilityService.expandRethoricURI(annotation.content.value);
+                let humanFriendly = annot.content.value.split('/').pop();
+                annot.content.label = `La funzione retorica di questo frammento è "${humanFriendly}"`;
+                annot.content.subject = `${subject}#${annot.target.id}-${annot.target.start}-${annot.target.end}`;
+                annot.content.object = annot.content.value;
                 break;
             case 'cites':
-                let num = utilityService.getCitedNumber();
-                subject = `${subject}_cited_${num}`;
+                const num = utilityService.getCitedNumber();
+                annot.content.object = `${subject}_cited_${num}`;
+                annot.content.value = annot.content.cited.title;
+                annot.content.label = `Questo articolo cita ${annot.content.value}`;
                 break;
         }
-
-
-/**
- * value OK TRANNE CIT
- * label
- * object
- * ?cited?
- */
     }
-
 
 }
