@@ -33,8 +33,6 @@ def upload_graph(serialized_graph):
     sparql.setMethod('POST')
     return sparql.queryAndConvert()
 
-# dato un URL di un'issue di dlib o statistica crea un json con titoli e
-# URL degli articoli di quel numero
 
 
 def _getURLandTitle(url):
@@ -48,9 +46,13 @@ def _getURLandTitle(url):
     tree = html.fromstring(page.content)
 
     if "dlib" in url:
-        title = tree.xpath(
-            '/html/body/form/table[3]/tr/td/table[5]/tr/td/table[1]/tr/td[2]/h3[2]/text()')  # noqa
-        doi = tree.xpath('/html/head/meta[@name="DOI"]/@content')
+        if "january16" in url:
+            title = tree.xpath('/html/head/title/text()')
+            doi = tree.xpath('//*[@id="DOI"]/@content')
+        else:
+            title = tree.xpath(
+                '/html/body/form/table[3]/tr/td/table[5]/tr/td/table[1]/tr/td[2]/h3[2]/text()')  # noqa
+            doi = tree.xpath('/html/head/meta[@name="DOI"]/@content')
     elif "unibo" in url:
         title = tree.xpath('//*[@id="articleTitle"]/h3/text()')
         doi = tree.xpath('//*[@id="pub-id::doi"]/text()')
@@ -64,7 +66,6 @@ def _getURLandTitle(url):
     }
 
 
-# in input prende un dizionario con chiavi: url, doi e title.
 def _createTriples(page_data):
     """
     Costruisce il grafo RDF con le triple rappresentanti il documento
@@ -135,7 +136,7 @@ def getArticles_in_issue(issueURL):
     """
     Data una issue di DLib o una rivista UniBo crea un elenco degli articoli di quel numero
 
-    :param issueURL: stringa con l'URL della issue
+    :param issueURL: stringa con l'URL della issue 
     :returns docs: un array con gli URL degli articoli
     """
     page = requests.get(issueURL)
@@ -143,13 +144,13 @@ def getArticles_in_issue(issueURL):
 
     docs = []
     if "dlib" in issueURL:
-        pref = issueURL.rsplit("/", 1).pop(0) + "/"  # ad esempio http://www.dlib.org/dlib/january16/
+        pref = issueURL.rsplit("/", 1).pop(0) + "/"  # esempio: pref = http://www.dlib.org/dlib/january16/
         for i, a in enumerate(tree.xpath("(//p[@class='contents']/a)[position()<last()]")):
-            ### nota::
-            ### l'xpath fatto in questo modo POTREBBE beccare anche eventuali conference reports
-            ### ma nell'ultimo numero (gen/feb 2016) ci sono solo articoli standard, quindi tutto ok
+            ### nota:: [position()<last()]
+            ### hack orrendo per non beccare l'ultimo articolo dell'issue
+            ### perché sia in nov14 che in gen16 è un conference report e non lo vogliamo
             docs.append(pref + a.attrib.get('href'))
-    else:
+    else:  
         # trattasi di rivista unibo
         for i, a in enumerate(tree.xpath('//div[@class="tocTitle"]//a')):
             docs.append(a.attrib.get('href'))
@@ -169,6 +170,8 @@ def getArticles_in_issue(issueURL):
 if __name__ == '__main__':
     articles = []
 
+    articles += getArticles_in_issue("http://www.dlib.org/dlib/november14/11contents.html")
+    articles += getArticles_in_issue("http://rivista-statistica.unibo.it/issue/view/467")
     articles += getArticles_in_issue("http://www.dlib.org/dlib/january16/01contents.html")
     articles += getArticles_in_issue("http://series.unibo.it/issue/view/549/showToc")
     articles += getArticles_in_issue("http://montesquieu.unibo.it/issue/view/509")
@@ -183,3 +186,4 @@ if __name__ == '__main__':
 
     for article in articles:
         add_document_to_fuseki(article)
+
