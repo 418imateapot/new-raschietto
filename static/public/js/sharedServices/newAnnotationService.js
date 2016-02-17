@@ -14,7 +14,6 @@ function newAnnotationService($http, localStorageService) {
     service.defusekify = _defusekify;
     service.nuke = _deleteLocal;
     service.updateRemote = _updateRemote;
-    service.deleteRemote = _deleteRemote;
 
 
     ////////////////////
@@ -42,16 +41,6 @@ function newAnnotationService($http, localStorageService) {
         return localStorageService.get('pending') || [];
     }
 
-    function _deleteRemote(annot) {
-        if (!annot.annotations) { //formato sbagliato
-            annot = _defusekify(annot);
-        }
-        return $http.post('/api/annotations', {items: [annot]})
-            .then(response => response)
-            .catch(err => console.warn(err));
-    }
-
-
     function _updateRemote(annotationList) {
         annotationList = annotationList.map(anno=>_defusekify(anno));
         return $http.put('/api/annotations', {items: annotationList})
@@ -59,99 +48,9 @@ function newAnnotationService($http, localStorageService) {
             .catch(err => console.warn(err));
     }
 
-    // UNSAVED = jsonone
-    // data = fuseki
     function _deleteLocal() {
         localStorageService.clearAll();
     }
-
-    function _separateAnnotations(anno) {
-        if (anno.annotations.length === 1)
-            return [anno];
-        return anno.annotations.map(a => {
-             return {
-                annotations: [a],
-                target: anno.target,
-                provenance: anno.provenance
-            };
-
-        });
-    }
-
-    function _fusekify(anno) {
-        let result = [];
-
-        result = anno.annotations.map(entry => {
-            return {
-                bodyLabel: {value: entry.body.label},
-                end: {value: anno.target.end},
-                fragment: {value: anno.target.id},
-                // objectLabel: {value: entry.body.resource ? entry.body.resource.label || entry.body.resource : entry.body.literal},
-                objectLabel: {value: entry.body.literal || entry.body.resource.label || entry.body.resource},
-                object: {value: entry.body.literal || entry.body.resource.label || entry.body.resource},
-                predicate: {value: entry.body.predicate},
-                provenance: {value: anno.provenance.author.email},
-                provenanceLabel: {value: anno.provenance.author.name},
-                src: {value: anno.target.source},
-                start: {value: anno.target.start},
-                time: {value: anno.provenance.time},
-                type: {value: entry.type},
-                typeLabel: {value: entry.label}
-            };
-        });
-
-        return result;
-    }
-
-
-    function _defusekify(data, editFmt) {
-        console.warn(data);
-        let result = {};
-        result.url = data.src.value;
-        result.subject = result.url.replace(/\.html$/, '') + '_ver1';
-        result.fragment = {
-            path: data.fragment.value,
-            start: data.start.value,
-            end: data.end.value
-        };
-        result.provenance = {
-            name: data.provenanceLabel.value || '',
-            email: data.provenance.value,
-            time: new Date(data.time.value)
-        };
-        result.type = data.type.value;
-        switch (data.type.value) {
-            case 'hasTitle':
-                result.title = data.objectLabel.value;
-                break;
-            case 'hasAuthor':
-                result.authors = [data.objectLabel.value];
-                break;
-            case 'hasPublicationYear':
-                result.year = data.objectLabel.value;
-                break;
-            case 'hasDOI':
-                result.doi = data.objectLabel.value;
-                break;
-            case 'hasURL':
-                result.url = data.objectLabel.value;
-                break;
-            case 'hasComment':
-                result.comment = data.objectLabel.value;
-                break;
-            case 'denotesRethoric':
-                result.rethoric = data.objectLabel.value;
-                break;
-            case 'cites':
-                result.cited = {};
-                result.cited.title = data.object.label;
-                break;
-        }
-        if (editFmt) return result;
-        return _generateAnnotation(result);
-    }
-
-
     function _generateAnnotation(data) {
         let result = {
             "annotations": _makeAnnotations(data),
@@ -352,6 +251,84 @@ function newAnnotationService($http, localStorageService) {
             return Math.floor(Math.random() * 50);
         }
     }
+
+
+
+
+
+    function _fusekify(anno) {
+        let result = [];
+
+        result = anno.annotations.map(entry => {
+            return {
+                bodyLabel: {value: entry.body.label},
+                end: {value: anno.target.end},
+                fragment: {value: anno.target.id},
+                // objectLabel: {value: entry.body.resource ? entry.body.resource.label || entry.body.resource : entry.body.literal},
+                objectLabel: {value: entry.body.literal || entry.body.resource.label || entry.body.resource},
+                object: {value: entry.body.literal || entry.body.resource.label || entry.body.resource},
+                predicate: {value: entry.body.predicate},
+                provenance: {value: anno.provenance.author.email},
+                provenanceLabel: {value: anno.provenance.author.name},
+                src: {value: anno.target.source},
+                start: {value: anno.target.start},
+                time: {value: anno.provenance.time},
+                type: {value: entry.type},
+                typeLabel: {value: entry.label}
+            };
+        });
+
+        return result;
+    }
+
+
+    function _defusekify(data, editFmt) {
+        console.warn(data);
+        let result = {};
+        result.url = data.src.value;
+        result.subject = result.url.replace(/\.html$/, '') + '_ver1';
+        result.fragment = {
+            path: data.fragment.value,
+            start: data.start.value,
+            end: data.end.value
+        };
+        result.provenance = {
+            name: data.provenanceLabel.value || '',
+            email: data.provenance.value,
+            time: new Date(data.time.value)
+        };
+        result.type = data.type.value;
+        switch (data.type.value) {
+            case 'hasTitle':
+                result.title = data.objectLabel.value;
+                break;
+            case 'hasAuthor':
+                result.authors = [data.objectLabel.value];
+                break;
+            case 'hasPublicationYear':
+                result.year = data.objectLabel.value;
+                break;
+            case 'hasDOI':
+                result.doi = data.objectLabel.value;
+                break;
+            case 'hasURL':
+                result.url = data.objectLabel.value;
+                break;
+            case 'hasComment':
+                result.comment = data.objectLabel.value;
+                break;
+            case 'denotesRethoric':
+                result.rethoric = data.objectLabel.value;
+                break;
+            case 'cites':
+                result.cited = {};
+                result.cited.title = data.object.label;
+                break;
+        }
+        if (editFmt) return result;
+        return _generateAnnotation(result);
+    }
+
 
 
 }

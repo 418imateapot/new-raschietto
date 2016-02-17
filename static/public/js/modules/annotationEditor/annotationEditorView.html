@@ -1,0 +1,152 @@
+<md-dialog class="md-dialog-fullscreen newAnnoModal" ng-cloak>
+    <md-toolbar class="md-toolbar teapot-tb-secondary">
+        <div class="md-toolbar-tools">
+            <h2>
+                <span>Nuova annotazione</span>
+            </h2>
+            <span flex></span>
+            <md-button ng-click="editor.cancel()">
+                <md-icon class="material-icons">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content flex layout="column" class="newAnno-content" layout-padding>
+
+        <!-- select -->
+        <br/>
+        <br/>
+        <md-input-container flex="100">
+            <label>Tipo di annotazione</label>
+            <md-select ng-model="editor.typeSelected">
+                <md-option value="hasTitle">Titolo</md-option>
+                <md-option value="hasAuthor">Autore</md-option>
+                <md-option value="hasPublicationYear">Anno di pubblicazione</md-option>
+                <md-option value="hasDOI">DOI</md-option>
+                <md-option value="hasURL">URL</md-option>
+                <md-option value="hasComment">Commento</md-option>
+                <md-option value="denotesRethoric">Retorica</md-option>
+                <md-option value="cites">Citazione</md-option>
+            </md-select>
+        </md-input-container>
+
+        <!-- form collection -->
+
+        <div layout="column">
+            <!--title-->
+            <md-input-container ng-show="editor.showFields('hasTitle')">
+                <label>Titolo del documento</label>
+                <input ng-model="editor.annotations.hasTitle.value">{{editor.text}}
+                </input>
+            </md-input-container>
+
+            <!--author-->
+            <span ng-show="editor.showFields('hasAuthor')">
+                <md-chips
+                  ng-model="editor.annotations.hasAuthor.value"
+                  md-separator-keys="editor.keys"
+                  placeholder="Autore del documento"
+                  secondary-placeholder="Autori, separati da virgola"></md-chips>
+              <br/>
+            </span>
+
+            <!--pubYear-->
+            <md-input-container ng-show="editor.showFields('hasPublicationYear')">
+                <label>Anno di pubblicazione</label>
+                <input type="number" ng-model="editor.annotations.hasPublicationYear.value">
+            </md-input-container>
+
+            <!--doi-->
+            <md-input-container ng-show="editor.showFields('hasDOI')">
+                <label>DOI del documento</label>
+                <input ng-model="editor.annotations.hasDOI.value">
+            </md-input-container>
+
+            <!--url-->
+            <md-input-container ng-show="editor.showFields('hasURL')">
+                <label>URL del documento</label>
+                <input ng-model="editor.annotations.hasURL.value">
+            </md-input-container>
+
+            <!--comment-->
+            <div ng-show="editor.showFields('hasComment')">
+                <span class="newAnno-selected" ng-show="editor.selectedText">
+                    <h3>Testo selezionato:</h3>
+                    <p>{{editor.selectedText}}</p>
+                </span>
+                <md-input-container class="md-block" ng-show="editor.selectedText">
+                    <label>Inserisci un commento</label>
+                    <textarea ng-model="editor.annotations.hasComment.value" rows="5" md-select-on-focus>
+                    </textarea>
+                </md-input-container>
+                <md-content ng-hide="editor.selectedText">Attenzione: questo tipo di annotazione richiede una selezione testuale.
+                </md-content>
+            </div>
+
+            <!--rethoric-->
+            <div ng-show="editor.showFields('denotesRethoric')">
+                <span class="newAnno-selected" ng-show="editor.selectedText">
+                    <h3>Testo selezionato:</h3>
+                    <p>{{editor.selectedText}}</p>
+                </span>
+                <md-input-container>
+                    <h3 ng-show="editor.selectedText">Funzione retorica del frammento selezionato:</h3>
+                    <md-radio-group layout="row" ng-show="editor.fragment" ng-model="editor.annotations.denotesRethoric.value">
+                        <md-radio-button value="sro:Abstract" class="md-primary">Abstract</md-radio-button>
+                        <md-radio-button value="deo:Introduction" class="md-primary">Introduction</md-radio-button>
+                        <md-radio-button value="deo:Materials" class="md-primary">Materials</md-radio-button>
+                        <md-radio-button value="deo:Methods" class="md-primary">Methods</md-radio-button>
+                        <md-radio-button value="deo:Results" class="md-primary">Results</md-radio-button>
+                        <md-radio-button value="sro:Discussion" class="md-primary">Discussion</md-radio-button>
+                        <md-radio-button value="sro:Conclusion" class="md-primary">Conclusion</md-radio-button>
+                    </md-radio-group>
+                </md-input-container>
+                <md-content ng-hide="editor.selectedText">Attenzione: questo tipo di annotazione richiede una selezione testuale.
+                </md-content>
+            </div>
+
+            <!--cites-->
+            <span ng-show="editor.showFields('cites')">
+                <span layout="column"  ng-show="editor.selectedText">
+                    <h3>Informazioni sull'articolo citato</h3>
+                    <md-input-container>
+                        <label>Titolo</label>
+                        <input ng-model="editor.annotations.cites.cited.title"/>
+                    </md-input-container>
+                    <md-chips
+                               ng-model="editor.annotations.cites.cited.authors"
+                               md-separator-keys="editor.keys"
+                               placeholder="Autore del documento"
+                               secondary-placeholder="Autori, separati da virgola">
+                    </md-chips>
+                    <br/>
+                    <md-input-container>
+                        <label>Anno di pubblicazione</label>
+                        <input/ ng-model="editor.annotations.cites.cited.year">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>DOI</label>
+                        <input/ ng-model="editor.annotations.cites.cited.doi">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>URL</label>
+                        <input/ ng-model="editor.annotations.cites.cited.url">
+                    </md-input-container>
+                </span>
+            <md-content ng-hide="editor.selectedText">Attenzione: questo tipo di annotazione richiede una selezione testuale.
+            </md-content>
+            </span>
+        </div>
+
+        </span>
+
+    </md-dialog-content>
+    <md-dialog-actions flex class="newAnnoButtons" layout="column">
+        <span flex>
+            Autore: {{ editor.provenance.author.name}}
+            <br>{{editor.provenance.time | date: medium}}
+        <span flex>
+            <md-button class="md-raised" ng-click="editor.submit()">Conferma</md-button>
+        </span>
+    </md-dialog-actions>
+
+</md-dialog>

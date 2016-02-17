@@ -64,8 +64,6 @@ function DocumentController($rootScope, $state, $mdDialog, $mdToast, $stateParam
      * NOTA: è il controller della main area che risolve il doi nel suo url
      */
     function _load(url) {
-        console.log("click: " + url);
-
         if ($state.is('teapot.mode.tutorial')) {
             documentService.retrieve(url)
             .then(() => {
@@ -77,7 +75,6 @@ function DocumentController($rootScope, $state, $mdDialog, $mdToast, $stateParam
         }
 
         $mdDialog.hide();
-
     }
 
     // Carica un documento nel triple store

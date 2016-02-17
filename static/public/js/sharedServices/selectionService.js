@@ -1,7 +1,7 @@
 import Riviste from './Riviste.js';
 import Dlib from './Dlib.js';
 
-export default function appService() {
+export default function selectionService() {
 
     var service = this;
 

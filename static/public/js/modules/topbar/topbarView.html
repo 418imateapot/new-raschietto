@@ -33,19 +33,3 @@ ng-hide="topbar.showSearch || topbar.showTools">
         </span>
     </div>
 </md-toolbar>
-
-<!-- toolbox bar -->
-<md-toolbar class="animate-show md-toolbar teapot-toolbar md-whiteframe-z1" ng-show="topbar.showTools">
-    <div class="md-toolbar-tools">
-        <md-button class="md-icon-button" ng-click="topbar.closeTools()">
-            <md-icon class="material-icons" aria-label="Close dialog">arrow_back</md-icon>
-        </md-button>
-        <h3 role="button" ng-click="topbar.closeTools()">Indietro</h3>
-        <span flex></span>
-        <md-button ng-click="topbar.toggleFilters()">
-            <md-icon class="material-icons">filter_list</md-icon>Mostra filtri
-        </md-button>
-        <span flex></span>
-        <h2>Strumenti</h2>
-    </div>
-</md-toolbar>

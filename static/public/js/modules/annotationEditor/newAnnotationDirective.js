@@ -1,10 +1,7 @@
 export default function newAnnotationDirective() {
     return {
         restrict: "AE",
-        templateUrl: 'js/modules/newAnnotation/newAnnotationView.html',
-        bindToController: {
-            docUrl: "="
-        },
+        templateUrl: 'js/modules/annotationEditor/newAnnotationView.html',
         controller: 'NewAnnotationController',
         controllerAs: 'newAnnotation'
     };

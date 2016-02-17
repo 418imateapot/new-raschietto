@@ -7,10 +7,6 @@ function annotatedText($compile) {
     return {
         restrict: 'AE',
         transclude: true,
-        bindToController: {
-            getAnnotations: '&annotatedText',
-            isFiltered: '&annotationFilters'
-        },
         templateUrl: 'js/modules/annotatedText/annotatedView.html',
         controller: 'AnnotatedTextController',
         controllerAs: 'annoText',
@@ -20,11 +16,13 @@ function annotatedText($compile) {
 
     function annotatedTextLink(scope, el, attrs, ctrl, transclude) {
 
+        console.info('Setting up some dom');
+
         // Usa rangy.highlighter per applicare le classi
         // ed evidenziare il testo sul nostro range
         let h = rangy.createHighlighter();
+        ctrl.init(attrs);
         ctrl.rangesInfo = []; // tutti i range correntemente evidenziati e i loro metadati
-        ctrl.elementConfig(attrs);
 
         /**
          *  rangeinfo = {
@@ -41,12 +39,12 @@ function annotatedText($compile) {
             let newRange = rangy.createRange();
             let newRangeBookmark = {
                 containerNode: el.get(0),
-                end: annot.end.value,
-                start: annot.start.value
+                end: annot.target.end,
+                start: annot.target.start
             };
             newRange.moveToBookmark(newRangeBookmark);
-            //let newRange = buildRange(el.get(0), annot.start.value, annot.end.value);
-            let annoType = annot.type.value;
+            //let newRange = buildRange(el.get(0), annot.target.start, annot.target.end);
+            let annoType = annot.type;
             let annotations = [annot];
 
             // Se ci sono intersezioni, unisci le annotazioni

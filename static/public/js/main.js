@@ -2,8 +2,6 @@
  * Questo è l'entry point dell'applicazione, dove
  * vengono registrate tutte le componenti necessarie
  * al suo funzionamento.
- *
- * @module teapot
  */
 
 // Load the Angular Material CSS associated with ngMaterial
@@ -29,7 +27,6 @@ import conf from './conf/index.js';
 import sharedServices from './sharedServices/index.js';
 import teapotModules from './modules/index.js';
 import ApplicationController from './application/ApplicationController.js';
-import appService from './application/appService.js';
 
 var app = angular.module('teapot', [
     'ui.router',
@@ -46,4 +43,3 @@ var app = angular.module('teapot', [
 app.config(conf.router);
 app.run(conf.user);
 app.controller('ApplicationController', ApplicationController);
-app.service('appService', appService);

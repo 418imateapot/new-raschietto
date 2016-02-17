@@ -1,5 +1,9 @@
 var annotation = {};
 
+annotation.group = graph;
+annotation.type = type;
+annotation.typeLabel = typeLabel;
+
 annotation.target = {
     source: elem.src.value,
     id: elem.fragment.value,
@@ -18,5 +22,7 @@ annotation.provenance = {
 annotation.content = {
     value: annot.object.value,
     label: annot.bodyLabel ? annot.bodyLabel.value : undefined,
+    subject: wat,
+    object: wattt,
     cited: annot.object.value // Citation only
 };

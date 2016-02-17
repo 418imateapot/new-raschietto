@@ -17,7 +17,6 @@ export default function MainAreaController($rootScope, $scope, $state, $sanitize
     if (!model.content) {
         // Se possibile, carica l'ultimo documento
         let savedDoc = userService.lastDocument();
-        console.info('lastdoc: ' + savedDoc);
         if (savedDoc) {
             $rootScope.$broadcast('retrieveNewUrl', {doc_url: savedDoc});
         } else {
@@ -56,7 +55,7 @@ export default function MainAreaController($rootScope, $scope, $state, $sanitize
         $mdToast.showSimple('Sto caricando le annotazioni.');
         annotationService.query(documentService.currentUrl)
         .then(res => {
-            //model.highlight();
+            $rootScope.$broadcast('highlight');
             $mdToast.showSimple(res.length + ' annotazioni caricate.');
         });
     }

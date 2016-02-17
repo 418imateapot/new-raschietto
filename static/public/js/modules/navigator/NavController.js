@@ -16,6 +16,7 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
     model.modeIcon = '?'; // Icona della modalità
     model.openDocArea = _openDocArea;
     model.openMetaArea = _openMetaArea;
+    model.tutorial = (ev) => $state.go('teapot.mode.tutorial');
     model.switchMode = _switchMode;
     model.scrape = _scrape;
     model.about = _about;

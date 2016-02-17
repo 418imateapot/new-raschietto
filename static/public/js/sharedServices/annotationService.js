@@ -98,7 +98,7 @@ function annotationService($http, utilityService) {
 
             annotation.target = {
                 source: elem.src.value,
-                id: elem.fragment.value,
+                id: _normalizeFragment(elem.fragment.value),
                 start: elem.start.value,
                 end: elem.end.value
             };
@@ -125,8 +125,6 @@ function annotationService($http, utilityService) {
             // Ed ecco la nostra nuova annotazione splendente
             result.push(annotation);
         } // END for (i in items)
-        // Converti il set in array
-        console.log(service.filters);
         return result;
     }
 
@@ -141,10 +139,23 @@ function annotationService($http, utilityService) {
             case 'denotesRethoric':
                 result.value = annot.object.value;
                 result.label = annot.bodyLabel ? annot.bodyLabel.value : undefined;
+                result.subject = annot.subject.value;
+                result.object = annot.object.value;
                 break;
             case 'hasAuthor':
                 result.label = annot.bodyLabel ? annot.bodyLabel.value : undefined;
                 result.value = annot.objectLabel ? annot.objectLabel.value : result.label;
+                result.subject = annot.subject.value;
+                if (annot.innerObject) {
+                    result.object = annot.innerObject.value;
+                }
+                if (!result.object && annot.object) {
+                    result.object =annot.object.value.match(/person/) ? annot.object.value : undefined;
+                }
+                if(!result.object) {
+                    // Chi cavolo è costui?
+                    result = null;
+                }
                 break;
             case 'cites':
                 if (annot.objectLabel) {
@@ -204,6 +215,19 @@ WHERE {
     }
 }
 `; // Sono backtick, non virgolette semplici
+    }
+
+    function _normalizeFragment(fragment) {
+        const possibleValues = [
+            '',
+            'document',
+            'body',
+            'html',
+            'html/body',
+            '/html/body',
+            '//body',
+        ];
+        return (possibleValues.indexOf(fragment) === -1) ? fragment : '';
     }
 
     function _validateRethoric(type) {

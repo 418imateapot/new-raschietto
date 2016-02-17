@@ -5,17 +5,11 @@ import annotationService from './annotationService.js';
 import userService from './userService.js';
 import newAnnotationService from './newAnnotationService.js';
 import utilityService from './utilityService.js';
+import selectionService from './selectionService.js';
 
 /**
- * @module teapot/sharedServices
- *
- * @description
- * Questo modulo espone alcuni servizi condivisi utili al
- * resto dell'applicazione:
- * <ul>
- *   <li>Annotation Service {@link module:teapot/sharedServices/annotationService}</li>
- *   <li>Document Service {@link module:teapot/sharedServices/documentService}</li>
- * </ul>
+ * Questo modulo espone i servizi condivisi utilizzati
+ * dal resto dell'applicazione:
  */
 export default angular.module('teapot.sharedServices', ['ngCookies'])
     .service('documentService', documentService)
@@ -23,4 +17,5 @@ export default angular.module('teapot.sharedServices', ['ngCookies'])
     .service('userService', userService)
     .service('newAnnotationService', newAnnotationService)
     .service('utilityService', utilityService)
+    .service('selectionService', selectionService)
     .name;

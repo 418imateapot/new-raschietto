@@ -1,19 +1,14 @@
 /**
- * @module teapot/sharedServices/documentService
- * @description
- * Servizio che si occupa delle comunicazioni col server relative ai documenti
- * disponibili.<br/>
- * Può richiedere la lista dei documenti, o il contenuto di uno specifico
- * documento.
+ * Servizio che si occupa delle comunicazioni col server relative ai documenti.
  */
 
-documentService.$inject = ['$http', '$rootScope', 'annotationService'];
+documentService.$inject = ['$http', '$rootScope', '$compile', 'annotationService', 'selectionService'];
 
 /**
  * Servizio che si occupa delle attività legate al
  * documento
  */
-export default function documentService($http, $rootScope, annotationService) {
+export default function documentService($http, $rootScope, $compile, annotationService, selectionService) {
 
     const Dservice = this;
 
@@ -25,6 +20,7 @@ export default function documentService($http, $rootScope, annotationService) {
     Dservice.retrieve = retrieve;
     Dservice.add = add;
     Dservice.list = list;
+    Dservice.highlight = _highlight;
 
     //-- FUNCTION DEFINITIONS --//
 
@@ -97,6 +93,57 @@ export default function documentService($http, $rootScope, annotationService) {
         return $http.post('/api/docs', {
             url: url
         });
+    }
+
+    /**
+     * Crea una direttiva per ciascun frammento
+     * annotato, la quale si occupa poi del suo
+     * comportamento.
+     */
+    function _highlight(scope) {
+
+        let newElements = [];
+
+        annotationService.annotations.forEach((val, index) => {
+            let source, fragment, type, provenance;
+            try {
+                source = val.target.source.indexOf('dlib') !== -1 ? 'dlib' : 'riviste';
+                fragment = val.target.id;
+                type = val.type;
+                provenance = val.provenance.author.email;
+            } catch (e) {
+                console.warn('Incomplete annotation?');
+                return;
+            }
+
+            // elem === false se l'xpath è balordo
+            let elem = selectionService.getSelector(fragment, type, source, provenance);
+            if (!elem || !elem.style)
+                return; // Per stare dalla parte dei bottoni
+
+
+            elem = angular.element(elem);
+            let isAlreadyAnnotated = false;
+
+            // L'elemento ha annotazioni preesistenti?
+            if (elem.attr('annotations') !== undefined) {
+                isAlreadyAnnotated = true;
+            }
+            // aggiungi gli attributi che ci servono
+            let exsisting_annotations = elem.attr('annotations') || '';
+            // L'attr annotations mantiene tutti gli indici delle annotazioni
+            // che vogliamo
+            elem.attr('annotations', `${exsisting_annotations} ${index}`);
+
+            // Non vogliamo compilare trenta volte lo stesso elemento
+            if (!isAlreadyAnnotated) {
+                newElements.push(elem);
+            }
+
+        });
+
+        // Compila i nuovi elementi
+        newElements.forEach((el) => $compile(el)(scope));
     }
 
 }
