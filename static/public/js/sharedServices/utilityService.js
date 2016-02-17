@@ -10,6 +10,7 @@ export default function utilityService() {
     service.expandRethoricURI = _expandRethoricURI;
     service.xpath_to_fragment = _xpath_to_fragment;
     service.getSelection = _selection;
+    service.getCitedNumber = _getCitedNumber;
 
     /////////////////////
     // Implementazione //
@@ -119,6 +120,17 @@ export default function utilityService() {
         console.log('Non so che farmene: ' + label);
         return null;
     }
+
+
+    function _getCitedNumber(annot) {
+        let tagNum = annot.target.id.match(/\d+$/);
+        if(tagNum) {
+            return tagNum[0];
+        } else {
+            return Math.floor(Math.random() * 50);
+        }
+    }
+
 
     /**
      * Ottieni la selezione corrente

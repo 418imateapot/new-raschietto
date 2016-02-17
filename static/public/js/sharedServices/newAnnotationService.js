@@ -243,18 +243,6 @@ function newAnnotationService($http, localStorageService) {
         return null;
     }
 
-    function _getCitedNumber(annot) {
-        let tagNum = annot.target.id.match(/\d+$/);
-        if(tagNum) {
-            return tagNum[0];
-        } else {
-            return Math.floor(Math.random() * 50);
-        }
-    }
-
-
-
-
 
     function _fusekify(anno) {
         let result = [];

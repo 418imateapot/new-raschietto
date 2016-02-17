@@ -26,3 +26,19 @@ annotation.content = {
     object: whattt,
     cited: annot.object.value // Citation only
 };
+
+/**
+ * type OK
+ * target OK
+ * provenance OK
+ *
+ * value OK TRANNE CIT
+ *
+ * typelabel 
+ * group
+ * label
+ * object
+ * subject
+ * ?cited?
+ *
+ */
