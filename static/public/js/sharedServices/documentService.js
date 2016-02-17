@@ -133,7 +133,8 @@ export default function documentService($http, $rootScope, $compile, annotationS
             let exsisting_annotations = elem.attr('annotations') || '';
             // L'attr annotations mantiene tutti gli indici delle annotazioni
             // che vogliamo
-            elem.attr('annotations', `${exsisting_annotations} ${index}`);
+            elem.attr('annotations', `${exsisting_annotations} ${index}`)
+                .attr('annotated-text', '');
 
             // Non vogliamo compilare trenta volte lo stesso elemento
             if (!isAlreadyAnnotated) {

@@ -29,6 +29,7 @@ export default function selectionService() {
                 if (!xpath) return;
                 break;
         }
+        console.log(xpath);
         return getElementByXpath(xpath);
     };
 

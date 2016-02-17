@@ -32,6 +32,10 @@ export default class Riviste {
             return null;
         }
         let suffix = xpath.replace(re, '');
+
+        if(!suffix)
+            return null;
+
         let result = Riviste.LOCAL_PREFIX + suffix;
 
         //console.log(type, xpath, prefix+suffix);

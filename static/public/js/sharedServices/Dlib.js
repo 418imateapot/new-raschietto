@@ -23,18 +23,22 @@ export default class Dlib {
         xpath = xpath.replace(/^\/\[\d\]/, ''); // Io ne ho viste cose che voi umani...
         let re = '^(?:/html/body)?'; // non potreste immaginarvi
         re += '/form(?:\\[\\d\\])?'; // regexp in fiamme al largo
-        re += '/table\\[3\\]/(?:tbody/)?'; // del triple store di Orione
-        re += 'tr(?:\\[\\d\\])?\/td(?:\\[\\d\\])?/table\\[5\\]/(?:tbody/)?';
-        re += 'tr(?:\\[\\d\\])?/td(?:\\[\\d\\])?/table\\[1\\]/(?:tbody/)?';
+        re += '/table\\[3\\]/(?:tbody\\[1\\]/)?'; // del triple store di Orione
+        re += 'tr(?:\\[\\d\\])?\/td(?:\\[\\d\\])?/table\\[5\\]/(?:tbody\\[1\\]/)?';
+        re += 'tr(?:\\[\\d\\])?/td(?:\\[\\d\\])?/table\\[1\\]/(?:tbody\\[1\\]/)?';
         re += 'tr(?:\\[\\d\\])?/td\\[2\\]'; // xpath balenare nel buio vicino ai
         re = new RegExp(re, 'i'); // server di Tannhauser
 
         if (!xpath.match(re)) {
             // Non so che farci...
-            // console.warn(xpath + '\n- nessun match');
+            console.warn(xpath + '\n- nessun match');
             return null;
         }
-        let suffix = xpath.replace(re, '');
+        let suffix = xpath.replace(re, '').replace(/\/$/, '');
+
+        if (suffix.match(/.*td$/) || !suffix)
+            return null;
+
         let result = Dlib.add_tbody(Dlib.LOCAL_PREFIX + suffix);
 
         //console.log(result);

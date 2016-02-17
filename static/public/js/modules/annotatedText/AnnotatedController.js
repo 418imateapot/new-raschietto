@@ -1,6 +1,6 @@
-AnnotatedTextController.$inject = ['$scope', '$mdToast', '$state', '$mdDialog', 'annotationService', 'newAnnotationService'];
+AnnotatedTextController.$inject = ['$scope', '$mdToast', '$state', '$mdDialog', 'annotationService', 'newAnnotationService', 'selectionService'];
 
-export default function AnnotatedTextController($state, $mdToast, $scope, $mdDialog, annotationService, newAnnotationService) {
+export default function AnnotatedTextController($state, $mdToast, $scope, $mdDialog, annotationService, newAnnotationService, selectionService) {
 
     let model = this;
 
@@ -59,7 +59,7 @@ export default function AnnotatedTextController($state, $mdToast, $scope, $mdDia
 
         model.managedAnnotations = annotationIndexes.map(i => annotationService.annotations[i]);
 
-        /* Scarta le annotazioni filtrate 
+        /* Scarta le annotazioni filtrate
         model.managedAnnotations.forEach((elem) => {
             if (model.isFiltered({item: elem}))
                 model.activeAnnotations.push(elem);
