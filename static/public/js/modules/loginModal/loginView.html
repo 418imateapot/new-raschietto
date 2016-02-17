@@ -12,15 +12,13 @@
             <div flex="100">
                 <md-input-container class="md-block">
                     <label>Nome utente</label>
-                    <input name="nomeUtente" type="text" ng-model="loginModal._username" autofocus pattern="^[a-zA-Z1-9]+$" required="required">
-                    <span ng-show="LoginForm.nomeUtente.$invalid">Il nome deve contenere solo caratteri alfanumerici.</span>
+                    <input name="nomeUtente" type="text" ng-model="loginModal._username" autofocus pattern="^[a-zA-Z1-9]+$" required="required" >
                 </md-input-container>
             </div>
             <div flex="100">
                 <md-input-container class="md-block">
                     <label>Email</label>
-                    <input nome="emailUtente" type="email" ng-model="loginModal._email"  required="required">
-
+                    <input nome="emailUtente" type="text" ng-model="loginModal._email" pattern="^[a-zA-Z1-9]+@[a-zA-Z1-9]+\.[a-zA-Z1-9]+$" required="required">
                 </md-input-container>
             </div>
         </md-dialog-content>

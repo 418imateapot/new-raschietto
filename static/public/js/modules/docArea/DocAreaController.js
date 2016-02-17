@@ -18,6 +18,8 @@ function DocumentController($rootScope, $state, $mdDialog, $mdToast, $stateParam
     model.docs = [];
     model.docsDlib = [];
     model.docsStat = [];
+    model.docsMont = [];
+    model.docsSeries = [];
     model.load = _load;
     model.search = _search;
     model.newDoc = _newDoc;
@@ -35,6 +37,8 @@ function DocumentController($rootScope, $state, $mdDialog, $mdToast, $stateParam
                 model.docs = data;
                 model.docsDlib=data.filter(item => item.url.value.match(/dlib/i));
                 model.docsStat=data.filter(item => item.url.value.match(/statistica/i));
+                model.docsMont=data.filter(item => item.url.value.match(/montesquieu/i));
+                model.docsSeries=data.filter(item => item.url.value.match(/series/i));
                             })
             .catch(err => {
                 console.log(err);
