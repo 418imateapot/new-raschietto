@@ -94,6 +94,8 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
         let newMode = (model.activeMode !== 'Annotator') ? 'annotator' : 'reader';
         $state.go('.', {
             mode: newMode
+        }).then(() => {
+            $rootScope.$broadcast('filter_toggled');
         });
         _showNavToolBar({
             mode: newMode

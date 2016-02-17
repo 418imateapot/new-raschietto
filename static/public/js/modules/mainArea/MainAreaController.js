@@ -12,6 +12,10 @@ export default function MainAreaController($rootScope, $scope, $state, $sanitize
     model.content = documentService.currentDoc.content; // Vediamo se abbiamo già un documento
 
     $scope.$on('retrieveNewUrl',change_document);
+    $scope.$on('filter_toggled', () => {
+        let url = documentService.currentUrl;
+        change_document(null, {doc_url: url, silent: true});
+    });
 
 
     if (!model.content) {
@@ -35,15 +39,16 @@ export default function MainAreaController($rootScope, $scope, $state, $sanitize
     /**
      * Carica un nuovo documento tramite documentService
      */
-    function change_document(event,args) {
+    function change_document(event, args) {
         model.loading = true; // Inizia l'animazione
         documentService
             .retrieve(args.doc_url)
             .then(doc => {
+                let silent = args.silent || false;
                 model.content = doc.content;
                 model.loading = false;
                 userService.storeLastDocument();  // Salve ultimo doc in un cookie
-                _loadAnnotations();
+                _loadAnnotations(silent);
             });
     }
 
@@ -51,12 +56,18 @@ export default function MainAreaController($rootScope, $scope, $state, $sanitize
      * Richiedi ad annotationService di caricare le annotazioni sul
      * documento corrente
      */
-    function _loadAnnotations() {
-        $mdToast.showSimple('Sto caricando le annotazioni.');
+    function _loadAnnotations(silent) {
+        if (annotationService.currentUrl === documentService.currentUrl) {
+            // Abbiamo già le annotazioni giuste
+            return;
+        }
+        if(!silent)
+            $mdToast.showSimple('Sto caricando le annotazioni.');
         annotationService.query(documentService.currentUrl)
         .then(res => {
             $rootScope.$broadcast('annotations_loaded');
-            $mdToast.showSimple(res.length + ' annotazioni caricate.');
+            if (!silent)
+                $mdToast.showSimple(res.length + ' annotazioni caricate.');
         });
     }
 }

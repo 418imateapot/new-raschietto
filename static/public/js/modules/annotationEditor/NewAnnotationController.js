@@ -69,6 +69,8 @@ function NewAnnotationController($rootScope, $mdConstant, $mdDialog, $stateParam
                 end: end
             };
         }
+        console.info(selection);
+        console.info(target);
 
         // Configura il modale e poi mostralo
         $mdDialog.show({

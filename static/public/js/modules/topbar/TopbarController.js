@@ -11,7 +11,6 @@ function TopbarController($mdSidenav, $mdToast, annotationService) {
 
     // Controlla il pulsante mostra/nascondi filtri
     model.toggleFilters = () => {
-        console.log(annotationService.filters);
         if ($.isEmptyObject(annotationService.filters)) {
             // Non mostrare i filtri se non c'è nulla da filtrare
             $mdToast.showSimple('Nessuna annotazione da filtrare');

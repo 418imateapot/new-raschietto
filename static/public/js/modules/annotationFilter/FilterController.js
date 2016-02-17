@@ -1,9 +1,11 @@
-FilterController.$inject = ['$scope', 'annotationService', 'userService', 'utilityService'];
+FilterController.$inject = ['$scope', '$rootScope', '$mdToast', 'annotationService', 'userService', 'utilityService'];
 
 /**
  * Controller per i filtri delle annotazioni
  */
-export default function FilterController($scope, annotationService, userService, utilityService) {
+export
+default
+function FilterController($scope, $rootScope, $mdToast, annotationService, userService, utilityService) {
 
     const model = this;
 
@@ -17,7 +19,7 @@ export default function FilterController($scope, annotationService, userService,
     model.toggle = _toggle;
     model.toggleOwn = _toggleOwn;
     model.toggleAll = _toggleAll;
-    model.hasAnnotations = Boolean(model.filters);
+    model.hasAnnotations = Boolean(annotationService.filters);
 
     $scope.$on('annotations_loaded', () => model.filters = annotationService.filters);
 
@@ -35,22 +37,30 @@ export default function FilterController($scope, annotationService, userService,
 
     function _toggleOwn() {
         let user = userService.userEmail;
-        _toggle(user);
+        if (user && model.filters[user]) {
+            _toggle(user);
+        } else {
+            $mdToast.showSimple('Non hai ancora effettuato alcuna annotazione.');
+        }
     }
 
     function _toggleAll() {
         for (let f in model.filters)
-            _toggle(f);
+            _toggle(f, true);
+        $rootScope.$broadcast('filter_toggled');
     }
 
-    function _toggle(item) {
+    function _toggle(item, silent) {
         // Bit flippin' man
-        let entry = model.filters[item];
-        entry.display = !entry.display;
+        let display = model.filters[item].display;
+        model.filters[item].display = !display;
+        if (!silent) {
+            $rootScope.$broadcast('filter_toggled');
+        }
     }
 
     function _exists(item) {
-        return model.filters[item].display;
+        return item.display;
     }
 
 }

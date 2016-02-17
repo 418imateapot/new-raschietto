@@ -54,7 +54,7 @@ function annotatedText($compile) {
                 if (newRange.intersectsRange(oldRange)) {
                     newRange = newRange.union(oldRange);
                     if (oldRangeInfo.type !== annoType) {
-                        annoType = 'anno-mixed';
+                        annoType = 'mixed';
                     }
                     annotations = oldRangeInfo.annotations.concat([annot]);
                     // E qui abbiamo finito

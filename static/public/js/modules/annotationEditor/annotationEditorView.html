@@ -13,9 +13,8 @@
     <md-dialog-content flex layout="column" class="newAnno-content" layout-padding>
 
         <!-- select -->
-        <br/>
-        <br/>
-        <md-input-container flex="100">
+        <h4>Scegliere un tipo per l'annotazione</h4>
+        <md-input-container flex="80">
             <label>Tipo di annotazione</label>
             <md-select ng-model="editor.typeSelected">
                 <md-option value="hasTitle">Titolo</md-option>
@@ -31,7 +30,7 @@
 
         <!-- form collection -->
 
-        <div layout="column">
+        <div layout="column" flex="80">
             <!--title-->
             <md-input-container ng-show="editor.showFields('hasTitle')">
                 <label>Titolo del documento</label>
@@ -90,7 +89,7 @@
                 </span>
                 <md-input-container>
                     <h3 ng-show="editor.selectedText">Funzione retorica del frammento selezionato:</h3>
-                    <md-radio-group layout="row" ng-show="editor.fragment" ng-model="editor.annotations.denotesRethoric.value">
+                    <md-radio-group layout="row" ng-show="editor.target.id" ng-model="editor.annotations.denotesRethoric.value">
                         <md-radio-button value="sro:Abstract" class="md-primary">Abstract</md-radio-button>
                         <md-radio-button value="deo:Introduction" class="md-primary">Introduction</md-radio-button>
                         <md-radio-button value="deo:Materials" class="md-primary">Materials</md-radio-button>
@@ -132,12 +131,10 @@
                         <input/ ng-model="editor.annotations.cites.cited.url">
                     </md-input-container>
                 </span>
-            <md-content ng-hide="editor.selectedText">Attenzione: questo tipo di annotazione richiede una selezione testuale.
-            </md-content>
+                <md-content ng-hide="editor.selectedText">Attenzione: questo tipo di annotazione richiede una selezione testuale.
+                </md-content>
             </span>
         </div>
-
-        </span>
 
     </md-dialog-content>
     <md-dialog-actions layout="row">

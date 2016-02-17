@@ -35,7 +35,7 @@ export default function documentService($http, $rootScope, $compile, annotationS
      */
     function retrieve(url) {
 
-        console.log(url);
+        console.log('URL: ' + url);
 
         return $http({
                 url: '/api/docs?url=' + encodeURIComponent(url),

@@ -8,7 +8,7 @@ class="md-whiteframe-5dp">
             <md-menu-item ng-repeat="(key, val) in filter.filters" ng-show="filter.isTypeFilter(val)"
             layout-padding>
                 <md-button ng-click="filter.toggle(key)">
-                    <md-icon class="material-icons" ng-show="filter.exists(key)">check</md-icon>
+                    <md-icon class="material-icons" ng-show="filter.exists(val)">check</md-icon>
                     {{val.name}}
                 </md-button>
             </md-menu-item>
@@ -21,8 +21,8 @@ class="md-whiteframe-5dp">
         <md-menu-content>
             <md-menu-item class="md-indent" ng-repeat="(key, val) in filter.filters" ng-show="filter.isProvenanceFilter(val)"
             layout-padding>
-                <md-button ng-click="filters.toggle(key)">
-                    <md-icon class="material-icons" ng-show="filter.exists(key)">check</md-icon>
+                <md-button ng-click="filter.toggle(key)">
+                    <md-icon class="material-icons" ng-show="filter.exists(val)">check</md-icon>
                     {{val.name}}
                 </md-button>
             </md-menu-item>
@@ -36,8 +36,8 @@ class="md-whiteframe-5dp">
         <md-menu-content>
             <md-menu-item class="md-indent" ng-repeat="(key, val) in filter.filters" ng-show="filter.isGroupFilter(val)"
             layout-padding>
-                <md-button ng-click="filters.toggle(key)">
-                    <md-icon class="material-icons" ng-show="filter.exists(key)">check</md-icon>
+                <md-button ng-click="filter.toggle(key)">
+                    <md-icon class="material-icons" ng-show="filter.exists(val)">check</md-icon>
                     {{val.name}}
                 </md-button>
             </md-menu-item>
