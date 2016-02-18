@@ -4,14 +4,14 @@ import Riviste from '../../application/Riviste.js';
 
 import EditorController from './AnnotationEditorController.js';
 
-NewAnnotationController.$inject = ['$rootScope', '$mdConstant', '$mdDialog', '$stateParams', '$mdToast', 'documentService', 'userService', 'utilityService'];
+ModifyAnnotationController.$inject = ['$rootScope', '$mdConstant', '$mdDialog', '$stateParams', '$mdToast', 'documentService', 'userService', 'utilityService'];
 
 /**
  * Controller per il pulsante 'nuova annotazione'
  */
 export
 default
-function NewAnnotationController($rootScope, $mdConstant, $mdDialog, $stateParams, $mdToast, documentService, userService, utilityService) {
+function ModifyAnnotationController($rootScope, $mdConstant, $mdDialog, $stateParams, $mdToast, documentService, userService, utilityService) {
 
     const model = this;
 
