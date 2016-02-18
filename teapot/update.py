@@ -107,7 +107,7 @@ def generateGraphFromJSON(jsonAnn):
                 bodyObject = Literal(annotation['body']['literal'], datatype=XSD.date)
             else:  # type == 'hasURL'
                 bodyObject = Literal(annotation['body']['literal'], datatype=XSD.anyURI)
-        elif annotation['type'] == 'denotesRethoric':
+        elif annotation['type'] == 'denotesRhetoric':
             bodyObject = URIRef(annotation['body']['resource'])
             g.add((bodyObject, RDF.type, SKOS.Concept))
         else:

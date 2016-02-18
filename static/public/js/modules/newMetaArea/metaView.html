@@ -1,0 +1,30 @@
+<md-table-container>
+  <table md-table ng-model="metaArea.annotations">
+      <thead md-head md-order="type">
+      <tr md-row>
+        <th md-column md-order-by="nameToLower"><span>Tipo</span></th>
+        <th md-column md-order-by="nameToLower"><span>Valore</span></th>
+        <!--<th md-column md-numeric>Fat (g)</th>-->
+        <!--<th md-column md-numeric>Carbs (g)</th>-->
+        <!--<th md-column md-numeric>Protein (g)</th>-->
+        <!--<th md-column md-numeric>Sodium (mg)</th>-->
+        <!--<th md-column md-numeric>Calcium (%)</th>-->
+        <!--<th md-column md-numeric>Iron (%)</th>-->
+      </tr>
+    </thead>
+    <tbody md-body>
+      <tr md-row ng-repeat="annot in metaArea.annotations">
+        <td md-cell>{{annot.typeLabel}}</td>
+        <td md-cell>{{annot.content.value}}</td>
+        <!--<td md-cell>{{dessert.fat.value | number: 1}}</td>-->
+        <!--<td md-cell>{{dessert.carbs.value}}</td>-->
+        <!--<td md-cell>{{dessert.protein.value | number: 1}}</td>-->
+        <!--<td md-cell>{{dessert.sodium.value}}</td>-->
+        <!--<td md-cell>{{dessert.calcium.value}}{{dessert.calcium.unit}}</td>-->
+        <!--<td md-cell>{{dessert.iron.value}}{{dessert.iron.unit}}</td>-->
+      </tr>
+    </tbody>
+  </table>
+</md-table-container>
+
+<md-table-pagination md-limit="metaArea.limit" md-page="metaArea.page" md-total="{{metaArea.length}}" md-on-paginate="metaArea.onPaginate" md-page-select></md-table-pagination>

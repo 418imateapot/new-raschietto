@@ -21,18 +21,10 @@ function newAnnotationService($http, localStorageService, utilityService) {
 
     /**
      * Salva annotazioni in localstorage
-     * @param {Boolean} overwrite Sovrascrivere le annotazioni esistenti?
      */
-    function _saveLocal(newAnnotations, overwrite) {
-        let unsaved;
-        if (overwrite) {
-            unsaved = new Set(newAnnotations);
-        } else {
-            unsaved = new Set(_retrieveLocal());
-            unsaved.add(newAnnotations);
-        }
-        localStorageService.set('pending', Array.from(unsaved));
-        //$cookies.putObject('pending', unsaved);
+    function _saveLocal(newAnnotations) {
+        let unsaved = _retrieveLocal().concat(newAnnotation);
+        localStorageService.set('pending', unsaved);
     }
 
 
@@ -110,7 +102,7 @@ function newAnnotationService($http, localStorageService, utilityService) {
                 annoBody.predicate = 'http://schema.org/comment';
                 annoBody.literal = annoData.content.object;
                 break;
-            case 'denotesRethoric':
+            case 'denotesRhetoric':
                 annoBody.predicate = 'http://www.ontologydesignpatterns.org/cp/owl/semiotics.owl#denotes';
                 annoBody.resource = annoData.content.object;
                 break;
@@ -170,8 +162,8 @@ function newAnnotationService($http, localStorageService, utilityService) {
                 annot.content.label = `${annot.provenance.author.name} ha commentato: ${annot.content.value}`;
                 annot.content.object = annot.content.value;
                 break;
-            case 'denotesRethoric':
-                annot.content.value = utilityService.expandRethoricURI(annot.content.value);
+            case 'denotesRhetoric':
+                annot.content.value = utilityService.expandRhetoricURI(annot.content.value);
                 let humanFriendly = annot.content.value.split('/').pop();
                 annot.content.label = `La funzione retorica di questo frammento è "${humanFriendly}"`;
                 annot.content.subject = `${annot.content.subject}#${annot.target.id}-${annot.target.start}-${annot.target.end}`;

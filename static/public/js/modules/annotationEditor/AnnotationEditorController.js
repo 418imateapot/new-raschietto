@@ -49,7 +49,7 @@ function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userServic
             hasComment: {
                 value: undefined
             },
-            denotesRethoric: {
+            denotesRhetoric: {
                 value: undefined
             },
             cites: {

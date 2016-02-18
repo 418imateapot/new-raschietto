@@ -1,0 +1,17 @@
+<md-dialog aria-label="Lista documenti">
+    <md-toolbar>
+        <div class="md-toolbar-tools teapot-tb-secondary">
+            <h2>Annotazioni non salvate<h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="stageDialog.close()">
+                <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content layout-padding>
+        <staging-area></staging-area>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        SALVA TUTTO
+    </md-dialog-actions>
+</md-dialog>

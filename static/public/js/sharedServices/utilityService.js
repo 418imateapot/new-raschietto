@@ -9,7 +9,7 @@ function utilityService() {
     service.labelFromType = _genLabel;
     service.typeFromLabel = _genType;
     service.getXPathTo = _getXPathTo;
-    service.expandRethoricURI = _expandRethoricURI;
+    service.expandRhetoricURI = _expandRhetoricURI;
     service.xpath_to_fragment = _xpath_to_fragment;
     service.getSelection = _selection;
     service.getCitedNumber = _getCitedNumber;
@@ -67,7 +67,7 @@ function utilityService() {
     /**
      * Questa è pura pigrizia
      */
-    function _expandRethoricURI(shortUri) {
+    function _expandRhetoricURI(shortUri) {
         let sro = 'http://salt.semanticauthoring.org/ontologies/sro#';
         let deo = 'http://purl.org/spar/deo/';
 
@@ -91,7 +91,7 @@ function utilityService() {
                 return 'DOI';
             case 'hasComment':
                 return 'Commento';
-            case 'denotesRethoric':
+            case 'denotesRhetoric':
                 return 'Funzione retorica';
             case 'cites':
                 return 'Citazione';
@@ -115,7 +115,7 @@ function utilityService() {
         } else if (/comment/i.test(label)) {
             return 'hasComment';
         } else if (/ret/i.test(label)) {
-            return 'denotesRethoric';
+            return 'denotesRhetoric';
         } else if (/cit/i.test(label)) {
             return 'cites';
         }

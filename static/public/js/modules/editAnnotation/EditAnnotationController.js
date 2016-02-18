@@ -102,8 +102,8 @@ export default function EditAnnotationController($mdConstant, $mdDialog, $stateP
             hasComment: {
                 comment: dialog.annoData.comment
             },
-            denotesRethoric: {
-                rethoric: dialog.annoData.rethoric
+            denotesRhetoric: {
+                rhetoric: dialog.annoData.rhetoric
             },
             cites: {
                 cited: {
@@ -126,8 +126,8 @@ export default function EditAnnotationController($mdConstant, $mdDialog, $stateP
             let content = dialog.annotations[type];
 
             // Pigrizia...
-            if (type === 'denotesRethoric') {
-                content.rethoric = _expandRethoricURI(content.rethoric);
+            if (type === 'denotesRhetoric') {
+                content.rhetoric = _expandRhetoricURI(content.rhetoric);
             }
 
             content.type = type;
@@ -253,7 +253,7 @@ export default function EditAnnotationController($mdConstant, $mdDialog, $stateP
     /**
      * Questa è pura pigrizia
      */
-    function _expandRethoricURI(shortUri) {
+    function _expandRhetoricURI(shortUri) {
         let sro = 'http://salt.semanticauthoring.org/ontologies/sro#';
         let deo = 'http://purl.org/spar/deo/';
 

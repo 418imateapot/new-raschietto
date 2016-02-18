@@ -48,7 +48,7 @@ function AnnotationCardController($sanitize, $state, userService, newAnnotationS
                     (String(model.annotation.content.subject).includes('cited')? ' citato' : '');
                 model.text = model.annotation.content.value;
                 break;
-            case 'denotesRethoric':
+            case 'denotesRhetoric':
                 model.icon = '&nbsp;R';
                 model.header= 'Funzione retorica';
                 model.text = model.annotation.content.label;

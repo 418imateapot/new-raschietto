@@ -1,19 +1,18 @@
-<!-- Cards con le annotazioni -->
+<!-- loading icon-->
+<div layout="column" ng-show="stage.loading" layout-align="center center">
+    <md-progress-circular md-mode="indeterminate" md-diameter="80"></md-progress-circular>
+</div>
 
-<span layout="row" layout-align="center center">
-<md-button class="md-raised md-warn" ng-click="stage.saveAll()" flex="80">Salva tutto</md-button>
-</span>
+<!--Empty text-->
+<h4 ng-show="stage.isEmpty">Nessuna nuova annotazione da salvare.</h4>
+
 <!-- Le cards! -->
-<md-content ng-hide="stage.loading" class="md-padding" layout="row" layout-wrap
+<md-content ng-hide="stage.loading || stage.isEmpty" class="md-padding" layout="row" layout-wrap
 layout-align="center start" layout-xs="column">
 
-    <div ng-show="stage.isVisible(anno)" ng-repeat="anno in stage.pending" flex="50" flex-xs="100" layout="column">
+    <div ng-repeat="anno in stage.pending" flex="50" flex-xs="100" layout="column">
 <!--        ng-if="app.isFiltered(anno)">-->
         <annotation-card edit="" delete="stage.delete($index)" refresh="app.reload()" annotation="anno" flex/>
     </div>
 
 </md-content>
-<!-- loading icon-->
-<div layout="column" ng-show="stage.loading" layout-align="center center">
-    <md-progress-circular md-mode="indeterminate" md-diameter="80"></md-progress-circular>
-</div>

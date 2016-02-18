@@ -16,6 +16,7 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
     model.modeIcon = '?'; // Icona della modalità
     model.openDocArea = _openDocArea;
     model.openMetaArea = _openMetaArea;
+    model.openStagingArea = _openStagingArea;
     model.tutorial = (ev) => $state.go('teapot.mode.tutorial');
     model.switchMode = _switchMode;
     model.scrape = _scrape;
@@ -84,6 +85,28 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
     function MetaDialogController() {
         const metaDialog = this;
         metaDialog.close = () => $mdDialog.cancel();
+    }
+
+    /**
+     * Apre il modal con la metaArea
+     */
+    function _openStagingArea() {
+        $mdSidenav('left').close().then(function(ev) {
+            $mdDialog.show({
+                controller: StageDialogController,
+                controllerAs: 'stageDialog',
+                templateUrl: 'js/modules/navigator/stageView.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true
+            });
+        });
+    }
+
+    // Il controller del modal docarea
+    function StageDialogController() {
+        const stageDialog = this;
+        stageDialog.close = () => $mdDialog.cancel();
     }
 
 

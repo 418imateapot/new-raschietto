@@ -157,7 +157,7 @@ function annotationService($http, utilityService) {
             case 'hasDOI':
             case 'hasURL':
             case 'hasComment':
-            case 'denotesRethoric':
+            case 'denotesRhetoric':
                 result.value = annot.object.value;
                 result.label = annot.bodyLabel ? annot.bodyLabel.value : undefined;
                 result.subject = annot.subject.value;
@@ -270,7 +270,7 @@ WHERE {
     }
 
 
-    function _validateRethoric(type) {
+    function _validateRhetoric(type) {
         let valid = [
             'http://salt.semanticauthoring.org/ontologies/sro#Abstract',
             'http://salt.semanticauthoring.org/ontologies/sro#Discussion',

@@ -27,7 +27,7 @@
                 <md-option value="hasDOI">DOI</md-option>
                 <md-option value="hasURL">URL</md-option>
                 <md-option value="hasComment">Commento</md-option>
-                <md-option value="denotesRethoric">Retorica</md-option>
+                <md-option value="denotesRhetoric">Retorica</md-option>
                 <md-option value="cites">Citazione</md-option>
             </md-select>
         </md-input-container>
@@ -81,11 +81,11 @@
                 </md-content>
             </div>
 
-            <!--rethoric-->
-            <div ng-show="dialog.showFields('denotesRethoric')">
+            <!--rhetoric-->
+            <div ng-show="dialog.showFields('denotesRhetoric')">
                 <md-input-container>
                     <h3 ng-show="dialog.hasFragment()">Funzione retorica del frammento selezionato:</h3>
-                    <md-radio-group layout="row" ng-show="dialog.fragment" ng-model="dialog.annotations.denotesRethoric.rethoric">
+                    <md-radio-group layout="row" ng-show="dialog.fragment" ng-model="dialog.annotations.denotesRhetoric.rhetoric">
                         <md-radio-button value="sro:Abstract" class="md-primary">Abstract</md-radio-button>
                         <md-radio-button value="deo:Introduction" class="md-primary">Introduction</md-radio-button>
                         <md-radio-button value="deo:Materials" class="md-primary">Materials</md-radio-button>
