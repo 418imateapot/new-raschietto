@@ -1,21 +1,125 @@
+$hasTitleColor: #FF4316;
+$hasAuthorColor: #62B31A;
+$hasURLColor: lightBlue;
+$hasDOIColor: #FF8A22;
+$hasPublicationYearColor: #0862C3;
+$denotesRhetoricColor: #CAC4BC;
+$hasCommentColor: cadetblue;
+$citesColor: #FFB72D;
+$mixedColor: #FF9999;
+
+
 /*****GODDAMN FONTS!************/
 md-icon.avatar-font {
     font-family: 'Kreon', serif;
-    font-size: 2rem;
+    font-size: 1.4rem;
     display: block;
     width: 2.2rem;
     height: 2.1rem;
+    text-align: center;
+    //background-color: $asecondadeltipo...
 }
+
+/// roba urenda ma non c'è più tempo...
+
+md-icon.card_hasTitle {
+    font-family: 'Kreon', serif;
+    font-size: 1.4rem;
+    display: block;
+    width: 2.2rem;
+    height: 2.1rem;
+    text-align: center;
+    background-color: $hasTitleColor;
+}
+
+md-icon.card_hasAuthor {
+    font-family: 'Kreon', serif;
+    font-size: 1.4rem;
+    display: block;
+    width: 2.2rem;
+    height: 2.1rem;
+    text-align: center;
+    background-color: $hasAuthorColor;
+}
+
+md-icon.card_hasURL {
+    font-family: 'Kreon', serif;
+    font-size: 1.4rem;
+    display: block;
+    width: 2.2rem;
+    height: 2.1rem;
+    text-align: center;
+    background-color: $hasURLColor;
+}
+
+md-icon.card_hasDOI {
+    font-family: 'Kreon', serif;
+    font-size: 1.5rem;
+    display: block;
+    width: 2.2rem;
+    height: 2.1rem;
+    text-align: center;
+    background-color: $hasDOIColor;
+}
+
+md-icon.card_hasPublicationYear {
+    font-family: 'Kreon', serif;
+    font-size: 1.4rem;
+    display: block;
+    width: 2.2rem;
+    height: 2.1rem;
+    text-align: center;
+    background-color: $hasPublicationYearColor;
+}
+
+md-icon.card_denotesRhetoric {
+    font-family: 'Kreon', serif;
+    font-size: 1.5rem;
+    display: block;
+    width: 2.2rem;
+    height: 2.1rem;
+    text-align: center;
+    background-color: $denotesRhetoricColor;
+}
+
+md-icon.card_hasComment {
+    font-family: 'Kreon', serif;
+    font-size: 1.4rem;
+    display: block;
+    width: 2.2rem;
+    height: 2.1rem;
+    text-align: center;
+    background-color: $hasCommentColor;
+}
+
+md-icon.card_cites {
+    font-family: 'Kreon', serif;
+    font-size: 1.4rem;
+    display: block;
+    width: 2.2rem;
+    height: 2.1rem;
+    text-align: center;
+    background-color: $citesColor;
+}
+
+
 md-card-header-text.annocard-header{
     position: relative;
     left: 0.5rem;
     top: 0.5rem;
 }
-md-card.annocard {
-    background-color: #FBFBFB;
+
+md-card.citationAnnNO {
+    background-color: #F1F1F1;
+    //background-color: #FBFBFB;
 /*    background-color: #F0F8FF; */
+}
+
+md-card.citationAnnYES {
+    background-color: #DDE1E2;
 }
 
 md-card.annocard * {
     word-wrap: break-word;
 }
+
