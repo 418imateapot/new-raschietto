@@ -76,3 +76,17 @@ main-area {
 .teapot-sidenav {
     position: fixed;
 }
+
+h5.titolo_inElencoDoc.ng-binding {
+    color: #349EC2;
+    font-size: 105%;
+}
+
+h5.titolo_inElencoDoc:hover {
+    cursor: pointer;
+    color: #0B6C8C;
+}
+/* 
+div.md-list-item-text.layout-column:hover {
+    background-color: #FFF7F5;
+} */
