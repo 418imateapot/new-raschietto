@@ -20,27 +20,32 @@ function AnnotationCardController($sanitize, $state, userService, newAnnotationS
         switch (model.annotation.type) {
             case 'hasTitle':
                 model.icon = '&nbsp;T';
-                model.header = 'Titolo del documento';
+                model.header = 'Titolo del documento' + 
+                    (String(model.annotation.content.subject).includes('cited')? ' citato' : '');
                 model.text = model.annotation.content.value;
                 break;
             case 'hasAuthor':
                 model.icon = 'Au';
-                model.header = 'Autore del documento';
+                model.header = 'Autore del documento' + 
+                    (String(model.annotation.content.subject).includes('cited')? ' citato' : '');
                 model.text = model.annotation.content.label;
                 break;
             case 'hasURL':
                 model.icon = '&nbsp;U';
-                model.header = 'URL del documento';
+                model.header = 'URL del documento' + 
+                    (String(model.annotation.content.subject).includes('cited')? ' citato' : '');
                 model.text = model.annotation.content.value;
                 break;
             case 'hasDOI':
                 model.icon = '&nbsp;D';
-                model.header = 'DOI del documento';
+                model.header = 'DOI del documento' + 
+                    (String(model.annotation.content.subject).includes('cited')? ' citato' : '');
                 model.text = model.annotation.content.value;
                 break;
             case 'hasPublicationYear':
                 model.icon = '&nbsp;Y';
-                model.header = 'Anno di pubblicazione';
+                model.header = 'Anno di pubblicazione del documento' + 
+                    (String(model.annotation.content.subject).includes('cited')? ' citato' : '');
                 model.text = model.annotation.content.value;
                 break;
             case 'denotesRethoric':
