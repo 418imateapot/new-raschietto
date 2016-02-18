@@ -3,7 +3,7 @@
         <md-list ng-repeat="doc in docArea.docsDlib">
             <md-list-item class="md-3-line">
                 <div class="md-list-item-text" layout="column">
-                    <h5 ng-click="docArea.load(doc.url.value)">{{doc.title.value}}</h5>
+                    <h5 class="titolo_inElencoDoc" ng-click="docArea.load(doc.url.value)">{{doc.title.value}}</h5>
                     <br/>
                     <p>URL originale: <a href="{{doc.url.value}}">{{doc.url.value}}</a>
                     </p>
@@ -19,7 +19,7 @@
         <md-list ng-repeat="doc in docArea.docsStat">
             <md-list-item class="md-3-line">
                 <div class="md-list-item-text" layout="column">
-                    <h5 ng-click="docArea.load(doc.url.value)">{{doc.title.value}}</h5>
+                    <h5 class="titolo_inElencoDoc" ng-click="docArea.load(doc.url.value)">{{doc.title.value}}</h5>
                     <br/>
                     <p>URL originale: <a href="{{doc.url.value}}">{{doc.url.value}}</a>
                     </p>
@@ -35,7 +35,7 @@
         <md-list ng-repeat="doc in docArea.docsMont">
             <md-list-item class="md-3-line">
                 <div class="md-list-item-text" layout="column">
-                    <h5 ng-click="docArea.load(doc.url.value)">{{doc.title.value}}</h5>
+                    <h5 class="titolo_inElencoDoc" ng-click="docArea.load(doc.url.value)">{{doc.title.value}}</h5>
                     <br/>
                     <p>URL originale: <a href="{{doc.url.value}}">{{doc.url.value}}</a>
                     </p>
@@ -51,7 +51,7 @@
         <md-list ng-repeat="doc in docArea.docsSeries">
             <md-list-item class="md-3-line">
                 <div class="md-list-item-text" layout="column">
-                    <h5 ng-click="docArea.load(doc.url.value)">{{doc.title.value}}</h5>
+                    <h5 class="titolo_inElencoDoc" ng-click="docArea.load(doc.url.value)">{{doc.title.value}}</h5>
                     <br/>
                     <p>URL originale: <a href="{{doc.url.value}}">{{doc.url.value}}</a>
                     </p>

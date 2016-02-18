@@ -1,29 +1,39 @@
+$hasTitleColor: red;
+$hasAuthorColor: green;
+$hasURLColor: lightBlue;
+$hasDOIColor: purple;
+$hasPublicationYearColor: blue;
+$denotesRhetoricColor: grey;
+$hasCommentColor: cadetblue;
+$citesColor: yellow;
+$mixedColor: brown;
+
 span.anno-hasTitle {
-    background-color: red;
+    background-color: $hasTitleColor;
 }
 span.anno-hasAuthor {
-    background-color: green;
+    background-color: $hasAuthorColor;
 }
 span.anno-hasURL {
-    background-color: lightBlue;
+    background-color: $hasURLColor;
 }
 span.anno-hasDOI {
-    background-color: purple;
+    background-color: $hasDOIColor;
 }
 span.anno-hasPublicationYear {
-    background-color: blue;
+    background-color: $hasPublicationYearColor;
 }
 span.anno-denotesRhetoric{
-    background-color: grey;
+    background-color: $denotesRhetoricColor;
 }
 span.anno-hasComment{
-    background-color: lightblue ;
+    background-color: $hasCommentColor ;
 }
 span.anno-cites{
-    background-color: yellow;
+    background-color: $citesColor;
 }
 span.anno-mixed{
-    background-color: brown;
+    background-color: $mixedColor;
 }
 
 
