@@ -26,7 +26,7 @@ import pagination from 'angular-utils-pagination';
 import conf from './conf/index.js';
 import sharedServices from './sharedServices/index.js';
 import teapotModules from './modules/index.js';
-import ApplicationController from './application/ApplicationController.js';
+import ApplicationController from './ApplicationController.js';
 
 var app = angular.module('teapot', [
     'ui.router',

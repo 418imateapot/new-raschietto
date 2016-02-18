@@ -1,6 +1,6 @@
 // Ci sara' un modo piu' carino di importare queste dipendenze...
-import Dlib from '../../application/Dlib.js';
-import Riviste from '../../application/Riviste.js';
+import Dlib from '../../sharedServices/Dlib.js';
+import Riviste from '../../sharedServices/Riviste.js';
 
 import EditorController from './AnnotationEditorController.js';
 
