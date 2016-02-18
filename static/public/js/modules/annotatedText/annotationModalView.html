@@ -2,15 +2,13 @@
     <md-toolbar class="md-toolbar teapot-tb-secondary">
         <div class="md-toolbar-tools">
             <h2>
-          <span>Annotazioni sul frammento</span>
-        </h2>
+                <span>Annotazioni sul frammento</span>
+            </h2>
         </div>
     </md-toolbar>
-    <md-dialog-content class="md-padding" layout="row" flex="100" layout-wrap layout-align="none"
-    layout-xs="column" >
-
-        <span ng-repeat="anno in dialog.annotations"  > 
-    <annotation-card delete="dialog.delete($index)" edit="dialog.edit($index)" class="annocard" flex-noshrink layout="row" annotation="anno"></annotation-card>
-</span>
+    <md-dialog-content class="md-padding" layout="row" flex="100" layout-wrap layout-align="none" layout-xs="column">
+        <span ng-repeat="anno in dialog.annotations"> 
+            <annotation-card delete="false" edit="false" class="annocard" flex-noshrink layout="row" annotation="anno"></annotation-card>
+        </span>
     </md-dialog-content>
 </md-dialog>
