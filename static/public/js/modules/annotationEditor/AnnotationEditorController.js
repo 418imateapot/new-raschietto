@@ -57,6 +57,9 @@ function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userServic
                 cited: {
                     title: model.selectedText,
                     authors: [],
+                    url: undefined,
+                    doi: undefined,
+                    year: undefined
                 }
             },
         };
@@ -76,11 +79,7 @@ function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userServic
         annotation.provenance = model.provenance;
         annotation.target = model.target;
 
-        _fillTheBlanks(annotation);
-
-        // TODO 
-        // if author -> separa l'annotazione
-        // if cites ->  crea le multi annotazioni
+        let annotationsArray = newAnnotationService.fillTheBlanks(annotation);
 
         newAnnotationService.saveLocal(annotation);
 
@@ -88,51 +87,6 @@ function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userServic
         $mdDialog.hide();
     }
 
-    function _fillTheBlanks(annot) {
-        annot.typeLabel = utilityService.labelFromType(annot.type);
-        annot.group = 'http://vitali.web.cs.unibo.it/raschietto/graph/ltw1543';
 
-        // Genera subject
-        let subject = annot.target.source.replace(/\.html$/, '') + '_ver1';
-        switch (annot.type) {
-            case 'hasTitle':
-                annot.content.label = `Il titolo del documento è "${annot.content.value}"`;
-                annot.content.object = annot.content.value;
-                break;
-            case 'hasPublicationYear':
-                annot.content.label = `Questo documento è stato pubblicato nel ${annot.content.value}`;
-                annot.content.object = annot.content.value;
-                break;
-            case 'hasAuthor':
-                annot.content.label = `Un autore del documento è ${annot.content.value}`;
-                annot.content.object = annot.content.value;
-                break;
-            case 'hasURL':
-                annot.content.label = `L'URL del documento è ${annot.content.value}`;
-                annot.content.object = annot.content.value;
-                break;
-            case 'hasDOI':
-                annot.content.label = `Il DOI associato a questo documento è ${annot.content.value}`;
-                annot.content.object = annot.content.value;
-                break;
-            case 'hasComment':
-                annot.content.label = `${annot.provenance.author.name} ha commentato: ${annot.content.value}`;
-                annot.content.object = annot.content.value;
-                break;
-            case 'denotesRethoric':
-                annot.content.value = utilityService.expandRethoricURI(annotation.content.value);
-                let humanFriendly = annot.content.value.split('/').pop();
-                annot.content.label = `La funzione retorica di questo frammento è "${humanFriendly}"`;
-                annot.content.subject = `${subject}#${annot.target.id}-${annot.target.start}-${annot.target.end}`;
-                annot.content.object = annot.content.value;
-                break;
-            case 'cites':
-                const num = utilityService.getCitedNumber();
-                annot.content.object = `${subject}_cited_${num}`;
-                annot.content.value = annot.content.cited.title;
-                annot.content.label = `Questo articolo cita ${annot.content.value}`;
-                break;
-        }
-    }
 
 }
