@@ -12,6 +12,6 @@
         <staging-area></staging-area>
     </md-dialog-content>
     <md-dialog-actions layout="row">
-        SALVA TUTTO
+        <md-button ng-hide="stageDialog.isEmpty" ng-click="stageDialog.saveAll()" class="md-warn">Salva tutto</md-button>
     </md-dialog-actions>
 </md-dialog>

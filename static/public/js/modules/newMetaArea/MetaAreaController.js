@@ -8,7 +8,7 @@ default
 function MetaController($scope, $stateParams, documentService, annotationService) {
     var model = this;
 
-    model.annotations = annotationService.annotations;
+    model.annotations = annotationService.getAnnotations();
     model.isFiltered = annotationService.isFiltered;
     model.notEmpty = Boolean(model.annotations);
 

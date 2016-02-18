@@ -106,7 +106,7 @@ export default function documentService($http, $rootScope, $compile, annotationS
 
         let newElements = [];
 
-        annotationService.annotations.forEach((val, index) => {
+        annotationService.getAnnotations().forEach((val, index) => {
             let source, fragment, type, provenance;
             try {
                 source = val.target.source.indexOf('dlib') !== -1 ? 'dlib' : 'riviste';

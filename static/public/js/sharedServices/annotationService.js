@@ -1,9 +1,4 @@
-/**
- * @module teapot/sharedServices/annotationService
- */
-// TODO: Cancella i rami else di debug
-
-annotationService.$inject = ['$http', 'utilityService'];
+annotationService.$inject = ['$http', 'utilityService', 'newAnnotationService'];
 
 /**
  * Servizio che, dato un url, chiede al triplestore le annotazioni
@@ -12,7 +7,7 @@ annotationService.$inject = ['$http', 'utilityService'];
 export
 default
 
-function annotationService($http, utilityService) {
+function annotationService($http, utilityService, newAnnotationService) {
 
     const service = this;
 
@@ -24,8 +19,19 @@ function annotationService($http, utilityService) {
     service.query = _query;
     service.tidy = _tidy;
     service.isFiltered = _isFiltered;
+    service.getAnnotations = () => service.annotations.concat(_getUnsavedAnnotations());
     //service.scrape = _scrape;
 
+
+    // Recupera da localStorage le annotazioni non salvate
+    // con target il doc corrente
+    function _getUnsavedAnnotations () {
+       let unsavedAll = newAnnotationService.retrieveLocal();
+       return unsavedAll.filter(annot => {
+            let target = annot.target.source;
+            return target === service.currentUrl;
+       });
+    }
 
     /*
     function _scrape(doi) {
@@ -48,7 +54,7 @@ function annotationService($http, utilityService) {
     function _query(url) {
         const encodedQuery = encodeURIComponent(_build_query(url));
         const endpoint = 'http://tweb2015.cs.unibo.it:8080/data';
-        //var endpoint = 'http://localhost:3030/data';
+        //const endpoint = 'http://localhost:3030/data';
         const opts = 'format=json&callback=JSON_CALLBACK';
         const url_string = `${endpoint}?query=${encodedQuery}&${opts}`;
         service.filters = {};  // Reinizializza i filtri
@@ -109,7 +115,7 @@ function annotationService($http, utilityService) {
             annotation.provenance = {
                 author: {
                     name: elem.provenanceLabel.value || elem.provenanceMail.value,
-                    mail: elem.provenanceMail.value
+                    email: elem.provenanceMail.value
                 },
                 time: elem.time.value
             };

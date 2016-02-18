@@ -23,7 +23,7 @@ function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userServic
         model.provenance = {
             author: {
                 name: userService.userName,
-                mail: userService.userEmail
+                email: userService.userEmail
             },
             time: new Date()
         };

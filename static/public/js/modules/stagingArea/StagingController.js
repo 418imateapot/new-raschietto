@@ -1,9 +1,9 @@
-StagingController.$inject = ['$mdToast', 'newAnnotationService'];
+StagingController.$inject = ['$scope', '$mdToast', 'newAnnotationService'];
 
 /**
  * Controller per l'area di sosta
  */
-export default function StagingController($mdToast, newAnnotationService) {
+export default function StagingController($scope, $mdToast, newAnnotationService) {
 
     const model = this;
 
@@ -13,6 +13,8 @@ export default function StagingController($mdToast, newAnnotationService) {
     model.saveAll = _saveAll;
     //model.isVisible = _isVisible;
     model.isEmpty = true;
+
+    $scope.$on('save_all', _saveAll);
 
     _init();
 

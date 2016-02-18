@@ -7,7 +7,7 @@ function AnnotationCardController($sanitize, $state, userService, newAnnotationS
 
     model.icon = '';
     model.header = '';
-    model.email = model.annotation.provenance.author.mail;
+    model.email = model.annotation.provenance.author.email;
     model.author = model.annotation.provenance.author.name || model.email;
     model.text = '';
     model.isEditable = (model.email === userService.userEmail);

@@ -23,7 +23,7 @@ function newAnnotationService($http, localStorageService, utilityService) {
      * Salva annotazioni in localstorage
      */
     function _saveLocal(newAnnotations) {
-        let unsaved = _retrieveLocal().concat(newAnnotation);
+        let unsaved = _retrieveLocal().concat(newAnnotations);
         localStorageService.set('pending', unsaved);
     }
 
@@ -34,7 +34,7 @@ function newAnnotationService($http, localStorageService, utilityService) {
 
 
     function _updateRemote(annotationList) {
-        annotationList = annotationList.map(anno => _defusekify(anno));
+        let newAnnotations = annotationList.map(a => _generateAnnotation(a));
         return $http.put('/api/annotations', {
                 items: annotationList
             })

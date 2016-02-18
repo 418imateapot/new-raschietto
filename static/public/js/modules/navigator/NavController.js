@@ -107,6 +107,13 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
     function StageDialogController() {
         const stageDialog = this;
         stageDialog.close = () => $mdDialog.cancel();
+        stageDialog.isEmpty = true;
+        stageDialog.saveAll = () => {
+            $rootScope.$broadcast('save_all');
+        };
+        if (newAnnotationService.retrieveLocal().length > 0) {
+            stageDialog.isEmpty = false;
+        }
     }
 
 
