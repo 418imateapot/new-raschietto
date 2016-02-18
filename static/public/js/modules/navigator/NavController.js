@@ -125,7 +125,7 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
         $state.go('.', {
             mode: newMode
         }).then(() => {
-            $rootScope.$broadcast('filter_toggled');
+            $rootScope.$broadcast('reload_view');
         });
         _showNavToolBar({
             mode: newMode

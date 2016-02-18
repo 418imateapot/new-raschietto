@@ -1,9 +1,9 @@
-StagingController.$inject = ['$scope', '$mdToast', 'newAnnotationService'];
+StagingController.$inject = ['$scope', '$state', '$mdToast', 'newAnnotationService'];
 
 /**
  * Controller per l'area di sosta
  */
-export default function StagingController($scope, $mdToast, newAnnotationService) {
+export default function StagingController($scope, $state, $mdToast, newAnnotationService) {
 
     const model = this;
 
@@ -25,7 +25,6 @@ export default function StagingController($scope, $mdToast, newAnnotationService
 
     function _init() {
         model.pending = newAnnotationService.retrieveLocal();
-        console.log(model.pending);
         if (model.pending.length > 0) {
             model.isEmpty = false;
         }
@@ -46,7 +45,11 @@ export default function StagingController($scope, $mdToast, newAnnotationService
         model.pending.splice(elem, 1);
         newAnnotationService.nuke();
         newAnnotationService.saveLocal(model.pending);
+        if (model.pending.length === 0) {
+            model.isEmpty = true;
+        }
         $mdToast.showSimple('Annotazione eliminata');
+        $state.go('.', {}, {reload: true});
     }
 
     function _isVisible(annot) {

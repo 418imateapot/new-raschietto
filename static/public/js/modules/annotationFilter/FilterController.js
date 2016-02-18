@@ -47,7 +47,7 @@ function FilterController($scope, $rootScope, $mdToast, annotationService, userS
     function _toggleAll() {
         for (let f in model.filters)
             _toggle(f, true);
-        $rootScope.$broadcast('filter_toggled');
+        $rootScope.$broadcast('reload_view');
     }
 
     function _toggle(item, silent) {
@@ -55,7 +55,7 @@ function FilterController($scope, $rootScope, $mdToast, annotationService, userS
         let display = model.filters[item].display;
         model.filters[item].display = !display;
         if (!silent) {
-            $rootScope.$broadcast('filter_toggled');
+            $rootScope.$broadcast('reload_view');
         }
     }
 

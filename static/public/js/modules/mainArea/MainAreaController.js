@@ -12,8 +12,9 @@ export default function MainAreaController($rootScope, $scope, $state, $sanitize
     model.content = documentService.currentDoc.content; // Vediamo se abbiamo già un documento
 
     $scope.$on('retrieveNewUrl',change_document);
-    $scope.$on('filter_toggled', () => {
+    $scope.$on('reload_view', () => {
         let url = documentService.currentUrl;
+        console.log('FORCE_RELOAD');
         change_document(null, {doc_url: url, silent: true});
     });
 
@@ -57,17 +58,20 @@ export default function MainAreaController($rootScope, $scope, $state, $sanitize
      * documento corrente
      */
     function _loadAnnotations(silent) {
-        if (annotationService.currentUrl === documentService.currentUrl) {
+        let forced = silent; // I casi d'uso sono sempre gli stessi...
+        if (!forced && annotationService.currentUrl === documentService.currentUrl) {
             // Abbiamo già le annotazioni giuste
             return;
         }
-        if(!silent)
+        if(!silent) {
             $mdToast.showSimple('Sto caricando le annotazioni.');
+        }
         annotationService.query(documentService.currentUrl)
         .then(res => {
             $rootScope.$broadcast('annotations_loaded');
-            if (!silent)
+            if (!silent) {
                 $mdToast.showSimple(res.length + ' annotazioni caricate.');
+            }
         });
     }
 }

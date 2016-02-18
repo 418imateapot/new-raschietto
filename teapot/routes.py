@@ -3,6 +3,7 @@
 Gestisce il routing per l'api server-side di raschietto
 """
 from flask import request, Response
+from flask import make_response
 from json.decoder import JSONDecoder
 
 from .boris.documents import get_doc

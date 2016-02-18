@@ -1,9 +1,9 @@
-newAnnotationService.$inject = ['$http', 'localStorageService', 'utilityService'];
+newAnnotationService.$inject = ['$rootScope', '$http', 'localStorageService', 'utilityService'];
 
 export
 default
 
-function newAnnotationService($http, localStorageService, utilityService) {
+function newAnnotationService($rootScope, $http, localStorageService, utilityService) {
 
     const service = this;
 
@@ -25,6 +25,7 @@ function newAnnotationService($http, localStorageService, utilityService) {
     function _saveLocal(newAnnotations) {
         let unsaved = _retrieveLocal().concat(newAnnotations);
         localStorageService.set('pending', unsaved);
+        $rootScope.$broadcast('reload_view');
     }
 
 
@@ -36,15 +37,19 @@ function newAnnotationService($http, localStorageService, utilityService) {
     function _updateRemote(annotationList) {
         let newAnnotations = annotationList.map(a => _generateAnnotation(a));
         return $http.put('/api/annotations', {
-                items: annotationList
+                items: newAnnotations
             })
-            .then(response => response)
+            .then(response => {
+                $rootScope.$broadcast('reload_view');
+                return response;
+            })
             .catch(err => console.warn(err));
     }
 
 
     function _deleteLocal() {
         localStorageService.clearAll();
+        $rootScope.$broadcast('reload_view');
     }
 
 

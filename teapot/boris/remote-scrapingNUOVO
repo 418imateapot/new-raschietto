@@ -142,10 +142,10 @@ def _scrape_dlib2(url_string2):
     url = url_string2
     citat2 = []
     my_data += zip(authorC,articleC)
-    print authorC
-    print authorCitation
-    print titleCitation  
-    print title2Citation 
+    #print authorC
+    #print authorCitation
+    #print titleCitation  
+    #print title2Citation 
     #return JSONEncoder().encode(articleC )
    
     

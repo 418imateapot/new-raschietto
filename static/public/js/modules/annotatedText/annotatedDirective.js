@@ -34,11 +34,17 @@ function annotatedText($compile) {
          * sovrapposizione
          */
         ctrl.activeAnnotations.forEach(annot => {
+            if (annot.target.start === annot.target.end) {
+                console.log('aSDSDasSAD');
+                return;
+            }
             let newRange = rangy.createRange();
             let newRangeBookmark = {
                 containerNode: el.get(0),
                 end: annot.target.end,
                 start: annot.target.start
+                //end: annot.target.end +1,   // Misteriosi off-by-one
+                //start: annot.target.start +1
             };
             newRange.moveToBookmark(newRangeBookmark);
             //let newRange = buildRange(el.get(0), annot.target.start, annot.target.end);
@@ -95,7 +101,7 @@ function annotatedText($compile) {
             try {
                 h.highlightRanges(className, [range]);
             } catch (e) {
-                console.warn(className + ' ha qualche problema?');
+                console.warn(className + ' ha qualche problema? ' + e.name);
             }
 
             // Determina su che elemento attaccare l'event listener per i click

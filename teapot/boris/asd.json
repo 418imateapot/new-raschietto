@@ -1,0 +1,48 @@
+{
+    "date": "2014",
+    "url": "http://rivista-statistica.unibo.it/article/view/4594",
+    "authors": ["Carlos Almeida", "Michel Mouchart"],
+    "doi": "10.6092/issn.1973-2201/4594",
+    "title": "Testing normality of latent variables in the polychoric correlation"
+} {
+    "date": "2014",
+    "url": "http://www.dlib.org/dlib/november14/beel/11beel.html",
+    "authors": ["Joeran Beel", "Stefan Langer", "Bela Gipp"],
+    "doi": "10.1045/november14-beel",
+    "title": "The Architecture and Datasets of Docear's  Research Paper Recommender System\n"
+}
+[
+    ["A. AGRESTI ", " Analysis of ordinal categorical data. Wiley, New York."],
+    ["C. ALMEIDA ", " Testing specifications on partial observability models: a Bayesian encompassing approach. Ph.D. thesis, Institut de statistique, Universit\u00e9 catholique de Louvain, Louvain-la-Neuve."],
+    ["C. ALMEIDA, M. MOUCHART ", " Bayesian encompassing test under partial observability. Discussion Paper 05-14, Institut de statistique, Universit\u00e9 catholique de Lou vain, Louvain-la-Neuve. http://www.stat.ucl.ac.be/ISpub/dp/2005/dp0514.pdf - http://www.stat.ucl.ac.be/ISpub/dp/2005/dp0514.pdf , submitted."],
+    ["C. ALMEIDA, M. MOUCHART ", " Bayesian encompassing specification test under not completely known partial observability. Bayesian Analysis, 2, pp. 303\u2013318."],
+    ["http://ba.stat.cmu.edu/journal/2007/vol02/issue02/almeida.pdf", ""],
+    ["http://ba.stat.cmu.edu/journal/2007/vol02/issue02/almeida.pdf.", ""],
+    ["C. ALMEIDA, M. MOUCHART ", " Bayesian encompassing specification test under not completely known partial observability (summary of Almeida and Mouchart (2007a)). In J.-M. BERNARDO, M.-J. BAYARRI, J.-O. BERGER, A.-P. DAWID, D. HECKERMAN, A.-F.-M. SMITH, M.WEST (eds.), Bayesian Statistics 8. Oxford:Oxford University Press, pp. 567\u2013572."],
+    ["J.-M. BERNARDO, A. F. M. SMITH ", " Bayesian theory. Wiley Series in Probability and Mathematical Statistics: Probability and Mathematical Statistics. John Wiley & Sons Ltd., Chichester."],
+    ["P. DAMIEN, J. WAKEFIELD, S. WALKER ", " Gibbs sampling for Bayesian nonconjugate and hierarchical models by using auxiliary variables. J. Roy. Statist. Soc. Ser. B, 61, no. 2, pp. 331\u2013344."],
+    ["J.-P. FLORENS, M.MOUCHART ", " Bayesian testing and testing Bayesians. In Econometrics, North-Holland, Amsterdam, vol. 11 of Handbook of Statist., pp. 303\u2013334."],
+    ["J.-P. FLORENS, M. MOUCHART, J.-M. ROLIN ", " Elements of Bayesian statistics, vol. 134 of Monographs and Textbooks in Pure and Applied Mathematics. Marcel Dekker Inc., New York."],
+    ["J.-P. FLORENS, J.-F. RICHARD, J.-M. ROLIN ", " Bayesian encompassing specification test of a parametric model against a nonparametric alternative. Unpublished mimeo, revised version of Discussion Paper 96-08, Institut de statistique, Universit\u00e9 catholique de Louvain, Louvain-la-Neuve."],
+    ["http://www.stat.ucl.ac.be/ISpub/dp/1996/dp9608.ps", ""],
+    ["http://www.stat.ucl.ac.be/ISpub/dp/1996/dp9608.ps.", ""],
+    ["L. A. GOODMAN ", " Association models and the bivariate normal for contingency tables with ordered categories. Biometrika, 68, no. 2, pp. 347\u2013355."],
+    ["N. L. JOHNSON, S. KOTZ ", " Distributions in statistics: continuous multivariate distributions. John Wiley & Sons Inc., New York. Wiley Series in Probability and Mathematical Statistics."],
+    ["K. J\u00d6RESKOG ", " Structural equation modeling with ordinal variables sudsing LISREL. Tech. rep., technical report."],
+    ["http://www.ssicentral.com/lisrel/techdocs/ordinal.pdf", ""],
+    ["http://www.ssicentral.com/lisrel/techdocs/ordinal.pdf.", ""],
+    ["K. J\u00d6RESKOG, D. S\u00d6RBOM, S. DU TOIT, M. DU TOIT ", " LISREL8: New statistical features. SSI Scientific International Inc. B. MUTH\u00c9N (1983). Latent variable structural equation modeling with categorical data. J. Econometrics, 22, no. 1-2, pp. 43\u201365."],
+    ["B. MUTH\u00c9N ", " A general structural equation model with dichotomous, ordered categorical variables, and continuous latent variables indicators. Psychometrika, 49, pp. 115\u2013132."],
+    ["B. MUTH\u00c9N, C. HOFACKER ", " Testing the assumptions underlying tetrachoric correlations. Psychometrika, 83, pp. 563 \u2013 578."],
+    ["R. B. NELSEN ", " An introduction to copulas, vol. 139 of Lecture Notes in Statistics. Springer-Verlag, New York."],
+    ["U.OLSSON ", " Maximul likelihood estmation of the polychoric correlation coefficient. Psychometrika, 44, pp. 443-460."],
+    ["K. PEARSON ", " Mathematical contribution to the theory of evolution vii: On the correlation of characters not quantitatively measurable. Phil. Trans. R. Soc. Lond., 195A, pp. 1 \u2013 47."],
+    ["K. PEARSON, E. S. PEARSON ", " On polychoric coefficients of correlation. Biometrika, 52, pp. 127 \u2013 156."],
+    ["G. M. TALLIS ", " The maximum likelihood estimation of correlation from contingency tables. Biometrics, 18, pp. 342\u2013353."],
+    ["F. VANDENHENDE ", " Copula models for the analysis of longitudinal ordinal responses in clinical trials on acute migraine. Ph.D. thesis, Institut de statistique, Universit\u00e9 catholique de Louvain, Louvain-la-Neuve."],
+    ["Q.WANG, S. R. KULKARNI, S. VERD\u00da ", " Divergence estimation of continuous distributions based on data-dependent partitions. IEEE Trans. Inform. Theory, 51, no. 9, pp. 3064\u20133074."]
+] {
+    "DLIB doiCitation": ["http://doi.org/10.1007/978-3-642-32524-3_10"],
+    "DLIB titleCitation": "A Multi-tiered Recommender System Architecture for Supporting E-Commerce,",
+    "DLIB authorCitation": " L. Palopoli, D. Rosaci, and G. M. Sarn\u00e9, "
+}
