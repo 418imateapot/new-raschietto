@@ -1,12 +1,12 @@
-$hasTitleColor: red;
-$hasAuthorColor: green;
+$hasTitleColor: #FF4316;
+$hasAuthorColor: #62B31A;
 $hasURLColor: lightBlue;
-$hasDOIColor: purple;
-$hasPublicationYearColor: blue;
-$denotesRhetoricColor: grey;
+$hasDOIColor: #FF8A22;
+$hasPublicationYearColor: #0862C3;
+$denotesRhetoricColor: #CAC4BC;
 $hasCommentColor: cadetblue;
-$citesColor: yellow;
-$mixedColor: brown;
+$citesColor: #FFB72D;
+$mixedColor: #FF9999;
 
 span.anno-hasTitle {
     background-color: $hasTitleColor;
@@ -35,5 +35,6 @@ span.anno-cites{
 span.anno-mixed{
     background-color: $mixedColor;
 }
+
 
 
