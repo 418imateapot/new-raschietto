@@ -1,8 +1,8 @@
-<md-card  class="annocard">
+<md-card class={{annoCard.isCitationAnn}}>
     <md-card-header>
         <md-card-avatar>
             <!-- uso bind-html perchè devo infilare a volte dei &nbsp; per allineare tutto -->
-            <md-icon class="avatar-font" ng-bind-html="annoCard.icon"></md-icon>
+            <md-icon class={{annoCard.avatarColor}} class="avatar-font" ng-bind-html="annoCard.icon"></md-icon>
         </md-card-avatar>
         <md-card-header-text class="annocard-header">
             <span class="md-title">{{annoCard.header}}</span>
@@ -17,7 +17,10 @@
         </p>
     </md-card-content>
     <md-card-actions ng-show="annoCard.isEditable" layout="row" layout-align="end center">
-        <modify-annotation ng-show="annoCard.isEditable"></modify-annotation>
-        <md-button ng-show="annoCard.isDeleteable" ng-click="annoCard.delete()">Cancella</md-button>
+        <!--
+        <edit-annotation ng-show="annoCard.edit" edit="annoCard.annotation"></edit-annotation>
+        -->
+        <md-button ng-show="annoCard.delete" ng-click="annoCard.delete()">Modifica</md-button>
+        <md-button ng-show="annoCard.delete" ng-click="annoCard.delete()">Cancella</md-button>
     </md-card-actions>
 </md-card>
