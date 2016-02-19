@@ -262,6 +262,8 @@ def scrapeit2(url_string2):
         return _scrape_dlib2(url_string2)
     elif "rivista-statistica" in url_string2:
         return _scrape_statistica2(url_string2) 
+    elif "montesquieu" in url_string2:
+        return _scrape_mont2(url_string2)
     elif "series" in url_string2:
         return _scrape_series2(url_string2)
 	       
