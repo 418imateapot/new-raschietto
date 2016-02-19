@@ -143,7 +143,9 @@ function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userServic
         let annotationsArray = newAnnotationService.fillTheBlanks(annotation);
         console.log(annotationsArray);
 
-        model.delete();
+        if(model.delete)
+            model.delete();
+
         newAnnotationService.saveLocal(annotationsArray);
 
         $mdToast.showSimple('Annotazione creata localmente.');

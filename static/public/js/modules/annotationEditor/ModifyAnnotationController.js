@@ -45,7 +45,7 @@ function ModifyAnnotationController($rootScope, $mdConstant, $mdDialog, $statePa
             targetEvent: ev,
             //Deps, part.2
             annotation: model.annotation,
-            delete: model.delete,
+            delete: model.delete(),
             //Deps
             userService: userService,
             clickOutsideToClose: true
