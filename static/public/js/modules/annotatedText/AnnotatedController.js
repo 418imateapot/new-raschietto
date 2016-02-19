@@ -11,7 +11,6 @@ export default function AnnotatedTextController($state, $mdToast, $scope, $mdDia
     model.managedAnnotations = [];  // Tutte le annotazioni gestite
     model.activeAnnotations = [];   // Tutte le annotazioni NON filtrate
 
-    model.init = _init;
     model.showAnnotations = _showAnnotation;
 
 
@@ -55,19 +54,5 @@ export default function AnnotatedTextController($state, $mdToast, $scope, $mdDia
         };
     }
 
-    function _init(attrs) {
-        let annotationIndexes = attrs.annotations.trim().split(' ');
-
-        model.managedAnnotations = annotationIndexes.map(i => annotationService.getAnnotations()[i]);
-        model.activeAnnotations = model.managedAnnotations.filter(a => !annotationService.isFiltered(a));
-
-        /* Scarta le annotazioni filtrate
-        model.managedAnnotations.forEach((elem) => {
-            if (model.isFiltered({item: elem}))
-                model.activeAnnotations.push(elem);
-        });
-        */
-
-    }
 
 }
