@@ -10,7 +10,7 @@
             </md-button>
         </div>
     </md-toolbar>
-    <md-dialog-content flex layout="column" class="newAnno-content" layout-padding>
+    <md-dialog-content flex layout="column" class="newAnno-content" ng-hide="editor.editingSelection" layout-padding>
 
         <!-- select -->
         <h4>Scegliere un tipo per l'annotazione</h4>
@@ -117,9 +117,7 @@
                                placeholder="Autore del documento"
                                secondary-placeholder="Autori, separati da virgola">
                     </md-chips>
-                    <br/>
-                    <md-input-container>
-                        <label>Anno di pubblicazione</label>
+                    <br/>dialogone</label>
                         <input/ ng-model="editor.annotations.cites.cited.year">
                     </md-input-container>
                     <md-input-container>
@@ -137,10 +135,14 @@
         </div>
 
     </md-dialog-content>
+    <md-dialog-contents ng-show="editor.editingSelection">
+        <main-area edit="true"></main-area>
+    </md-dialog-contents>
     <md-dialog-actions layout="row">
         Autore: {{editor.provenance.author.name}}
         <br>{{editor.provenance.time | date: medium}}
         <span flex></span>
+        <md-button class="md-raised" ng-show="editor.annotation" ng-click="editor.editFragment($event, true)">Modifica selezione</md-button>
         <md-button class="md-raised" ng-click="editor.submit()">Conferma</md-button>
     </md-dialog-actions>
 

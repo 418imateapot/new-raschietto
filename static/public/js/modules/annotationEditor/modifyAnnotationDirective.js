@@ -3,7 +3,7 @@ export default function modifyAnnotationDirective() {
         restrict: "AE",
         templateUrl: 'js/modules/annotationEditor/modifyAnnotationView.html',
         controller: 'ModifyAnnotationController',
-        controllerAs: 'modifyAnnotation'
+        controllerAs: 'modifyAnnotation',
+        bindToController:{annotation:'='}
     };
 }
-
