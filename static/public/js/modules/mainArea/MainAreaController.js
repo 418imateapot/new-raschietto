@@ -12,10 +12,10 @@ export default function MainAreaController($rootScope, $scope, $state, $sanitize
     model.content = documentService.currentDoc.content; // Vediamo se abbiamo già un documento
 
     $scope.$on('retrieveNewUrl',change_document);
-    $scope.$on('reload_view', () => {
+    $scope.$on('reload_view', (ev, args) => {
         let url = documentService.currentUrl;
-        console.log('FORCE_RELOAD');
-        change_document(null, {doc_url: url, silent: true});
+        console.log(args);
+        change_document(ev, {doc_url: url, silent: true, noAnnotations: args.noAnnotations});
     });
 
 
@@ -49,7 +49,11 @@ export default function MainAreaController($rootScope, $scope, $state, $sanitize
                 model.content = doc.content;
                 model.loading = false;
                 userService.storeLastDocument();  // Salve ultimo doc in un cookie
-                _loadAnnotations(silent);
+                if(!args.noAnnotations) {
+                    _loadAnnotations(silent);
+                } else {
+                    $rootScope.$broadcast('annotations_loaded');
+                }
             });
     }
 

@@ -20,7 +20,6 @@ export default function AnnotatedTextController($state, $mdToast, $scope, $mdDia
     /////////////////
 
     function _showAnnotation(event, annotationIndexes) {
-        console.log(annotationIndexes);
         let annotations = annotationIndexes.map(i => model.activeAnnotations[i]);
         $mdDialog.show({
             controller: _showAnnotationController,
@@ -61,7 +60,6 @@ export default function AnnotatedTextController($state, $mdToast, $scope, $mdDia
 
         model.managedAnnotations = annotationIndexes.map(i => annotationService.getAnnotations()[i]);
         model.activeAnnotations = model.managedAnnotations.filter(a => !annotationService.isFiltered(a));
-        console.log(model.managedAnnotations.length, model.activeAnnotations.length);
 
         /* Scarta le annotazioni filtrate
         model.managedAnnotations.forEach((elem) => {

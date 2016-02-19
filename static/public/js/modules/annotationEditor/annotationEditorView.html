@@ -2,9 +2,17 @@
     <md-toolbar class="md-toolbar teapot-tb-secondary">
         <div class="md-toolbar-tools">
             <h2>
-                <span>Nuova annotazione</span>
+                <span ng-hide="editor.editingSelection">Nuova annotazione</span>
+                <span ng-show="editor.editingSelection">Modifica annotazione</span>
             </h2>
-            <span flex></span>
+            <span flex>
+                <md-button ng-show="editor.editingSelection" ng-click="editor.setRange()">
+                    Conferma selezione
+                </md-button>
+                <md-button ng-show="editor.editingSelection" ng-click="editor.cancelEdit()">
+                    Annulla
+                </md-button>
+            </span>
             <md-button ng-click="editor.cancel()">
                 <md-icon class="material-icons">close</md-icon>
             </md-button>

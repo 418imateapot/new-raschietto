@@ -1,7 +1,11 @@
 import Riviste from './Riviste.js';
 import Dlib from './Dlib.js';
 
-export default function selectionService() {
+selectionService.$inject = ['annotationService', 'utilityService'];
+
+export
+default
+function selectionService(annotationService, utilityService) {
 
     var service = this;
 
@@ -32,6 +36,50 @@ export default function selectionService() {
         // console.log(xpath);  // Il grande amico del debug alle 4 di notte
         return getElementByXpath(xpath);
     };
+
+    service.initSelection = function(selection) {
+        let src = annotationService.currentUrl;
+        let selectedText = selection.toString();
+
+        // Crea un target vuoto
+        // Se non abbiamo una selezione, teniamo questo
+        let target = {
+            source: src,
+            id: '',
+            start: '',
+            end: ''
+        };
+
+        if (selection.anchorNode && selectedText) {
+            let localPath = utilityService.getXPathTo(selection.anchorNode);
+            let path;
+
+            if (src.match('dlib')) {
+                path = Dlib.convertFromRaschietto(localPath);
+            } else {
+                path = Riviste.convertFromRaschietto(localPath);
+            }
+            let focus = selection.focusOffset;
+            let anchor = selection.anchorOffset;
+            let anchorNode = selection.anchorNode;
+            //TODO controllare gli offset che genera
+            let start = Math.min(focus, anchor);
+            let end = Math.max(focus, anchor);
+            if (focus === 0 && anchorNode.nodeType === anchorNode.TEXT_NODE) { // Double click selection?
+                end = anchorNode.length;
+            }
+
+            // Dato che abbiamo una selezione, riempiamo il target
+            target = {
+                source: src,
+                id: utilityService.xpath_to_fragment(path),
+                start: start,
+                end: end
+            };
+        }
+        return target;
+    };
+
 
 
     /////////////

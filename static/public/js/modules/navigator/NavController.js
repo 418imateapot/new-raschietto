@@ -125,7 +125,7 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
         $state.go('.', {
             mode: newMode
         }).then(() => {
-            $rootScope.$broadcast('reload_view');
+            $rootScope.$broadcast('reload_view', {noAnnotations: true});
         });
         _showNavToolBar({
             mode: newMode

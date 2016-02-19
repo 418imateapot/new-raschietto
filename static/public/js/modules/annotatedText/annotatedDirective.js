@@ -151,6 +151,124 @@ function annotatedText($compile) {
         });
 
     }
+    //function annotatedTextLink(scope, el, attrs, ctrl, transclude) {
+
+        //ctrl.init(attrs);
+        //let resultAnnotations = [];
+
+        //// Aggrega le annotazioni sovrapposte
+        //for (let i = 0; i < ctrl.activeAnnotations.length; i++) {
+
+            //let anno1 = ctrl.activeAnnotations[i];
+            //if (anno1.processed) {
+                //// Già esaminata
+                //continue;
+            //}
+            //let overlapped = [anno1];
+
+            //for (let j = 0; j < ctrl.activeAnnotations.length; j++) {
+                //let intersect = false;
+                //let anno2 = ctrl.activeAnnotations[j];
+                //if (anno2.processed) {
+                    //continue;
+                //}
+                //let target1 = anno1.realTarget || anno1.target;
+                //let target2 = anno2.target;
+                //// Scopri se si sovrappongono
+                //if (target1.start <= target2.start) {
+                    //if(target2.start <= target1.end) {
+                        //intersect = true;
+                    //}
+                //} else {
+                    //if(target1.start <= target2.end) {
+                        //intersect = true;
+                    //}
+                //}
+                //if(intersect) {
+                    //anno1.realTarget = {};
+                    //anno1.realTarget.start = Math.min(target1.start, target2.start);
+                    //anno1.realTarget.end = Math.max(target1.end, target2.end);
+                    //anno1.realType = anno1.type === anno2.type ? anno1.type : 'mixed';
+                    //overlapped.push(anno2);
+                    //anno2.processed = true;
+                //}
+            //}
+            //anno1.processed = true;
+            //resultAnnotations.push(overlapped);
+        //}
+
+        //let span = $('<span>',{class:'anno-hasTitle'}).get(0);
+
+        //for (let i in resultAnnotations) {
+            //let bundle = resultAnnotations[i];
+            //if(bundle.length < 1) {
+                //continue;
+            //}
+            //let target = bundle[0].realTarget || bundle[0].target;
+            //let nativeEl = el.get(0);
+            //let tNodes = (nativeEl.nodeType === nativeEl.TEXT_NODE) ? [nativeEl] : getTextNodesIn(nativeEl, true);
+            //let startNotFound = true;
+
+            //for (let n in tNodes) {
+                //let node = tNodes[n];
+                //let s = node.length;
+
+                //if (s < target.start && startNotFound) {
+                    //// Cerchiamo l'offset iniziale
+                    //target.start -= s;
+                    //target.end -= s;
+                    //startNotFound = false;
+                //} else {
+                    ////let secondHalf = rNodes[n].splitText();
+                    //if (startNotFound) {
+                        //// Abbiamo trovato il primo offset
+                        //let sr = rangy.createRange();
+                        //sr.setStart(node, target.start);
+                        //sr.setEnd(node, node.length);
+                        //sr.surroundContents(span);
+                    //} else {
+                        //// Cerchiamo l'offset finale
+                        //if (s < target.end) {
+                            //// Intanto tagghiamo tutti i nodi intermedi
+                            //let sr = rangy.createRange();
+                            //sr.setStart(node, 0);
+                            //sr.setEnd(node, node.length);
+                            //sr.surroundContents(span);
+                            //target.end -= s;
+                        //} else {
+                            //// Trovato l'offset finale
+                            //let sr = rangy.createRange();
+                            //sr.setStart(node, 0);
+                            //sr.setEnd(node, target.end);
+                            //sr.surroundContents(span);
+                            //break;
+                        //}
+                    //}
+                //}
+            //}
+
+        //}
+
+    //}
+    
+    //function getTextNodesIn(node, includeWhitespaceNodes) {
+        //var textNodes = [], nonWhitespaceMatcher = /\S/;
+
+        //function getTextNodes(node) {
+            //if (node.nodeType == 3) {
+                //if (includeWhitespaceNodes || nonWhitespaceMatcher.test(node.nodeValue)) {
+                    //textNodes.push(node);
+                //}
+            //} else {
+                //for (var i = 0, len = node.childNodes.length; i < len; ++i) {
+                    //getTextNodes(node.childNodes[i]);
+                //}
+            //}
+        //}
+
+        //getTextNodes(node);
+        //return textNodes;
+    //}
 
     /**
      * SO, cosa farei senza di te..
@@ -179,16 +297,16 @@ function annotatedText($compile) {
      * @param {node} el L'elemento di partenza
      * @return {Array} La lista ordinata dei nodi testuali
      */
-    function getTextNodes(el) {
+    function oldGetTextNodes(el) {
         let result = [];
 
         $.each(el.childNodes, function(i, node) {
             if (node.nodeType === node.TEXT_NODE) {
                 // se è un text_node lo vogliamo
                 /* A quanto pare i nodi vuoti sono importanti
-                if (node.data.match(/^\s+$/)) {
-                    // scarta i nodi vuoti
-                    return;
+                   if (node.data.match(/^\s+$/)) {
+                // scarta i nodi vuoti
+                return;
                 }
                 */
                 result.push(node);

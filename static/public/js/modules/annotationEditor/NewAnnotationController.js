@@ -4,14 +4,14 @@ import Riviste from '../../sharedServices/Riviste.js';
 
 import EditorController from './AnnotationEditorController.js';
 
-NewAnnotationController.$inject = ['$rootScope', '$mdConstant', '$mdDialog', '$stateParams', '$mdToast', 'documentService', 'userService', 'utilityService'];
+NewAnnotationController.$inject = ['$rootScope', '$mdConstant', '$mdDialog', '$stateParams', '$mdToast', 'documentService', 'userService', 'utilityService', 'selectionService'];
 
 /**
  * Controller per il pulsante 'nuova annotazione'
  */
 export
 default
-function NewAnnotationController($rootScope, $mdConstant, $mdDialog, $stateParams, $mdToast, documentService, userService, utilityService) {
+function NewAnnotationController($rootScope, $mdConstant, $mdDialog, $stateParams, $mdToast, documentService, userService, utilityService, selectionService) {
 
     const model = this;
 
@@ -23,7 +23,6 @@ function NewAnnotationController($rootScope, $mdConstant, $mdDialog, $stateParam
     //- Implementazione -//
     ///////////////////////
 
-
     /**
      * Recupera le informazioni sul frammento da annotare,
      * poi chiama il modale con l'editor delle annotazioni.
@@ -31,44 +30,7 @@ function NewAnnotationController($rootScope, $mdConstant, $mdDialog, $stateParam
     function _showModal(ev) {
         let selection = rangy.getSelection();
         let selectedText = selection.toString();
-        let src = documentService.currentUrl;
-
-        // Crea un target vuoto
-        // Se non abbiamo una selezione, teniamo questo
-        let target = {
-            source: src,
-            id: '',
-            start: '',
-            end: ''
-        };
-
-        if (selection.anchorNode && selectedText) {
-            let localPath = utilityService.getXPathTo(selection.anchorNode);
-            let path;
-
-            if (src.match('dlib')) {
-                path = Dlib.convertFromRaschietto(localPath);
-            } else {
-                path = Riviste.convertFromRaschietto(localPath);
-            }
-            let focus = selection.focusOffset;
-            let anchor = selection.anchorOffset;
-            let anchorNode = selection.anchorNode;
-            //TODO controllare gli offset che genera
-            let start = Math.min(focus, anchor);
-            let end = Math.max(focus, anchor);
-            if (focus === 0 && anchorNode.nodeType === anchorNode.TEXT_NODE) { // Double click selection?
-                end = anchorNode.length;
-            }
-
-            // Dato che abbiamo una selezione, riempiamo il target
-            target = {
-                source: src,
-                id: utilityService.xpath_to_fragment(path),
-                start: start,
-                end: end
-            };
-        }
+        let target = selectionService.initSelection(selection);
         console.info(selection);
         console.info(target);
 

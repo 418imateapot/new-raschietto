@@ -1,9 +1,9 @@
-AnnotationEditorController.$inject = ['$mdDialog', '$mdConstant', '$mdToast', 'userService', 'newAnnotationService', 'utilityService'];
+AnnotationEditorController.$inject = ['$mdDialog', '$mdConstant', '$mdToast', 'userService', 'newAnnotationService', 'utilityService', 'selectionService'];
 
 export
 default
 
-function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userService, newAnnotationService, utilityService) {
+function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userService, newAnnotationService, utilityService, selectionService) {
 
     const model = this;
     model.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA]; // Separatori per i nomi
@@ -15,6 +15,12 @@ function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userServic
     model.editFragment = (ev, toggle) => {
         model.editingSelection = toggle;
     };
+    model.setRange = () => {
+        let selection = rangy.getSelection();
+        model.target = selectionService.initSelection(selection);
+        model.editingSelection = false;
+    };
+    model.cancelEdit = () => model.editingSelection = false;
 
     if (model.annotation) {
         _initModify();
