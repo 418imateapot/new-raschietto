@@ -10,10 +10,13 @@ function AnnotationCardController($sanitize, $state, userService, newAnnotationS
     model.email = model.annotation.provenance.author.email;
     model.author = model.annotation.provenance.author.name || model.email;
     model.text = '';
-    model.isEditable = (model.email === userService.userEmail);
     model.avatarColor = '';
     model.isCitationAnn = 'citationAnnNO';
     //model.delete -> passata dallo scope esterno
+    model.isDeleteable = model.delete !== 'false';
+    model.isEditable = (model.edit !== 'false' && 
+                        (model.email === userService.userEmail ||
+                        model.email ===  'scraper@ltw1543'));
 
     _init();
 
@@ -94,8 +97,7 @@ function AnnotationCardController($sanitize, $state, userService, newAnnotationS
     function _delete() {
         newAnnotationService.delete(model.annotation);
         model.refresh();
-        $state.reload();
-        //$state.go('.', {}, {reload: true});
+        $state.go('.', {}, {reload: true});
     }
 
 }

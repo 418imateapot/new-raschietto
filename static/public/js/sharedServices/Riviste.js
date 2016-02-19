@@ -28,7 +28,7 @@ export default class Riviste {
 
         if (!xpath.match(re)) {
             // Non so che farci...
-            console.warn(xpath + '\n- nessun match');
+            //console.warn(xpath + '\n- nessun match');
             return null;
         }
         let suffix = xpath.replace(re, '');

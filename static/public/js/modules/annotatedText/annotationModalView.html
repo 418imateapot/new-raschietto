@@ -7,7 +7,7 @@
         </div>
     </md-toolbar>
     <md-dialog-content class="md-padding" layout="row" flex="100" layout-wrap layout-align="none" layout-xs="column">
-        <span ng-repeat="anno in dialog.annotations"> 
+        <span ng-repeat="anno in dialog.annotations track by $index"> 
             <annotation-card delete="false" edit="false" class="annocard" flex-noshrink layout="row" annotation="anno"></annotation-card>
         </span>
     </md-dialog-content>

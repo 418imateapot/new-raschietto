@@ -1,21 +1,27 @@
-MainAreaController.$inject = ['$rootScope', '$scope', '$state', '$sanitize', '$mdToast', 'documentService',  'annotationService', 'userService'];
+MainAreaController.$inject = ['$rootScope', '$scope', '$state', '$stateParams', '$sanitize', '$mdToast', 'documentService', 'annotationService', 'userService'];
 
 /**
  * Controller per la model
  * $sanitize permette di iniettare HTML nelle viste
  */
-export default function MainAreaController($rootScope, $scope, $state, $sanitize, $mdToast, documentService, annotationService, userService) {
+export
+default
+function MainAreaController($rootScope, $scope, $state, $stateParams, $sanitize, $mdToast, documentService, annotationService, userService) {
 
     const model = this;
 
     model.loading = false; /** Usato per l'animazione */
     model.content = documentService.currentDoc.content; // Vediamo se abbiamo già un documento
 
-    $scope.$on('retrieveNewUrl',change_document);
-    $scope.$on('reload_view', () => {
+    $scope.$on('retrieveNewUrl', change_document);
+    $scope.$on('reload_view', (ev, args) => {
         let url = documentService.currentUrl;
-        console.log('FORCE_RELOAD');
-        change_document(null, {doc_url: url, silent: true});
+        console.log(args);
+        change_document(ev, {
+            doc_url: url,
+            silent: true,
+            noAnnotations: args.noAnnotations
+        });
     });
 
 
@@ -23,18 +29,23 @@ export default function MainAreaController($rootScope, $scope, $state, $sanitize
         // Se possibile, carica l'ultimo documento
         let savedDoc = userService.lastDocument();
         if (savedDoc) {
-            $rootScope.$broadcast('retrieveNewUrl', {doc_url: savedDoc});
+            $rootScope.$broadcast('retrieveNewUrl', {
+                doc_url: savedDoc
+            });
         } else {
             // Se non abbiamo nulla, andiamo al tutorial
-            $state.go('teapot.mode.tutorial', {mode: 'reader'});
+            $state.go('teapot.mode.tutorial', {
+                mode: 'reader'
+            });
         }
     } else {
         // Abbiamo già un documento, controlliamo di avere anche le sue
         // annotazioni
         if (annotationService.currentUrl !== documentService.currentUrl) {
-             _loadAnnotations();
+            if ($stateParams.no_reload_annos)
+                _loadAnnotations();
         }
-        userService.storeLastDocument();  // Salve ultimo doc in un cookie
+        userService.storeLastDocument(); // Salve ultimo doc in un cookie
     }
 
     /**
@@ -48,8 +59,14 @@ export default function MainAreaController($rootScope, $scope, $state, $sanitize
                 let silent = args.silent || false;
                 model.content = doc.content;
                 model.loading = false;
-                userService.storeLastDocument();  // Salve ultimo doc in un cookie
-                _loadAnnotations(silent);
+                userService.storeLastDocument(); // Salve ultimo doc in un cookie
+                if (!args.noAnnotations) {
+                    if (!$stateParams.no_reload_annos) {
+                        _loadAnnotations(silent);
+                    }
+                } else {
+                    $rootScope.$broadcast('annotations_loaded');
+                }
             });
     }
 
@@ -63,15 +80,15 @@ export default function MainAreaController($rootScope, $scope, $state, $sanitize
             // Abbiamo già le annotazioni giuste
             return;
         }
-        if(!silent) {
+        if (!silent) {
             $mdToast.showSimple('Sto caricando le annotazioni.');
         }
         annotationService.query(documentService.currentUrl)
-        .then(res => {
-            $rootScope.$broadcast('annotations_loaded');
-            if (!silent) {
-                $mdToast.showSimple(res.length + ' annotazioni caricate.');
-            }
-        });
+            .then(res => {
+                $rootScope.$broadcast('annotations_loaded');
+                if (!silent) {
+                    $mdToast.showSimple(res.length + ' annotazioni caricate.');
+                }
+            });
     }
 }

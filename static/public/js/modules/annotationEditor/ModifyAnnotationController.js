@@ -29,48 +29,6 @@ function ModifyAnnotationController($rootScope, $mdConstant, $mdDialog, $statePa
      * poi chiama il modale con l'editor delle annotazioni.
      */
     function _showModal(ev) {
-        let selection = rangy.getSelection();
-        let selectedText = selection.toString();
-        let src = documentService.currentUrl;
-
-        // Crea un target vuoto
-        // Se non abbiamo una selezione, teniamo questo
-        let target = {
-            source: src,
-            id: '',
-            start: '',
-            end: ''
-        };
-
-        if (selection.anchorNode && selectedText) {
-            let localPath = utilityService.getXPathTo(selection.anchorNode);
-            let path;
-
-            if (src.match('dlib')) {
-                path = Dlib.convertFromRaschietto(localPath);
-            } else {
-                path = Riviste.convertFromRaschietto(localPath);
-            }
-            let focus = selection.focusOffset;
-            let anchor = selection.anchorOffset;
-            let anchorNode = selection.anchorNode;
-            //TODO controllare gli offset che genera
-            let start = Math.min(focus, anchor);
-            let end = Math.max(focus, anchor);
-            if (focus === 0 && anchorNode.nodeType === anchorNode.TEXT_NODE) { // Double click selection?
-                end = anchorNode.length;
-            }
-
-            // Dato che abbiamo una selezione, riempiamo il target
-            target = {
-                source: src,
-                id: utilityService.xpath_to_fragment(path),
-                start: start,
-                end: end
-            };
-        }
-        console.info(selection);
-        console.info(target);
 
         // Configura il modale e poi mostralo
         $mdDialog.show({
@@ -78,16 +36,16 @@ function ModifyAnnotationController($rootScope, $mdConstant, $mdDialog, $statePa
             controllerAs: 'editor',
             //Deps, part.1
             bindToController: {
-                target: target,
-                selectedText: selectedText
+                annotation: model.annotation,
+                delete: model.delete
             }, //Deps
             templateUrl: 'js/modules/annotationEditor/annotationEditorView.html',
             parent: angular.element(document.body),
             fullscreen: true,
             targetEvent: ev,
             //Deps, part.2
-            target: target,
-            selectedText: selectedText,
+            annotation: model.annotation,
+            delete: model.delete(),
             //Deps
             userService: userService,
             clickOutsideToClose: true

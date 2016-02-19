@@ -33,7 +33,7 @@ function routerConfig($stateProvider, $urlRouterProvider, $locationProvider) {
             url: '/{mode:reader|annotator}', // regex path matching
             views: {
                 '@': {
-                    template: '<main-area></main-area>'
+                    template: '<main-area edit="false"></main-area>'
                 }
             }
         })

@@ -1,9 +1,9 @@
-StagingController.$inject = ['$scope', '$state', '$mdToast', 'newAnnotationService'];
+StagingController.$inject = ['$scope', '$state', '$mdToast', 'documentService', 'newAnnotationService'];
 
 /**
  * Controller per l'area di sosta
  */
-export default function StagingController($scope, $state, $mdToast, newAnnotationService) {
+export default function StagingController($scope, $state, $mdToast, documentService,  newAnnotationService) {
 
     const model = this;
 
@@ -11,7 +11,7 @@ export default function StagingController($scope, $state, $mdToast, newAnnotatio
     model.loading = true;
     model.delete = _delete;
     model.saveAll = _saveAll;
-    //model.isVisible = _isVisible;
+    model.isVisible = _isVisible;
     model.isEmpty = true;
 
     $scope.$on('save_all', _saveAll);
@@ -53,11 +53,17 @@ export default function StagingController($scope, $state, $mdToast, newAnnotatio
     }
 
     function _isVisible(annot) {
-        /*
-        let type = annot.type.value;
-        let author = annot.provenance.value;
-        author = model.filters[author] ? model.filters[author].display : true;
-        return (model.filters[type].display && author);
-        */
+        let type = annot.type;
+        let author = annot.provenance.author.email;
+        let url = documentService.currentUrl;
+        console.log(annot.target.source, url);
+
+        if (annot.target.source !== url)
+            return false;
+
+        return true;
+
+        //author = model.filters[author] ? model.filters[author].display : true;
+        //return (model.filters[type].display && author);
     }
 }

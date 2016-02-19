@@ -18,6 +18,7 @@ function annotationService($http, utilityService, newAnnotationService) {
     // Methods
     service.query = _query;
     service.tidy = _tidy;
+    service.scrape = _scrape;
     service.isFiltered = _isFiltered;
     service.getAnnotations = () => service.annotations.concat(_getUnsavedAnnotations());
     //service.scrape = _scrape;
@@ -25,27 +26,21 @@ function annotationService($http, utilityService, newAnnotationService) {
 
     // Recupera da localStorage le annotazioni non salvate
     // con target il doc corrente
-    function _getUnsavedAnnotations () {
-       let unsavedAll = newAnnotationService.retrieveLocal();
-       return unsavedAll.filter(annot => {
+    function _getUnsavedAnnotations() {
+        let unsavedAll = newAnnotationService.retrieveLocal();
+        return unsavedAll.filter(annot => {
             let target = annot.target.source;
             return target === service.currentUrl;
-       });
+        });
     }
 
-    /*
-    function _scrape(doi) {
-        return documentService.findByDoi(documentService.decodeDoi(doi))
-            .then(result => {
-                let url = encodeURIComponent(result.url.value);
-                let request_url = `/api/scraper?url=${url}`;
-                return $http.get(request_url)
-                    .then(result => result)
-                    .catch(err => err);
-            })
+    function _scrape() {
+        let url = encodeURIComponent(service.currentUrl);
+        let request_url = `/api/scraper?url=${url}`;
+        return $http.get(request_url)
+            .then(result => result)
             .catch(err => err);
     }
-*/
 
     /**
      * Restituisce la promessa del risultato di una query gigante
@@ -57,7 +52,7 @@ function annotationService($http, utilityService, newAnnotationService) {
         //const endpoint = 'http://localhost:3030/data';
         const opts = 'format=json&callback=JSON_CALLBACK';
         const url_string = `${endpoint}?query=${encodedQuery}&${opts}`;
-        service.filters = {};  // Reinizializza i filtri
+        service.filters = {}; // Reinizializza i filtri
 
         return $http.jsonp(url_string)
             .then(response => {
@@ -267,8 +262,8 @@ WHERE {
 
         try {
             active = groupFilter.display &&
-                        typeFilter.display &&
-                        provenanceFilter.display;
+                typeFilter.display &&
+                provenanceFilter.display;
         } catch (e) {
             active = true;
         }

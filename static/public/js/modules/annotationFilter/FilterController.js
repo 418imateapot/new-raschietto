@@ -1,11 +1,11 @@
-FilterController.$inject = ['$scope', '$rootScope', '$mdToast', 'annotationService', 'userService', 'utilityService'];
+FilterController.$inject = ['$scope', '$rootScope', '$state', '$mdToast', 'annotationService', 'userService', 'utilityService'];
 
 /**
  * Controller per i filtri delle annotazioni
  */
 export
 default
-function FilterController($scope, $rootScope, $mdToast, annotationService, userService, utilityService) {
+function FilterController($scope, $rootScope, $state, $mdToast, annotationService, userService, utilityService) {
 
     const model = this;
 
@@ -47,7 +47,8 @@ function FilterController($scope, $rootScope, $mdToast, annotationService, userS
     function _toggleAll() {
         for (let f in model.filters)
             _toggle(f, true);
-        $rootScope.$broadcast('reload_view');
+        $rootScope.$broadcast('reload_view', {noAnnotations: true});
+        $state.go('.', {no_reload_annos: true}, {reload: true});
     }
 
     function _toggle(item, silent) {
@@ -55,8 +56,9 @@ function FilterController($scope, $rootScope, $mdToast, annotationService, userS
         let display = model.filters[item].display;
         model.filters[item].display = !display;
         if (!silent) {
-            $rootScope.$broadcast('reload_view');
+            $rootScope.$broadcast('reload_view', {noAnnotations:true});
         }
+        $state.go('.', {no_reload_annos: true}, {reload: true});
     }
 
     function _exists(item) {
