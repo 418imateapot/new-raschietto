@@ -26,25 +26,20 @@ function annotatedText($compile) {
          *  rangeinfo = {
          *      rangeBookmark: bookmark,
          *      type: string,
-         *      annotations: array
+         *      annotations: array,
+         *      indexes: array
          *  };
          */
         /**
          * Crea una lista di range, fondendo insieme i range che sono in
          * sovrapposizione
          */
-        ctrl.activeAnnotations.forEach(annot => {
-            if (annot.target.start === annot.target.end) {
-                console.log('aSDSDasSAD');
-                return;
-            }
+        ctrl.activeAnnotations.forEach((annot, index) => {
             let newRange = rangy.createRange();
             let newRangeBookmark = {
                 containerNode: el.get(0),
                 end: annot.target.end,
                 start: annot.target.start
-                //end: annot.target.end +1,   // Misteriosi off-by-one
-                //start: annot.target.start +1
             };
             newRange.moveToBookmark(newRangeBookmark);
             //let newRange = buildRange(el.get(0), annot.target.start, annot.target.end);
@@ -67,8 +62,10 @@ function annotatedText($compile) {
                     let result = {
                         rangeBookmark: newRange.getBookmark(),
                         type: annoType,
-                        annotations: annotations
+                        annotations: annotations,
+                        indexes: oldRangeInfo.indexes
                     };
+                    result.indexes.add(index);
                     ctrl.rangesInfo[i] = result;
                     return;
                 }
@@ -77,7 +74,8 @@ function annotatedText($compile) {
             let result = {
                 rangeBookmark: newRangeBookmark,
                 type: annoType,
-                annotations: annotations
+                annotations: annotations,
+                indexes: new Set([index])
             };
             ctrl.rangesInfo.push(result);
         });
@@ -101,7 +99,7 @@ function annotatedText($compile) {
             try {
                 h.highlightRanges(className, [range]);
             } catch (e) {
-                console.warn(className + ' ha qualche problema? ' + e.name);
+                console.warn(className + ' ha qualche problema?');
             }
 
             // Determina su che elemento attaccare l'event listener per i click
@@ -125,11 +123,29 @@ function annotatedText($compile) {
             // Assegna la callback
             container.forEach(c => {
                 c = angular.element(c);
-                c.attr('bound', true);
-                c.bind('click', (event) => {
-                    event.preventDefault();
-                    ctrl.showAnnotations(event, rInfo.annotations);
-                });
+                let newIndexes = Array.from(rInfo.indexes);
+                let newIndexesString = newIndexes.join(' ');
+                // Questo balletto dovrebbe evitarmi di
+                // bindare duemila callback allo stesso
+                // elemento
+                if (!c.attr('bound')) {
+                    // Unbound, crea la click function
+                    c.attr('bound', newIndexesString);
+                    c.bind('click', (event) => {
+                        event.preventDefault();
+                        ctrl.showAnnotations(event, newIndexes);
+                    });
+                } else {
+                    // Già bound, sostituisci l'handler
+                    let boundAnnots = c.attr('bound');
+                    c.attr('bound', `${boundAnnots} ${newIndexesString}`);
+                    let annotationIndexes = c.attr('bound').trim().split(' ');
+                    c.unbind('click');
+                    c.bind('click', (event) => {
+                        event.preventDefault();
+                        ctrl.showAnnotations(event, annotationIndexes);
+                    });
+                }
             });
 
         });
@@ -222,3 +238,5 @@ function annotatedText($compile) {
     }
 
 }
+
+
