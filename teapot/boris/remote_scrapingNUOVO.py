@@ -208,40 +208,40 @@ def _scrape_dlib2(url_string2):
     my_data = [] 
    
 
-    authorCitation =  my_page.xpath("//p/a[@name]/parent::*/text()")[0].split('"')[0]
-    title2Citation =  my_page.xpath("//p/a[@name]/following-sibling::*/text()")[0].split('"')[0]
-    titleCitation = my_page.xpath("//p/a[@name]/parent::*/text()")[0].split('"')[1]
+    # authorCitation =  my_page.xpath("//p/a[@name]/parent::*/text()")[0].split('"')[0]
+    # title2Citation =  my_page.xpath("//p/a[@name]/following-sibling::*/text()")[0].split('"')[0]
+    # titleCitation = my_page.xpath("//p/a[@name]/parent::*/text()")[0].split('"')[1]
    
     
-    doiCitation = my_page.xpath("/html/body/form/table[3]//tr/td/table[5]//tr/td/table[1]//tr/td[2]/p[57]/a[2]/text()")
+    # doiCitation = my_page.xpath("/html/body/form/table[3]//tr/td/table[5]//tr/td/table[1]//tr/td[2]/p[57]/a[2]/text()")
 
-    #allTitleCitation = my_page.xpath("//p/a[@name]/parent::*/text()")
+    allTitleCitation = my_page.xpath("//p/a[@name]/parent::*/text()")
     allAuthorCitation =  my_page.xpath("//p/a[@name]/parent::*/text()")
     #alldoiCitation = my_page.xpath("//p/a[@href]/self::*/text()")
 
     #print(allTitleCitation)
 
-    articleC = []
+    titleC = []
     authorC = []
     alldoiC = []
 
-    for tit in allAuthorCitation:
+    for aut in allAuthorCitation:
         
-        authorC.append(tit.rpartition('"')[0])
+        authorC.append(aut.split('"')[0])
        
-    #for doi in alldoiCitation:
-      #  alldoiC.append(doi.partition('"http"')[0])
+    for tit in allTitleCitation:
+        titleC.append(tit.split('.')[0])
     
     print 'DLIBBBBB'
    
     url = url_string2
     citat2 = []
-    my_data += authorC         # zip(authorC,articleC)
+    my_data += zip(authorC, titleC)
     #print authorC
     #print authorCitation
     #print titleCitation  
     #print title2Citation 
-    return authorC
+    return my_data
     
     
  

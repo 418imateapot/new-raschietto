@@ -17,7 +17,7 @@ export default function annotatedText(annotationService) {
 
         ctrl.managedAnnotations = annotationIndexes.map(i => annotationService.getAnnotations()[i]);
         ctrl.activeAnnotations = ctrl.managedAnnotations.filter(a => !annotationService.isFiltered(a));
-        console.log('active: ' + ctrl.activeAnnotations.length + ' managed: ' + ctrl.managedAnnotations.length);
+        //console.log('active: ' + ctrl.activeAnnotations.length + ' managed: ' + ctrl.managedAnnotations.length);
 
     }
 
@@ -106,7 +106,7 @@ export default function annotatedText(annotationService) {
                 try {
                     h.highlightRanges(className, [range]);
                 } catch (e) {
-                    console.warn(className + ' ha qualche problema?');
+                    //console.warn(className + ' ha qualche problema?');
                 }
 
                 // Determina su che elemento attaccare l'event listener per i click

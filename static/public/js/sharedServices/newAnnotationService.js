@@ -279,6 +279,7 @@ export default function newAnnotationService($rootScope, $http, localStorageServ
 
         for (let c in data.citations) {
             let item = data.citations[c];
+            if (!item || !Array.isArray(item) || item[0] === "") continue;
             let title = item.pop();
             if (!title) {
                 // niente titolo?
@@ -290,7 +291,7 @@ export default function newAnnotationService($rootScope, $http, localStorageServ
                     value: title,
                     cited: {
                         title: title,
-                        authors: item   // Dovrebbero essere rimasti solo gli autori
+                        authors: item[0].trim().split(', ')   // Dovrebbero essere rimasti solo gli autori
                     }
                 },
                 target: {start: '', end: '', id: '', source: data.document.hasURL},
