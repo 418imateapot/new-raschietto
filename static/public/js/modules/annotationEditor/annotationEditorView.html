@@ -150,8 +150,8 @@
         Autore: {{editor.provenance.author.name}}
         <br>{{editor.provenance.time | date: medium}}
         <span flex></span>
-        <md-button class="md-raised" ng-show="editor.annotation" ng-click="editor.editFragment($event, true)">Modifica selezione</md-button>
-        <md-button class="md-raised" ng-click="editor.submit()">Conferma</md-button>
+        <md-button class="md-raised" ng-show="editor.annotation && !editor.editingSelection" ng-click="editor.editFragment($event, true)">Modifica selezione</md-button>
+        <md-button class="md-raised"  ng-hide="editor.editingSelection" ng-click="editor.submit()">Conferma</md-button>
     </md-dialog-actions>
 
 </md-dialog>
