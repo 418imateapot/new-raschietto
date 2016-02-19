@@ -1,13 +1,11 @@
 newAnnotationService.$inject = ['$rootScope', '$http', 'localStorageService', 'utilityService'];
 
-export
-default
-
-function newAnnotationService($rootScope, $http, localStorageService, utilityService) {
+export default function newAnnotationService($rootScope, $http, localStorageService, utilityService) {
 
     const service = this;
 
     service.generateAnnotation = _generateAnnotation;
+    service.generateFromScraper = _generateFromScraper;
     service.saveLocal = _saveLocal;
     service.retrieveLocal = _retrieveLocal;
     service.nuke = _deleteLocal;
@@ -37,13 +35,13 @@ function newAnnotationService($rootScope, $http, localStorageService, utilitySer
     function _updateRemote(annotationList) {
         let newAnnotations = annotationList.map(a => _generateAnnotation(a));
         return $http.put('/api/annotations', {
-                items: newAnnotations
-            })
-            .then(response => {
-                $rootScope.$broadcast('reload_view', {noAnnotations: false});
-                return response;
-            })
-            .catch(err => console.warn(err));
+            items: newAnnotations
+        })
+        .then(response => {
+            $rootScope.$broadcast('reload_view', {noAnnotations: false});
+            return response;
+        })
+        .catch(err => console.warn(err));
     }
 
 
@@ -147,6 +145,8 @@ function newAnnotationService($rootScope, $http, localStorageService, utilitySer
                 annot.content.object = annot.content.value;
                 break;
             case 'hasAuthor':
+                if(!Array.isArray(annot.content.value))
+                    annot.content.value = [annot.content.value];
                 resultArray = annot.content.value.map(val => {
                     let item = $.extend(true, {}, annot);
                     item.content.label = `Un autore del documento è ${val}`;
@@ -253,6 +253,77 @@ function newAnnotationService($rootScope, $http, localStorageService, utilitySer
         } // END ciclo for
 
         return resultArray;
+    }
+
+
+    /**
+     * genera annotzioni dallo scraper
+     */
+    function _generateFromScraper(data) {
+        let annotations = [];
+        for (let k in data.document) {
+            let skel = {
+                type: k,
+                content: {value: data.document[k]},
+                target: {start: '', end: '', id: '', source: data.document.hasURL},
+                provenance: {
+                    author: {
+                        name: 'TeapotScraper',
+                        email: 'scraper@ltw1543'
+                    },
+                    time: new Date()
+                }
+            };
+            annotations = annotations.concat(_fillTheBlanks(skel));
+        }
+
+        for (let c in data.citations) {
+            let item = data.citations[c];
+            let title = item.pop();
+            if (!title) {
+                // niente titolo?
+                continue;
+            }
+            let skel = {
+                type: 'cites',
+                content: {
+                    value: title,
+                    cited: {
+                        title: title,
+                        authors: item   // Dovrebbero essere rimasti solo gli autori
+                    }
+                },
+                target: {start: '', end: '', id: '', source: data.document.hasURL},
+                provenance: {
+                    author: {
+                        name: 'TeapotScraper',
+                        email: 'scraper@ltw1543'
+                    },
+                    time: new Date()
+                }
+            };
+            annotations = annotations.concat(_fillTheBlanks(skel));
+        }
+
+        _clearScraped();
+        _saveLocal(annotations);
+        console.log(annotations);
+        console.log(data.citations);
+    }
+
+    /**
+     * rimuovi le annotazioni dello scraper
+     */
+    function _clearScraped() {
+        let local = _retrieveLocal();
+        for (let i in local) {
+            if(local[i].provenance.author.name ===  'TeapotScraper') {
+                local.splice(i, 1);
+            }
+        }
+        _deleteLocal();
+        _saveLocal(local);
+
     }
 
 }

@@ -36,7 +36,8 @@ function ModifyAnnotationController($rootScope, $mdConstant, $mdDialog, $statePa
             controllerAs: 'editor',
             //Deps, part.1
             bindToController: {
-                annotation: model.annotation
+                annotation: model.annotation,
+                delete: model.delete
             }, //Deps
             templateUrl: 'js/modules/annotationEditor/annotationEditorView.html',
             parent: angular.element(document.body),
@@ -44,6 +45,7 @@ function ModifyAnnotationController($rootScope, $mdConstant, $mdDialog, $statePa
             targetEvent: ev,
             //Deps, part.2
             annotation: model.annotation,
+            delete: model.delete,
             //Deps
             userService: userService,
             clickOutsideToClose: true

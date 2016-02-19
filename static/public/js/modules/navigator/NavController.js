@@ -196,32 +196,10 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
             .position('top right')
             .hideDelay(3000)
         );
-        annotationService.scrape($stateParams.doi)
+        annotationService.scrape()
             .then(res => {
-                let alreadyPending = newAnnotationService.retrieveLocal();
-                let data = new Set(alreadyPending);
-                let subject = res.data.url.replace(/\.html$/, '') + '_ver1';
-                let provenance = {
-                    name: userService.userName,
-                    email: userService.userEmail,
-                    time: new Date()
-                };
-                // TODO Converti formato?
-                for (let key in res.data) {
-                    let item = {};
-                    item.type = _determineType(key);
-                    // Se l'annotazione dello scraper è ugule
-                    // ad una preesistente, scratiamola
-                    item[key] = res.data[key];
-                    item.type = _determineType(key);
-                    item.provenance = provenance;
-                    item.subject = subject;
-                    item.url = res.data.url;
-                    data.add(item);
-                }
-                data.forEach(annotation => newAnnotationService.generateAnnotation(annotation));
+                newAnnotationService.generateFromScraper(res.data);
                 $mdToast.updateTextContent('Finito! Ora puoi modificare le nuove annotazioni');
-
             })
             .catch(err => console.warn(err));
     }

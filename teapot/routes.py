@@ -7,7 +7,8 @@ from flask import make_response
 from json.decoder import JSONDecoder
 
 from .boris.documents import get_doc
-from .boris.remoteScraping import scrapeit
+# from .boris.remoteScraping import scrape
+from .boris.remote_scrapingNUOVO import scrape
 from .update import generateGraphFromJSON, edit_graph
 from boris.docloader import add_document_to_fuseki
 from . import app
@@ -41,7 +42,7 @@ def modify_annotations():
 @app.route('/scraper', methods=['GET'])
 def scrape_document():
     doc_url = request.args.get('url')
-    return scrapeit(doc_url)
+    return scrape(doc_url)
 
 
 @app.route('/', defaults={'path': ''})

@@ -4,6 +4,9 @@ export default function modifyAnnotationDirective() {
         templateUrl: 'js/modules/annotationEditor/modifyAnnotationView.html',
         controller: 'ModifyAnnotationController',
         controllerAs: 'modifyAnnotation',
-        bindToController:{annotation:'='}
+        bindToController:{
+            annotation:'=',
+            delete: '&'
+        }
     };
 }
