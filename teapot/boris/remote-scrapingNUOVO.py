@@ -10,9 +10,50 @@ from lxml import html
 import httplib, json
 from urlparse import urlparse
 
+def _scrape_mont(url_string):
+    url = urlparse(url_string)
+    conn = httplib.HTTPConnection(url.hostname)
+    conn.request("GET", url.path)
+    res = conn.getresponse()
+    body = res.read()
 
+    my_page = html.fromstring(body)
 
+    title = my_page.xpath("//meta[@name='citation_title']/@content")[0].encode("utf8")
+    doi = my_page.xpath("//meta[@name='DC.Identifier.DOI']/@content")[0]
+    authors = my_page.xpath("//meta[@name='citation_author']/@content")[0]
+    date = my_page.xpath("//meta[@name='citation_date']/@content")[0]
+    date = re.findall('\d\d\d\d', date)[0]
+    url = url_string
+
+    result = {"title": title, "doi": doi, "authors": authors, "date": date, "url": url}
+    print 'MONTESQUIEU'
+    return JSONEncoder().encode(result)
+
+def _scrape_mont2(url_string2):
     
+    url = urlparse(url_string2)
+    conn = httplib.HTTPConnection(url.hostname)
+    conn.request("GET", url.path)
+    res = conn.getresponse()
+    body = res.read()
+    my_page = html.fromstring(body)
+    my_data = [] 
+    citat = []  
+    articleC = []
+    authorC = []
+
+   
+    titleCitation = my_page.xpath("//*[@id='content']/ul/li/text()")
+    authorCitation =  my_page.xpath("//*[@id='content']/ul/li/text()")
+    
+    url = url_string2
+    result = {"MONTESQUIEU Citation": titleCitation}
+    my_data += zip(authorC,articleC)
+    
+    
+    return JSONEncoder().encode(result ) 
+        
     
     
 
@@ -140,6 +181,7 @@ def _scrape_dlib2(url_string2):
       #  alldoiC.append(doi.partition('"http"')[0])
     
     print 'DLIBBBBB'
+   
     url = url_string2
     citat2 = []
     my_data += authorC         # zip(authorC,articleC)
@@ -148,9 +190,13 @@ def _scrape_dlib2(url_string2):
     #print titleCitation  
     #print title2Citation 
     return JSONEncoder().encode(authorC )
-   
+    
     
  
+    
+
+
+
     url = url_string2
     result = { "DLIB authorCitation": authorCitation ,"DLIB titleCitation": titleCitation, "DLIB doiCitation" : doiCitation}
     my_data += authorCitation,titleCitation, doiCitation
@@ -163,8 +209,9 @@ def scrapeit2(url_string2):
     if "dlib.org" in url_string2:
         return _scrape_dlib2(url_string2)
     elif "rivista-statistica" in url_string2:
-        
         return _scrape_statistica2(url_string2) 
+    elif "montesquieu" in url_string2:
+        return _scrape_mont2(url_string2)
 	       
     else:
         return "<h1>NOPEgg</h1>"
@@ -176,12 +223,17 @@ def scrapeit(url_string):
         return _scrape_dlib(url_string)
     elif "rivista-statistica" in url_string:
         return _scrape_statistica(url_string) 
+    elif "montesquieu" in url_string:
+        return _scrape_mont(url_string)
     else:
         return "<h1>NOPE</h1>"
 
 
 if __name__ == '__main__':
     print(scrapeit('http://rivista-statistica.unibo.it/article/view/4594'))
-    print(scrapeit('http://www.dlib.org/dlib/november14/beel/11beel.html'))
     print(scrapeit2('http://rivista-statistica.unibo.it/article/view/4594'))
+    print(scrapeit('http://www.dlib.org/dlib/november14/beel/11beel.html'))
     print(scrapeit2('http://www.dlib.org/dlib/november14/beel/11beel.html'))
+    print(scrapeit('http://montesquieu.unibo.it/article/view/5167'))
+    print(scrapeit2('http://montesquieu.unibo.it/article/view/5167'))
+    
