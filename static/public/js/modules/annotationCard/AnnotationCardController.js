@@ -72,8 +72,7 @@ function AnnotationCardController($sanitize, $state, userService, newAnnotationS
     function _delete() {
         newAnnotationService.delete(model.annotation);
         model.refresh();
-        $state.reload();
-        //$state.go('.', {}, {reload: true});
+        $state.go('.', {}, {reload: true});
     }
 
 }
