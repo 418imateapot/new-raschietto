@@ -1,6 +1,14 @@
 Raschietto TODO
 ===============
 
+NEW->
+    Sostituire il tastone + con un menu con filtri, + e legenda
+    Togliere il 2-way binding da annocard per velocizzare
+    indagare sul bug del doppio modale
+    RIPARARE i filtri
+    Migliorae il modale new/edit-anno
+    Riparare il login
+
 Collegare newanno client e newanno server
 filtri migliori
 Pulsante indietro per newAnnoModal
