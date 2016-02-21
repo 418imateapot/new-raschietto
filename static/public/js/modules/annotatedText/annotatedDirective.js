@@ -67,7 +67,7 @@ export default function annotatedText(annotationService) {
                         annotations = oldRangeInfo.annotations.concat([annot]);
                         // E qui abbiamo finito
                         let result = {
-                            rangeBookmark: newRange.getBookmark(),
+                            rangeBookmark: newRange.getBookmark(el),
                             type: annoType,
                             annotations: annotations,
                             indexes: oldRangeInfo.indexes

@@ -76,6 +76,7 @@ function selectionService(annotationService, utilityService) {
                 start: start,
                 end: end
             };
+            console.log(target);
         }
         return target;
     };

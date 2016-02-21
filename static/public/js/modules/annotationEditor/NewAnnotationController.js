@@ -31,8 +31,6 @@ function NewAnnotationController($rootScope, $mdConstant, $mdDialog, $stateParam
         let selection = rangy.getSelection();
         let selectedText = selection.toString();
         let target = selectionService.initSelection(selection);
-        console.info(selection);
-        console.info(target);
 
         // Configura il modale e poi mostralo
         $mdDialog.show({
