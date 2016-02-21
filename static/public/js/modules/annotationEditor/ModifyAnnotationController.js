@@ -9,9 +9,7 @@ ModifyAnnotationController.$inject = ['$rootScope', '$mdConstant', '$mdDialog', 
 /**
  * Controller per il pulsante 'nuova annotazione'
  */
-export
-default
-function ModifyAnnotationController($rootScope, $mdConstant, $mdDialog, $stateParams, $mdToast, documentService, userService, utilityService) {
+export default function ModifyAnnotationController($rootScope, $mdConstant, $mdDialog, $stateParams, $mdToast, documentService, userService, utilityService) {
 
     const model = this;
 

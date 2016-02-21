@@ -6,6 +6,7 @@ MainAreaController.$inject = ['$rootScope', '$scope', '$state', '$stateParams', 
  */
 export
 default
+
 function MainAreaController($rootScope, $scope, $state, $stateParams, $sanitize, $mdToast, documentService, annotationService, userService) {
 
     const model = this;
@@ -14,39 +15,38 @@ function MainAreaController($rootScope, $scope, $state, $stateParams, $sanitize,
     model.content = documentService.currentDoc.content; // Vediamo se abbiamo già un documento
 
     $scope.$on('retrieveNewUrl', change_document);
-    $scope.$on('reload_view', (ev, args) => {
-        let url = documentService.currentUrl;
-        console.log(args);
-        change_document(ev, {
-            doc_url: url,
-            silent: true,
-            noAnnotations: args.noAnnotations
-        });
-    });
+
+    _init();
 
 
-    if (!model.content) {
-        // Se possibile, carica l'ultimo documento
-        let savedDoc = userService.lastDocument();
-        if (savedDoc) {
-            $rootScope.$broadcast('retrieveNewUrl', {
-                doc_url: savedDoc
-            });
+    /**
+     * All'avvio, controlliamo se abbiamo già qualcosa
+     * da visualizzare o se dobbiamo interrogare dei servizi
+     */
+    function _init() {
+        if (!model.content) {
+            // Se possibile, carica l'ultimo documento
+            let savedDoc = userService.lastDocument();
+            if (savedDoc) {
+                $rootScope.$broadcast('retrieveNewUrl', {
+                    doc_url: savedDoc
+                });
+            } else {
+                // Se non abbiamo nulla, andiamo al tutorial
+                $state.go('teapot.mode.tutorial', {
+                    mode: 'reader'
+                });
+            }
         } else {
-            // Se non abbiamo nulla, andiamo al tutorial
-            $state.go('teapot.mode.tutorial', {
-                mode: 'reader'
-            });
-        }
-    } else {
-        // Abbiamo già un documento, controlliamo di avere anche le sue
-        // annotazioni
-        if (annotationService.currentUrl !== documentService.currentUrl) {
-            if ($stateParams.no_reload_annos)
+            // Abbiamo già un documento, controlliamo di avere anche le sue
+            // annotazioni
+            if (annotationService.currentUrl !== documentService.currentUrl) {
                 _loadAnnotations();
+            }
+            userService.storeLastDocument(); // Salve ultimo doc in un cookie
         }
-        userService.storeLastDocument(); // Salve ultimo doc in un cookie
     }
+
 
     /**
      * Carica un nuovo documento tramite documentService
@@ -59,36 +59,35 @@ function MainAreaController($rootScope, $scope, $state, $stateParams, $sanitize,
                 let silent = args.silent || false;
                 model.content = doc.content;
                 model.loading = false;
-                userService.storeLastDocument(); // Salve ultimo doc in un cookie
-                if (!args.noAnnotations) {
-                    if (!$stateParams.no_reload_annos) {
-                        _loadAnnotations(silent);
-                    }
-                } else {
-                    $rootScope.$broadcast('annotations_loaded');
-                }
+                userService.storeLastDocument(); // Salve ultimo doc in localStorage
+                _loadAnnotations(silent);
             });
     }
+
 
     /**
      * Richiedi ad annotationService di caricare le annotazioni sul
      * documento corrente
      */
     function _loadAnnotations(silent) {
-        let forced = silent; // I casi d'uso sono sempre gli stessi...
-        if (!forced && annotationService.currentUrl === documentService.currentUrl) {
-            // Abbiamo già le annotazioni giuste
+
+        // Abbiamo già le annotazioni giuste?
+        if (annotationService.currentUrl === documentService.currentUrl)
             return;
-        }
-        if (!silent) {
+
+        if (!silent)
             $mdToast.showSimple('Sto caricando le annotazioni.');
-        }
+
         annotationService.query(documentService.currentUrl)
             .then(res => {
                 $rootScope.$broadcast('annotations_loaded');
-                if (!silent) {
+                if (!silent)
                     $mdToast.showSimple(res.length + ' annotazioni caricate.');
-                }
+            })
+            .catch((err) => {
+                const msg = `Non sono riuscito a caricare le annotazioni: ${err.name}`;
+                $mdToast.showSimple(msg);
             });
     }
+
 }

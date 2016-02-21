@@ -143,15 +143,16 @@ function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userServic
         let annotationsArray = newAnnotationService.fillTheBlanks(annotation);
         console.log(annotationsArray);
 
-        if(model.delete)
+        if(model.delete) {
+            // model.delete è undefined se
+            // stiamo creando una nuova annotazione
             model.delete();
+        }
 
         newAnnotationService.saveLocal(annotationsArray);
 
         $mdToast.showSimple('Annotazione creata localmente.');
         $mdDialog.hide();
     }
-
-
 
 }

@@ -1,7 +1,5 @@
 AnnotationCardController.$inject = ['$sanitize', '$state', 'userService', 'newAnnotationService'];
-export
-default
-function AnnotationCardController($sanitize, $state, userService, newAnnotationService) {
+export default function AnnotationCardController($sanitize, $state, userService, newAnnotationService) {
 
     var model = this;
 
@@ -19,6 +17,7 @@ function AnnotationCardController($sanitize, $state, userService, newAnnotationS
                         model.email ===  'scraper@ltw1543'));
 
     _init();
+
 
     function _init() {
 
@@ -92,12 +91,6 @@ function AnnotationCardController($sanitize, $state, userService, newAnnotationS
                 model.text = model.annotation.content.label;
                 break;
         }
-    }
-
-    function _delete() {
-        newAnnotationService.delete(model.annotation);
-        model.refresh();
-        $state.go('.', {}, {reload: true});
     }
 
 }
