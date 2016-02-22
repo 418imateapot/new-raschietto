@@ -1,0 +1,30 @@
+ul.pagination {
+    list-style-type: none;
+    display: inline;
+
+    li {
+        list-style-type: none;
+        display: inline;
+
+        a {
+            color: black;
+            text-decoration: none;
+            padding: 5px;
+            margin:: 1em;
+        }
+
+        &.active {
+
+            list-style-type: none;
+            display: inline;
+
+            a {
+                color: white;
+                background-color: $myBlue;
+                border-radius: 10%;
+            }
+        }
+    }
+}
+
+

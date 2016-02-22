@@ -1,11 +1,10 @@
+@import 'styles/colors.scss';
 @import 'styles/annotationCard.scss';
 @import 'styles/textAnnotations.scss';
 @import 'styles/styleloginmodal.scss';
 @import 'styles/newAnnoDialog.scss';
+@import 'styles/pagination.scss';
 
-$myBlue: rgb(0, 140, 186);
-$myRed: rgb(240, 65, 36);
-$myBlack: rgb(34, 34, 34);
 
 
 .md-fab#add-annotation {
@@ -86,30 +85,6 @@ h5.titolo_inElencoDoc.ng-binding {
 h5.titolo_inElencoDoc:hover {
     cursor: pointer;
     color: #0B6C8C;
-}
-
-ul.pagination {
-    list-style-type: none;
-    display: inline;
-}
-ul.pagination li {
-    list-style-type: none;
-    display: inline;
-}
-ul.pagination li.active {
-    list-style-type: none;
-    display: inline;
-}
-ul.pagination li a {
-    color: black;
-    text-decoration: none;
-    padding: 5px;
-    margin:: 1em;
-}
-ul.pagination li.active a {
-    color: white;
-    background-color: $myBlue;
-    border-radius: 20%;
 }
 
 /* 
