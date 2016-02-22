@@ -10,6 +10,9 @@ export default function MetaController($scope, $stateParams, documentService, an
     model.isFiltered = annotationService.isFiltered;
     model.notEmpty = Boolean(model.annotations);
 
+    // Pagination vars
+    model.currentPage = 1;
+    model.pagesize = 10;
 
     model.toggle = function(item, list) {
         var idx = list.indexOf(item);

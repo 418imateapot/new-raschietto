@@ -2,6 +2,7 @@ AnnotatedTextController.$inject = ['$scope', '$mdToast', '$state', '$mdDialog', 
 
 export
 default
+
 function AnnotatedTextController($state, $mdToast, $scope, $mdDialog, annotationService, newAnnotationService, selectionService) {
 
     let model = this;
@@ -39,6 +40,11 @@ function AnnotatedTextController($state, $mdToast, $scope, $mdDialog, annotation
     function _showAnnotationController() {
         const dialog = this;
         dialog.isFiltered = () => false;
+
+        // Pagination vars
+        dialog.currentPage = 1;
+        dialog.pagesize = 10;
+
 
     }
 }

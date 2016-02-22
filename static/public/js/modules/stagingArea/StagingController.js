@@ -3,7 +3,9 @@ StagingController.$inject = ['$scope', '$state', '$mdToast', 'documentService', 
 /**
  * Controller per l'area di sosta
  */
-export default function StagingController($scope, $state, $mdToast, documentService,  newAnnotationService) {
+export
+default
+function StagingController($scope, $state, $mdToast, documentService, newAnnotationService) {
 
     const model = this;
 
@@ -13,6 +15,10 @@ export default function StagingController($scope, $state, $mdToast, documentServ
     model.saveAll = _saveAll;
     model.isVisible = _isVisible;
     model.isEmpty = true;
+
+    // Pagination vars
+    model.currentPage = 1;
+    model.pagesize = 10;
 
     $scope.$on('save_all', _saveAll);
 
@@ -49,7 +55,9 @@ export default function StagingController($scope, $state, $mdToast, documentServ
             model.isEmpty = true;
         }
         $mdToast.showSimple('Annotazione eliminata');
-        $state.go('.', {}, {reload: true});
+        $state.go('.', {}, {
+            reload: true
+        });
     }
 
     function _isVisible(annot) {
