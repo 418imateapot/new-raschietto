@@ -1,6 +1,8 @@
 AnnotatedTextController.$inject = ['$scope', '$mdToast', '$state', '$mdDialog', 'annotationService', 'newAnnotationService', 'selectionService'];
 
-export default function AnnotatedTextController($state, $mdToast, $scope, $mdDialog, annotationService, newAnnotationService, selectionService) {
+export
+default
+function AnnotatedTextController($state, $mdToast, $scope, $mdDialog, annotationService, newAnnotationService, selectionService) {
 
     let model = this;
 
@@ -8,8 +10,8 @@ export default function AnnotatedTextController($state, $mdToast, $scope, $mdDia
     // model.managedAnnotations  -> Lista di tutte le annotazioni sul frammento
     // model.getAnnotations      -> Recupera le annotazioni
 
-    model.managedAnnotations = [];  // Tutte le annotazioni gestite
-    model.activeAnnotations = [];   // Tutte le annotazioni NON filtrate
+    model.managedAnnotations = []; // Tutte le annotazioni gestite
+    model.activeAnnotations = []; // Tutte le annotazioni NON filtrate
 
     model.showAnnotations = _showAnnotation;
 
@@ -25,7 +27,9 @@ export default function AnnotatedTextController($state, $mdToast, $scope, $mdDia
             controllerAs: 'dialog',
             templateUrl: 'js/modules/annotatedText/annotationModalView.html',
             annotations: annotations,
-            bindToController: {annotations: annotations},
+            bindToController: {
+                annotations: annotations
+            },
             parent: angular.element(document.body),
             targetEvent: event,
             clickOutsideToClose: true
@@ -35,24 +39,6 @@ export default function AnnotatedTextController($state, $mdToast, $scope, $mdDia
     function _showAnnotationController() {
         const dialog = this;
         dialog.isFiltered = () => false;
-        dialog.delete = (index) => {
-            let annot = dialog.annotations[index];
 
-            newAnnotationService.deleteRemote(annot)
-                .then(() => $mdToast.showSimple('Annotazione eliminata'))
-                .catch(() => $mdToast.showSimple('Whoops! C\'è stato un problema'));
-        };
-        dialog.edit = (index) => {
-            let annot = dialog.annotations[index];
-
-            newAnnotationService.saveLocal(annot);
-            newAnnotationService.deleteRemote(annot)
-                .then(() => {
-                    $mdToast.showSimple('Annotazione spostata in "Annotazioni non salvate"');
-                })
-                .catch(() => $mdToast.showSimple('Whoops! C\'è stato un problema'));
-        };
     }
-
-
 }

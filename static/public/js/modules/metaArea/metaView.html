@@ -5,7 +5,7 @@
 <!-- Le cards! -->
 <md-content class="md-padding" layout="row" layout-wrap layout-align="center start" layout-xs="column">
 
-    <div ng-hide="metaArea.isFiltered(anno)" ng-repeat="anno in metaArea.annotations" flex="50" flex-xs="100" layout="column" ng-show="metaArea.notEmpty"> 
+    <div ng-hide="metaArea.isFiltered(anno)" dir-paginate="anno in metaArea.annotations | itemsPerPage: 10" flex="50" flex-xs="100" layout="column" ng-show="metaArea.notEmpty"> 
         <annotation-card annotation="anno" flex></annotation-card>
     </div>
 

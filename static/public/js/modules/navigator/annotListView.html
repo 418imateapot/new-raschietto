@@ -1,7 +1,7 @@
 <md-dialog aria-label="Lista documenti">
     <md-toolbar>
         <div class="md-toolbar-tools teapot-tb-secondary">
-            <h2>Annotazioni sul documento<h2>
+            <h2>Annotazioni sul documento</h2>
             <span flex></span>
             <md-button class="md-icon-button" ng-click="metaDialog.close()">
                 <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
@@ -11,7 +11,7 @@
     <md-dialog-content>
         <meta-area></meta-area>
     </md-dialog-content>
-    <md-dialog-actions layout="row">
+    <md-dialog-actions layout="column" layout-align="space-around end">
+        <dir-pagination-controls></dir-pagination-controls>
     </md-dialog-actions>
 </md-dialog>
-

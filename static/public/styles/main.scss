@@ -87,7 +87,32 @@ h5.titolo_inElencoDoc:hover {
     cursor: pointer;
     color: #0B6C8C;
 }
+
+ul.pagination {
+    list-style-type: none;
+    display: inline;
+}
+ul.pagination li {
+    list-style-type: none;
+    display: inline;
+}
+ul.pagination li.active {
+    list-style-type: none;
+    display: inline;
+}
+ul.pagination li a {
+    color: black;
+    text-decoration: none;
+    padding: 5px;
+    margin:: 1em;
+}
+ul.pagination li.active a {
+    color: white;
+    background-color: $myBlue;
+    border-radius: 20%;
+}
+
 /* 
 div.md-list-item-text.layout-column:hover {
-    background-color: #FFF7F5;
+background-color: #FFF7F5;
 } */
