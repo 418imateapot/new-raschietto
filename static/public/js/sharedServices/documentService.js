@@ -8,7 +8,9 @@ documentService.$inject = ['$http', '$rootScope', '$compile', 'annotationService
  * Servizio che si occupa delle attività legate al
  * documento
  */
-export default function documentService($http, $rootScope, $compile, annotationService, selectionService) {
+export
+default
+function documentService($http, $rootScope, $compile, annotationService, selectionService) {
 
     const Dservice = this;
 
@@ -106,13 +108,17 @@ export default function documentService($http, $rootScope, $compile, annotationS
 
         let newElements = [];
 
-        annotationService.getAnnotations().forEach((val, index) => {
+        annotationService.getAnnotations(true).forEach((val, index) => {
             let source, fragment, type, provenance;
             try {
                 source = val.target.source.indexOf('dlib') !== -1 ? 'dlib' : 'riviste';
                 fragment = val.target.id;
                 type = val.type;
                 provenance = val.provenance.author.email;
+                if (fragment === 'document') {
+                    // Non vogliamo visualizzare le annotazioni globali
+                    return;
+                }
             } catch (e) {
                 console.warn('Incomplete annotation?');
                 return;
@@ -128,14 +134,14 @@ export default function documentService($http, $rootScope, $compile, annotationS
             let isAlreadyAnnotated = false;
 
             // L'elemento ha annotazioni preesistenti?
-            if (elem.attr('annotations') !== undefined) {
+            if (elem.attr('data-annotations') !== undefined) {
                 isAlreadyAnnotated = true;
             }
             // aggiungi gli attributi che ci servono
-            let exsisting_annotations = elem.attr('annotations') || '';
+            let exsisting_annotations = elem.attr('data-annotations') || '';
             // L'attr annotations mantiene tutti gli indici delle annotazioni
             // che vogliamo
-            elem.attr('annotations', `${exsisting_annotations} ${index}`)
+            elem.attr('data-annotations', `${exsisting_annotations} ${index}`)
                 .attr('annotated-text', '');
 
             // Non vogliamo compilare trenta volte lo stesso elemento

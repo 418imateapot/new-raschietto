@@ -1,6 +1,10 @@
 Raschietto TODO
 ===============
 
+FILTIR
+tutto il filtraggio lo fa direttamente annoservice
+quando si rigenerano i filtri, NON si sostituiscono i valori preesistenti!!
+
 NEW->
     Sostituire il tastone + con un menu con filtri, + e legenda
     Togliere il 2-way binding da annocard per velocizzare

@@ -47,8 +47,8 @@ function FilterController($scope, $rootScope, $state, $mdToast, annotationServic
     function _toggleAll() {
         for (let f in model.filters)
             _toggle(f, true);
-        $rootScope.$broadcast('reload_view', {noAnnotations: true});
-        $state.go('.', {no_reload_annos: true}, {reload: true});
+        $rootScope.$broadcast('reload_view');
+        $state.go('.', {}, {reload: true});
     }
 
     function _toggle(item, silent) {
@@ -56,9 +56,9 @@ function FilterController($scope, $rootScope, $state, $mdToast, annotationServic
         let display = model.filters[item].display;
         model.filters[item].display = !display;
         if (!silent) {
-            $rootScope.$broadcast('reload_view', {noAnnotations:true});
+            $rootScope.$broadcast('reload_view');
         }
-        $state.go('.', {no_reload_annos: true}, {reload: true});
+        $state.go('.', {}, {reload: true});
     }
 
     function _exists(item) {

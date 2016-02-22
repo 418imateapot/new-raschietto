@@ -20,9 +20,36 @@ function annotationService($http, utilityService, newAnnotationService) {
     service.tidy = _tidy;
     service.scrape = _scrape;
     service.isFiltered = _isFiltered;
-    service.getAnnotations = () => service.annotations.concat(_getUnsavedAnnotations());
+    service.getAnnotations = _getAnnotations;
     //service.scrape = _scrape;
 
+
+    /**
+     * Ottieni la lista di tutte le annotazioni, salvate e non,
+     * opzionalmente filtrate da service.filters.
+     * Alternativamente, fornendo un indice, si può ottenere
+     * la singola annotazione corrispondente
+     * @param {Boolean} filtered Controlla se filtrare le annotazioni,
+     * o restituirle così come sono
+     * @param {Number} index Se presente, la funzione restituisce una singola
+     * annotazione, oppure null
+     * @return {Array | Object | null} Una lista di annotazioni, opzionalmente filtrate,
+     * oppure una singola annotazione
+     */
+    function _getAnnotations(filtered, index) {
+
+        let everything = service.annotations.concat(_getUnsavedAnnotations());
+
+        if (index) {
+            let a = everything[index];
+            return (filtered === true && _isFiltered(a)) ? null : a;
+        } else if (filtered === true) {
+            return everything.filter(a => !_isFiltered(a));
+        } else {
+            return everything;
+        }
+
+    }
 
     // Recupera da localStorage le annotazioni non salvate
     // con target il doc corrente
@@ -52,7 +79,6 @@ function annotationService($http, utilityService, newAnnotationService) {
         //const endpoint = 'http://localhost:3030/data';
         const opts = 'format=json&callback=JSON_CALLBACK';
         const url_string = `${endpoint}?query=${encodedQuery}&${opts}`;
-        service.filters = {}; // Reinizializza i filtri
 
         return $http.jsonp(url_string)
             .then(response => {
@@ -78,6 +104,7 @@ function annotationService($http, utilityService, newAnnotationService) {
     function _tidy(data) {
         let items = data.results.bindings;
         let result = [];
+        let newFilters = {};
         for (let i in items) {
             let elem = items[i];
             let annotation = {};
@@ -122,33 +149,52 @@ function annotationService($http, utilityService, newAnnotationService) {
                 continue;
             }
 
-            // Aggiungi i filtri per quest'annotazione al set
-            let groupLabel = annotation.group.split('/').pop();
-            let typeLabel = utilityService.labelFromType(annotation.type);
-            let provLabel = annotation.provenance.author.name || annotation.provenance.author.email;
-            let provKey = annotation.provenance.author.email || annotation.provenance.author.name;
-            service.filters[annotation.group] = {
-                name: groupLabel,
-                display: true,
-                type: 'group'
-            };
-            service.filters[annotation.type] = {
-                name: typeLabel,
-                display: true,
-                type: 'type'
-            };
-            service.filters[provKey] = {
-                name: provLabel,
-                display: true,
-                type: 'provenance'
-            };
+            // Crea/aggiorna i filtri
+            _initFilter(annotation, newFilters);
+
             // Ed ecco la nostra nuova annotazione splendente
             result.push(annotation);
         } // END for (i in items)
+        service.filters = newFilters;
 
         console.log(service.filters);
         return result;
     }
+
+
+    /**
+     * Aggiungi i filtri per un'annotazione all'elenco,
+     * se non sono già presenti.
+     */
+    function _initFilter(annotation, destination) {
+        // Aggiungi i filtri per quest'annotazione al set
+        let groupLabel = annotation.group.split('/').pop();
+        let typeLabel = utilityService.labelFromType(annotation.type);
+        let provLabel = annotation.provenance.author.name || annotation.provenance.author.email;
+        let provKey = annotation.provenance.author.email || annotation.provenance.author.name;
+        let groupFilter = {
+            name: groupLabel,
+            display: true,
+            type: 'group'
+        };
+        let typeFilter = {
+            name: typeLabel,
+            display: true,
+            type: 'type'
+        };
+        let provenanceFilter = {
+            name: provLabel,
+            display: true,
+            type: 'provenance'
+        };
+
+        // Assegna il filtro nuovo, se non esiste quello vecchio
+        destination[annotation.group] = service.filters[annotation.group] || groupFilter;
+        destination[annotation.type] = service.filters[annotation.type] || typeFilter;
+        destination[provKey] = service.filters[provKey] || provenanceFilter;
+
+    }
+
 
     function _setContent(annot, type) {
         let result = {};
@@ -249,7 +295,7 @@ WHERE {
             '/html/body',
             '//body',
         ];
-        return (possibleValues.indexOf(fragment) === -1) ? fragment : '';
+        return (possibleValues.indexOf(fragment) === -1) ? fragment : 'document';
     }
 
 

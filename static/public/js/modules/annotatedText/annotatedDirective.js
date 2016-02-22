@@ -21,9 +21,8 @@ function annotatedText(annotationService) {
      */
     function _init(attrs, ctrl) {
         let annotationIndexes = attrs.annotations.trim().split(' ');
-
-        ctrl.managedAnnotations = annotationIndexes.map(i => annotationService.getAnnotations()[i]);
-        ctrl.activeAnnotations = ctrl.managedAnnotations.filter(a => !annotationService.isFiltered(a));
+        // Le annots sono già filtrate
+        ctrl.managedAnnotations = annotationIndexes.map(index => annotationService.getAnnotations(false, index));
     }
 
 
@@ -49,7 +48,7 @@ function annotatedText(annotationService) {
          * Crea una lista di range, fondendo insieme i range che sono in
          * sovrapposizione
          */
-        ctrl.activeAnnotations.forEach((annot, index) => {
+        ctrl.managedAnnotations.forEach((annot, index) => {
             let newRange = rangy.createRange();
             let newRangeBookmark = {
                 containerNode: transcluded_el.get(0),
@@ -147,18 +146,18 @@ function annotatedText(annotationService) {
                 // Questo balletto dovrebbe evitarmi di
                 // bindare duemila callback allo stesso
                 // elemento
-                if (!c.attr('bound')) {
+                if (!c.attr('data-bound')) {
                     // Unbound, crea la click function
-                    c.attr('bound', newIndexesString);
+                    c.attr('data-bound', newIndexesString);
                     c.bind('click', (event) => {
                         event.preventDefault();
                         ctrl.showAnnotations(event, newIndexes);
                     });
                 } else {
                     // Già bound, sostituisci l'handler
-                    let boundAnnots = c.attr('bound');
-                    c.attr('bound', `${boundAnnots} ${newIndexesString}`);
-                    let annotationIndexes = c.attr('bound').trim().split(' ');
+                    let boundAnnots = c.attr('data-bound');
+                    c.attr('data-bound', `${boundAnnots} ${newIndexesString}`);
+                    let annotationIndexes = c.attr('data-bound').trim().split(' ');
                     c.unbind('click');
                     c.bind('click', (event) => {
                         event.preventDefault();

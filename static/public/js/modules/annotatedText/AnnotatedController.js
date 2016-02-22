@@ -12,7 +12,7 @@ function AnnotatedTextController($state, $mdToast, $scope, $mdDialog, annotation
     // model.getAnnotations      -> Recupera le annotazioni
 
     model.managedAnnotations = []; // Tutte le annotazioni gestite
-    model.activeAnnotations = []; // Tutte le annotazioni NON filtrate
+    //model.activeAnnotations = []; // Tutte le annotazioni NON filtrate
 
     model.showAnnotations = _showAnnotation;
 
@@ -22,7 +22,7 @@ function AnnotatedTextController($state, $mdToast, $scope, $mdDialog, annotation
     /////////////////
 
     function _showAnnotation(event, annotationIndexes) {
-        let annotations = annotationIndexes.map(i => model.activeAnnotations[i]);
+        let annotations = annotationIndexes.map(i => model.managedAnnotations[i]);
         $mdDialog.show({
             controller: _showAnnotationController,
             controllerAs: 'dialog',

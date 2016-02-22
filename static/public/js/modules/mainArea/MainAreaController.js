@@ -38,11 +38,9 @@ function MainAreaController($rootScope, $scope, $state, $stateParams, $sanitize,
                 });
             }
         } else {
-            // Abbiamo già un documento, controlliamo di avere anche le sue
-            // annotazioni
-            if (annotationService.currentUrl !== documentService.currentUrl) {
-                _loadAnnotations();
-            }
+            // Abbiamo già un dicumento da visualizzare, recuperiamo
+            // le annotazioni.
+            _loadAnnotations();
             userService.storeLastDocument(); // Salve ultimo doc in un cookie
         }
     }
@@ -72,8 +70,8 @@ function MainAreaController($rootScope, $scope, $state, $stateParams, $sanitize,
     function _loadAnnotations(silent) {
 
         // Abbiamo già le annotazioni giuste?
-        if (annotationService.currentUrl === documentService.currentUrl)
-            return;
+        //if (annotationService.currentUrl === documentService.currentUrl)
+            //return;
 
         if (!silent)
             $mdToast.showSimple('Sto caricando le annotazioni.');
