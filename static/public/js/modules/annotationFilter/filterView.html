@@ -28,7 +28,6 @@ class="md-whiteframe-5dp">
             </md-menu-item>
         </md-menu-content>
     </md-menu>
-    </md-menu flex>
     <md-menu flex>
         <button ng-click="$mdOpenMenu()">
             Per gruppo
@@ -44,15 +43,42 @@ class="md-whiteframe-5dp">
         </md-menu-content>
     </md-menu>
     <md-menu flex>
-        <button ng-click="filter.toggleOwn()">
+        <button ng-click="$mdOpenMenu()">
             Le mie annotazioni
         </button>
-        <md-menu-content></md-menu-content>
+        <md-menu-content>
+            <md-menu-item class="md-indent" layout-padding>
+                <md-button ng-click="filter.toggleOwn(true)">
+                    Visualizza tutte
+                </md-button>
+            </md-menu-item>
+            <md-menu-item class="md-indent" layout-padding>
+                <md-button ng-click="filter.toggleOwn(false)">
+                    Nascondi tutte
+                </md-button>
+            </md-menu-item>
+            <md-menu-item class="md-indent" layout-padding>
+                <md-button ng-click="filter.hideOther()">
+                    Nascondi tutte le altre
+                </md-button>
+            </md-menu-item>
+        </md-menu-content>
     </md-menu>
     <md-menu flex>
-        <button ng-click="filter.toggleAll()">
+        <button ng-click="$mdOpenMenu()">
             Tutte le annotazioni
         </button>
-        <md-menu-content></md-menu-content>
+        <md-menu-content>
+            <md-menu-item class="md-indent" layout-padding>
+                <md-button ng-click="filter.toggleAll(true)">
+                    Visualizza tutte
+                </md-button>
+            </md-menu-item>
+            <md-menu-item class="md-indent" layout-padding>
+                <md-button ng-click="filter.toggleAll(false)">
+                    Nascondi tutte
+                </md-button>
+            </md-menu-item>
+        </md-menu-content>
     </md-menu>
 </md-menu-bar>
