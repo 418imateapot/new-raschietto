@@ -106,8 +106,6 @@ function documentService($http, $rootScope, $compile, annotationService, selecti
      */
     function _highlight(scope) {
 
-        let newElements = [];
-
         annotationService.getAnnotations(true).forEach((val, index) => {
             let source, fragment, type, provenance;
             try {
@@ -144,15 +142,13 @@ function documentService($http, $rootScope, $compile, annotationService, selecti
             elem.attr('data-annotations', `${exsisting_annotations} ${index}`)
                 .attr('annotated-text', '');
 
-            // Non vogliamo compilare trenta volte lo stesso elemento
-            if (!isAlreadyAnnotated) {
-                newElements.push(elem);
-            }
-
         });
 
         // Compila i nuovi elementi
-        newElements.forEach((el) => $compile(el)(scope));
+        // TODO -> Potrei compilare uno alla volta e passare le annotazioni
+        // nello $scope
+        let newDirs = $('[annotated-text]');
+        $compile(newDirs)(scope);
     }
 
 }
