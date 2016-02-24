@@ -61,8 +61,8 @@ function AnnotatedTextController($scope, $mdDialog, annotationService, newAnnota
         let applier = rangy.createClassApplier('filtered');
         model.rangesInfo.forEach(rInfo => {
             let isActive = rInfo.annotations.reduce((prev, curr) => {
-                return prev && !annotationService.isFiltered(curr);
-            }, true);
+                return prev || !annotationService.isFiltered(curr);
+            }, false);
             if (!isActive) {
                 let range = rangy.createRange();
                 range.moveToBookmark(rInfo.rangeBookmark);

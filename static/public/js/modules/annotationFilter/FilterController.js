@@ -1,15 +1,14 @@
 FilterController.$inject = ['$scope', '$rootScope', '$state', '$mdToast', 'annotationService', 'userService', 'utilityService'];
 
 /**
- * Controller per i filtri delle annotazioni
+ * Controller per la barra dei filtri delle annotazioni
  */
-export
-default
-function FilterController($scope, $rootScope, $state, $mdToast, annotationService, userService, utilityService) {
+export default function FilterController($scope, $rootScope, $state, $mdToast, annotationService, userService, utilityService) {
 
     const model = this;
 
     model.filters = annotationService.filters;
+    console.log(model.filters);
     model.getLabel = (filter) => utilityService.labelFromType(filter);
     model.isTypeFilter = _isTypeFilter;
     model.isProvenanceFilter = _isProvenanceFilter;
@@ -43,6 +42,7 @@ function FilterController($scope, $rootScope, $state, $mdToast, annotationServic
     }
 
 
+    // Mostra/nascondi le mie annotazioni
     function _toggleOwn(value) {
         let user = userService.userEmail;
         if (user && model.filters[user]) {
@@ -52,6 +52,7 @@ function FilterController($scope, $rootScope, $state, $mdToast, annotationServic
         }
     }
 
+    // Nascondi le annotazioni altrui
     function _hideOthers() {
         _toggleAll(false);
         _toggleOwn(true);

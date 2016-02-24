@@ -1,12 +1,10 @@
-<md-menu-bar flex="100" layout-padding layout="row" layout-align="space-around bottom"
-class="md-whiteframe-5dp">
+<md-menu-bar flex="100" layout-padding layout="row" layout-align="space-around bottom" class="md-whiteframe-5dp">
     <md-menu flex>
         <button ng-click="$mdOpenMenu()">
             Per tipologia
         </button>
         <md-menu-content>
-            <md-menu-item ng-repeat="(key, val) in filter.filters" ng-show="filter.isTypeFilter(val)"
-            layout-padding>
+            <md-menu-item ng-repeat="(key, val) in filter.filters" ng-show="filter.isTypeFilter(val)" layout-padding>
                 <md-button ng-click="filter.toggle(key)">
                     <md-icon class="material-icons" ng-show="filter.exists(val)">check</md-icon>
                     {{val.name}}
@@ -19,8 +17,7 @@ class="md-whiteframe-5dp">
             Per utente
         </button>
         <md-menu-content>
-            <md-menu-item class="md-indent" ng-repeat="(key, val) in filter.filters" ng-show="filter.isProvenanceFilter(val)"
-            layout-padding>
+            <md-menu-item class="md-indent" ng-repeat="(key, val) in filter.filters" ng-show="filter.isProvenanceFilter(val)" layout-padding>
                 <md-button ng-click="filter.toggle(key)">
                     <md-icon class="material-icons" ng-show="filter.exists(val)">check</md-icon>
                     {{val.name}}
@@ -33,8 +30,7 @@ class="md-whiteframe-5dp">
             Per gruppo
         </button>
         <md-menu-content>
-            <md-menu-item class="md-indent" ng-repeat="(key, val) in filter.filters" ng-show="filter.isGroupFilter(val)"
-            layout-padding>
+            <md-menu-item class="md-indent" ng-repeat="(key, val) in filter.filters" ng-show="filter.isGroupFilter(val)" layout-padding>
                 <md-button ng-click="filter.toggle(key)">
                     <md-icon class="material-icons" ng-show="filter.exists(val)">check</md-icon>
                     {{val.name}}
@@ -58,7 +54,7 @@ class="md-whiteframe-5dp">
                 </md-button>
             </md-menu-item>
             <md-menu-item class="md-indent" layout-padding>
-                <md-button ng-click="filter.hideOther()">
+                <md-button ng-click="filter.hideOthers()">
                     Nascondi tutte le altre
                 </md-button>
             </md-menu-item>
