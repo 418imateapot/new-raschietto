@@ -303,7 +303,7 @@ WHERE {
     function _isFiltered(annot) {
         let groupFilter = service.filters[annot.group];
         let typeFilter = service.filters[annot.type];
-        let provenanceFilter = service.filters[annot.provenance.author.name];
+        let provenanceFilter = service.filters[annot.provenance.author.email];
         let active = false;
 
         try {

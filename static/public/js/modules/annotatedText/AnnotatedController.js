@@ -1,9 +1,18 @@
-AnnotatedTextController.$inject = ['$scope', '$mdToast', '$state', '$mdDialog', 'annotationService', 'newAnnotationService', 'selectionService'];
+/**
+ *  rangeinfo = {
+ *      rangeBookmark: bookmark,
+ *      type: string,
+ *      annotations: array,
+ *      indexes: array
+ *  };
+ */
+
+AnnotatedTextController.$inject = ['$scope', '$mdDialog', 'annotationService', 'newAnnotationService', 'selectionService'];
 
 export
 default
 
-function AnnotatedTextController($state, $mdToast, $scope, $mdDialog, annotationService, newAnnotationService, selectionService) {
+function AnnotatedTextController($scope, $mdDialog, annotationService, newAnnotationService, selectionService) {
 
     let model = this;
 
@@ -15,6 +24,8 @@ function AnnotatedTextController($state, $mdToast, $scope, $mdDialog, annotation
     //model.activeAnnotations = []; // Tutte le annotazioni NON filtrate
 
     model.showAnnotations = _showAnnotation;
+
+    $scope.$on('filter_toggled', _applyFilters);
 
 
     /////////////////
@@ -44,7 +55,24 @@ function AnnotatedTextController($state, $mdToast, $scope, $mdDialog, annotation
         // Pagination vars
         dialog.currentPage = 1;
         dialog.pagesize = 10;
+    }
 
-
+    function _applyFilters () {
+        let applier = rangy.createClassApplier('filtered');
+        model.rangesInfo.forEach(rInfo => {
+            let isActive = rInfo.annotations.reduce((prev, curr) => {
+                return prev && !annotationService.isFiltered(curr);
+            }, true);
+            if (!isActive) {
+                let range = rangy.createRange();
+                range.moveToBookmark(rInfo.rangeBookmark);
+                applier.applyToRange(range);
+            } else {
+                let range = rangy.createRange();
+                range.moveToBookmark(rInfo.rangeBookmark);
+                applier.undoToRange(range);
+            }
+        });
+        
     }
 }
