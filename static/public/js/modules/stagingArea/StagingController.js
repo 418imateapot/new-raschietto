@@ -13,6 +13,7 @@ function StagingController($scope, $state, $mdToast, documentService, newAnnotat
     model.loading = true;
     model.delete = _delete;
     model.saveAll = _saveAll;
+    model.deleteAll=_deleteAll;
     model.isVisible = _isVisible;
     model.isEmpty = true;
 
@@ -21,6 +22,7 @@ function StagingController($scope, $state, $mdToast, documentService, newAnnotat
     model.pagesize = 10;
 
     $scope.$on('save_all', _saveAll);
+    $scope.$on('delete_all', _deleteAll);
 
     _init();
 
@@ -46,6 +48,12 @@ function StagingController($scope, $state, $mdToast, documentService, newAnnotat
             })
             .catch(e => $mdToast.showSimple('C\'è stato un problema!'));
     }
+
+    function _deleteAll(){
+        newAnnotationService.nuke();
+        $mdToast.showSimple('Annotazioni eliminate');
+        model.pending=[];
+        }
 
     function _delete(elem) {
         model.pending.splice(elem, 1);

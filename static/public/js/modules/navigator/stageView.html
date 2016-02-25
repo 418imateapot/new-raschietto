@@ -15,9 +15,12 @@
     <md-dialog-actions layout="column" layout-align="space-around end">
         <dir-pagination-controls></dir-pagination-controls>
     </md-dialog-actions>
-    <span class="staging-buttons">      
+    <span class="staging-buttons">
         <md-button ng-hide="stageDialog.isEmpty" ng-click="stageDialog.saveAll()" class="md-warn">
             Salva tutto
+        </md-button>
+        <md-button ng-hide="stageDialog.isEmpty" ng-click="stageDialog.deleteAll()" class="md-warn">
+            Cancella tutto
         </md-button>
 </span>
 

@@ -112,6 +112,9 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
         stageDialog.saveAll = () => {
             $rootScope.$broadcast('save_all');
         };
+        stageDialog.deleteAll = () => {
+            $rootScope.$broadcast('delete_all');
+        };
         if (newAnnotationService.retrieveLocal().length > 0) {
             stageDialog.isEmpty = false;
         }
