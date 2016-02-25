@@ -1,6 +1,7 @@
 # Raschietti per tutti
 
 Progetto di techweb 2015/16!!
+(Informatica, Università di Bologna)
 
 ## Requisiti
 * server apache 2.4

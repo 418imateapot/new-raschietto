@@ -25,7 +25,6 @@ System.config({
     "angular-utils-pagination": "npm:angular-utils-pagination@0.10.0",
     "babel": "npm:babel-core@5.8.34",
     "babel-runtime": "npm:babel-runtime@5.8.34",
-    "christopherthielen/ui-router-extras": "github:christopherthielen/ui-router-extras@0.1.0",
     "clean-css": "npm:clean-css@3.4.9",
     "core-js": "npm:core-js@1.2.6",
     "css": "github:systemjs/plugin-css@0.1.20",
@@ -35,8 +34,6 @@ System.config({
     "rangy": "github:timdown/rangy-release@1.3.0",
     "scss": "github:theefer/plugin-sass@master",
     "text": "github:systemjs/plugin-text@0.0.4",
-    "traceur": "github:jmcriffey/bower-traceur@0.0.93",
-    "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.93",
     "github:angular-ui/ui-router@0.2.15": {
       "angular": "github:angular/bower-angular@1.4.8"
     },
