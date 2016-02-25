@@ -1,0 +1,10 @@
+- StagingArea dovrebbe refreshare la pagina DOPO essere stata chiusa,
+  e non ogni volta che un'annotazione viene modificata, se nola lag ci ucciderà tutti
+
+- Quando la modifica ad un'annotazione locale viene annullata, l'annotazione viene eliminata,
+  che è evidentemente sbagliato
+
+- I filtri devono disattivare i binding per i click, oltre ad eliminare la colorazione, quando vengono attivati
+
+- Serve un tasto ELIMINA TUTTO su stagingArea, altrimenti lo scraper ci rovina la vita con tutte le annotazioni
+  che produce
