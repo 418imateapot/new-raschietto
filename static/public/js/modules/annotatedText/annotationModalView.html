@@ -6,9 +6,9 @@
             </h2>
         </div>
     </md-toolbar>
-    <md-dialog-content class="md-padding" layout="row" flex="100" layout-wrap layout-align="none" layout-xs="column">
+    <md-dialog-content class="md-padding" layout="row" flex="100" layout-wrap layout-align="none" layout-xs="column" layput-padding>
         <span dir-paginate="anno in dialog.annotations | itemsPerPage: dialog.pagesize track by $index" current-page="dialog.currentPage">
-            <annotation-card delete="false" edit="false" class="annocard" flex-noshrink layout="row" annotation="anno"></annotation-card>
+            <annotation-card delete="false" edit="false" class="annocard" flex="noshrink" layout="row" annotation="anno"></annotation-card>
         </span>
     </md-dialog-content>
     <md-dialog-actions layout="column" layout-align="space-around end">
