@@ -1,4 +1,4 @@
-<md-dialog aria-label="Lista documenti">
+<md-dialog aria-label="Annotazioni non salvate">
     <md-toolbar>
         <div class="md-toolbar-tools teapot-tb-secondary">
             <h2>Annotazioni non salvate</h2>
@@ -11,15 +11,17 @@
     <md-dialog-content class="md-padding" layout="row" flex="100" layout-wrap layout-align="none" layout-xs="column" layout-padding>
         <staging-area></staging-area>
     </md-dialog-content>
-    <md-dialog-actions layout="row" layout-align="space-around end">
-        <span class="staging-buttons" flex flex="noshrink" layout="row">
-            <md-button ng-hide="stageDialog.isEmpty" ng-click="stageDialog.saveAll()" class="md-warn" flex>
-                Salva tutto
+    <md-dialog-actions layout="row" layout-xs="column" layout-align="space-around center">
+        <dir-pagination-controls max-size="5"></dir-pagination-controls>
+        <span class="staging-buttons" flex layout="row" layout-padding>
+            <md-button ng-hide="stageDialog.isEmpty" ng-click="stageDialog.saveAll()" class="md-raised md-primary" flex="50">
+                <md-tooltip>Salva tutte le annotazioni</md-tooltip>
+                <md-icon class="material-icons">done_all</md-icon>
             </md-button>
-            <md-button ng-hide="stageDialog.isEmpty" ng-click="stageDialog.deleteAll()" class="md-warn" flex>
-                Cancella tutto
+            <md-button ng-hide="stageDialog.isEmpty" ng-click="stageDialog.deleteAll()" class="md-raised md-warn" flex="50">
+                <md-tooltip>Elimina tutte le annotazioni</md-tooltip>
+                <md-icon class="material-icons">delete_forever</md-icon>
             </md-button>
         </span>
-        <dir-pagination-controls flex></dir-pagination-controls>
     </md-dialog-actions>
 </md-dialog>

@@ -1,12 +1,9 @@
-NavController.$inject = ['$scope', '$rootScope', '$state', '$stateParams', '$mdDialog', '$mdSidenav', '$mdToast', 'annotationService', 'userService', 'loginModal', 'newAnnotationService'];
+NavController.$inject = ['$scope', '$rootScope', '$state', '$stateParams', '$mdDialog', '$mdSidenav', '$mdMedia', '$mdToast', 'annotationService', 'userService', 'loginModal', 'newAnnotationService'];
 /**
  * $mdSidenav e $mdDialog sono i servizi per interagire
  * rispettivamente con la barra laterale e la finestra modale
  */
-export
-default
-
-function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdSidenav, $mdToast, annotationService, userService, loginModal, newAnnotationService) {
+export default function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdSidenav, $mdMedia, $mdToast, annotationService, userService, loginModal, newAnnotationService) {
     var model = this;
 
     model.open = () => $mdSidenav('left').toggle(); // Funzione da invocare per aprire il dialog.
@@ -21,6 +18,7 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
     model.switchMode = _switchMode;
     model.scrape = _scrape;
     model.about = _about;
+    model.fullscreenDialog = $mdMedia('xs') || $mdMedia('sm');
 
     model.isLoggedIn = userService.isLoggedIn;
     model.login = _login;
@@ -53,6 +51,7 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
                 controllerAs: 'docDialog',
                 templateUrl: 'js/modules/navigator/docTabView.html',
                 parent: angular.element(document.body),
+                fullscreen: model.fullscreenDialog,
                 targetEvent: ev,
                 clickOutsideToClose: true
             });
@@ -75,6 +74,7 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
                 controllerAs: 'metaDialog',
                 templateUrl: 'js/modules/navigator/annotListView.html',
                 parent: angular.element(document.body),
+                fullscreen: model.fullscreenDialog,
                 targetEvent: ev,
                 clickOutsideToClose: true
             });
@@ -97,6 +97,7 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
                 controllerAs: 'stageDialog',
                 templateUrl: 'js/modules/navigator/stageView.html',
                 parent: angular.element(document.body),
+                fullscreen: model.fullscreenDialog,
                 targetEvent: ev,
                 clickOutsideToClose: true
             });
@@ -147,16 +148,7 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
                 clickOutsideToClose: true
             });
         }
-        //funzione tutorial   ---> ?
 
-    function _tutorial(ev) {
-        $mdDialog.show({
-            templateUrl: 'js/modules/tutorial/tutorialView.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose: true
-        });
-    }
 
     /**
      * Seleziona il colore e il contenuto dell'intestazione del
