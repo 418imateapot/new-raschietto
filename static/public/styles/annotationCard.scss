@@ -99,14 +99,18 @@ md-card-header-text.annocard-header{
 }
 
 md-card.annocard {
-    background-color: #F1F1F1;
-    background-color: #FBFBFB;
+    //background-color: #F1F1F1;
+    //background-color: #FBFBFB;
     min-width: 20em;
 /*    background-color: #F0F8FF; */
 }
 
 md-card.citationAnnYES {
-    background-color: #DDE1E2;
+    background-color: #C5C5C5;
+}
+
+md-card.citationAnnNO {
+    background-color: #DDE1E2; /* vecchio colore annotazioni su doc citato */
 }
 
 md-card.annocard * {
