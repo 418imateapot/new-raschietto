@@ -185,6 +185,16 @@ export default function NavController($scope, $rootScope, $state, $stateParams, 
     }
 
     function _scrape() {
+        if($state.current.url==="/tutorial"){
+            $mdToast.show(
+                $mdToast.simple()
+                .textContent('Scraping inpossibile nella pagina tutorial')
+                .position('top right')
+                .hideDelay(3000)
+                );
+                return;
+
+        }
         model.open(); //toggle
         $mdToast.show(
             $mdToast.simple()
