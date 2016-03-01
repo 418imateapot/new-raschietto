@@ -4,12 +4,12 @@ import Riviste from '../../sharedServices/Riviste.js';
 
 import EditorController from './AnnotationEditorController.js';
 
-NewAnnotationController.$inject = ['$rootScope', '$state', '$mdConstant', '$mdDialog', '$stateParams', '$mdToast', 'documentService', 'userService', 'utilityService', 'selectionService'];
+NewAnnotationController.$inject = ['$rootScope', '$state', '$mdConstant', '$mdDialog', '$stateParams', '$mdToast', 'documentService', 'annotationService', 'userService', 'utilityService', 'selectionService'];
 
 /**
  * Controller per il pulsante 'nuova annotazione'
  */
-export default function NewAnnotationController($rootScope, $state, $mdConstant, $mdDialog, $stateParams, $mdToast, documentService, userService, utilityService, selectionService) {
+export default function NewAnnotationController($rootScope, $state, $mdConstant, $mdDialog, $stateParams, $mdToast, documentService, annotationService, userService, utilityService, selectionService) {
 
     const model = this;
 
@@ -51,6 +51,9 @@ export default function NewAnnotationController($rootScope, $state, $mdConstant,
                 clickOutsideToClose: true
             })
             .then(function(answer) {
+                // Questo serve per forzare il reload delle annotazioni
+                // Non è il massimo, ma la vita è dura
+                annotationService.currentUrl = '';
                 $state.go('.', {}, {
                     reload: true
                 });

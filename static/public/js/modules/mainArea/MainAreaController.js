@@ -40,6 +40,13 @@ function MainAreaController($rootScope, $scope, $state, $stateParams, $sanitize,
         } else {
             // Abbiamo già un dicumento da visualizzare, recuperiamo
             // le annotazioni.
+
+            // Non fare niente se abbiamo già le annotazioni
+            // Vedi NewAnnotationController.showModal per un'eccezione
+            // malefica a questa regola.
+            if (documentService.currentUrl === annotationService.currentUrl)
+                return;
+
             _loadAnnotations();
             userService.storeLastDocument(); // Salve ultimo doc in un cookie
         }
@@ -68,10 +75,6 @@ function MainAreaController($rootScope, $scope, $state, $stateParams, $sanitize,
      * documento corrente
      */
     function _loadAnnotations(silent) {
-
-        // Abbiamo già le annotazioni giuste?
-        //if (annotationService.currentUrl === documentService.currentUrl)
-            //return;
 
         if (!silent)
             $mdToast.showSimple('Sto caricando le annotazioni.');
