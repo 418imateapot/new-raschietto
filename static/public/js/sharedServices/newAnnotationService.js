@@ -23,7 +23,6 @@ export default function newAnnotationService($rootScope, $http, localStorageServ
     function _saveLocal(newAnnotations) {
         let unsaved = _retrieveLocal().concat(newAnnotations);
         localStorageService.set('pending', unsaved);
-        $rootScope.$broadcast('reload_view', {noAnnotations: true});
     }
 
 
@@ -38,7 +37,6 @@ export default function newAnnotationService($rootScope, $http, localStorageServ
             items: newAnnotations
         })
         .then(response => {
-            $rootScope.$broadcast('reload_view', {noAnnotations: false});
             return response;
         })
         .catch(err => console.warn(err));
@@ -47,7 +45,6 @@ export default function newAnnotationService($rootScope, $http, localStorageServ
 
     function _deleteLocal() {
         localStorageService.clearAll();
-        $rootScope.$broadcast('reload_view', {noAnnotations: true});
     }
 
 

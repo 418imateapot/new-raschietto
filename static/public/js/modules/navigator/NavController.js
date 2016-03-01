@@ -129,8 +129,6 @@ export default function NavController($scope, $rootScope, $state, $stateParams, 
         let newMode = (model.activeMode !== 'Annotator') ? 'annotator' : 'reader';
         $state.go('.', {
             mode: newMode
-        }).then(() => {
-            $rootScope.$broadcast('reload_view', {noAnnotations: true});
         });
         _showNavToolBar({
             mode: newMode

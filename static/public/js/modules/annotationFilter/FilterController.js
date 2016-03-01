@@ -1,9 +1,9 @@
-FilterController.$inject = ['$scope', '$rootScope', '$state', '$mdToast', 'annotationService', 'userService', 'utilityService'];
+FilterController.$inject = ['$scope', '$rootScope', '$mdToast', 'annotationService', 'userService', 'utilityService'];
 
 /**
  * Controller per la barra dei filtri delle annotazioni
  */
-export default function FilterController($scope, $rootScope, $state, $mdToast, annotationService, userService, utilityService) {
+export default function FilterController($scope, $rootScope, $mdToast, annotationService, userService, utilityService) {
 
     const model = this;
 
