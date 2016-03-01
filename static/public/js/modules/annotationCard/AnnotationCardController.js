@@ -2,7 +2,7 @@ AnnotationCardController.$inject = ['$sanitize', '$state', 'userService', 'newAn
 export default function AnnotationCardController($sanitize, $state, userService, newAnnotationService) {
 
     var model = this;
-
+    model.time= model.annotation.provenance.time;
     model.icon = '';
     model.header = '';
     model.email = model.annotation.provenance.author.email;
@@ -12,7 +12,7 @@ export default function AnnotationCardController($sanitize, $state, userService,
     model.isCitationAnn = 'citationAnnNO';
     //model.delete -> passata dallo scope esterno
     model.isDeleteable = model.delete !== 'false';
-    model.isEditable = (model.edit !== 'false' && 
+    model.isEditable = (model.edit !== 'false' &&
                         (model.email === userService.userEmail ||
                         model.email ===  'scraper@ltw1543'));
 
