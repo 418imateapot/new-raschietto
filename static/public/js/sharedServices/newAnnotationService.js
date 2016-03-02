@@ -166,7 +166,7 @@ export default function newAnnotationService($rootScope, $http, localStorageServ
                 break;
             case 'denotesRhetoric':
                 annot.content.value = utilityService.expandRhetoricURI(annot.content.value);
-                let sep = String(annot.content.value).includes('sro') ? '#' : '/';
+                let sep = annot.content.value.includes('sro') ? '#' : '/';
                 let humanFriendly = annot.content.value.split(sep).pop();
                 annot.content.label = `La funzione retorica di questo frammento è "${humanFriendly}"`;
                 annot.content.subject = `${annot.content.subject}#${annot.target.id}-${annot.target.start}-${annot.target.end}`;
