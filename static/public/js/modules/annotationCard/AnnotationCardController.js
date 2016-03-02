@@ -30,7 +30,7 @@ export default function AnnotationCardController($sanitize, $state, userService,
                     model.header += ' citato';
                     model.isCitationAnn = 'citationAnnYES';
                 }
-                model.text = model.annotation.content.value;
+                model.text = model.annotation.content.label;
                 break;
             case 'hasAuthor':
                 model.avatarColor = 'card_hasAuthor';
@@ -50,7 +50,7 @@ export default function AnnotationCardController($sanitize, $state, userService,
                     model.header += ' citato';
                     model.isCitationAnn = 'citationAnnYES';
                 }
-                model.text = model.annotation.content.value;
+                model.text = model.annotation.content.label;
                 break;
             case 'hasDOI':
                 model.avatarColor = 'card_hasDOI';
@@ -60,7 +60,7 @@ export default function AnnotationCardController($sanitize, $state, userService,
                     model.header += ' citato';
                     model.isCitationAnn = 'citationAnnYES';
                 }
-                model.text = model.annotation.content.value;
+                model.text = model.annotation.content.label;
                 break;
             case 'hasPublicationYear':
                 model.avatarColor = 'card_hasPublicationYear';
@@ -70,7 +70,7 @@ export default function AnnotationCardController($sanitize, $state, userService,
                     model.header += ' citato';
                     model.isCitationAnn = 'citationAnnYES';
                 }
-                model.text = model.annotation.content.value;
+                model.text = model.annotation.content.label;
                 break;
             case 'denotesRhetoric':
                 model.avatarColor = 'card_denotesRhetoric';
