@@ -125,16 +125,18 @@
                                placeholder="Autore del documento"
                                secondary-placeholder="Autori, separati da virgola">
                     </md-chips>
-                    <br/>dialogone</label>
-                        <input/ ng-model="editor.annotations.cites.cited.year">
+                    <br/>
+                    <md-input-container>
+                        <label>Anno di pubblicazione</label>
+                        <input ng-model="dialog.annotations.cites.cited.year"/>
                     </md-input-container>
                     <md-input-container>
                         <label>DOI</label>
-                        <input/ ng-model="editor.annotations.cites.cited.doi">
+                        <input ng-model="editor.annotations.cites.cited.doi"/>
                     </md-input-container>
                     <md-input-container>
                         <label>URL</label>
-                        <input/ ng-model="editor.annotations.cites.cited.url">
+                        <input ng-model="editor.annotations.cites.cited.url"/>
                     </md-input-container>
                 </span>
                 <md-content ng-hide="editor.selectedText">Attenzione: questo tipo di annotazione richiede una selezione testuale.
