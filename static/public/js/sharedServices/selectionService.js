@@ -56,6 +56,7 @@ function selectionService(annotationService, utilityService) {
         if (selectedText.length > 0) { // Abbiamo una selezione
 
             let selectedRange = selection.getRangeAt(0);
+            selectedRange.trim();  // Scarta il whitespace dal nostro range
             let elementCandidate;
             let idElement;
 
