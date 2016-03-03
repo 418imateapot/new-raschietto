@@ -73,6 +73,6 @@ function AnnotatedTextController($scope, $mdDialog, annotationService, newAnnota
                 applier.undoToRange(range);
             }
         });
-        
+
     }
 }

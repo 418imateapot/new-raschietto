@@ -112,7 +112,8 @@ def generateGraphFromJSON(jsonAnn):
             g.add((bodyObject, RDF.type, SKOS.Concept))
         else:
             if annotation['type'] == 'hasAuthor':
-                bodyObject = URIRef(string2rschAuthor(annotation['body']['resource']['label']))
+                personNS = "http://vitali.web.cs.unibo.it/raschietto/person/"
+                bodyObject = URIRef(personNS + string2rschAuthor(annotation['body']['resource']['label']))
                 g.add((bodyObject, RDF.type, FOAF.Person))
             else:  # type == 'cites'
                 bodyObject = URIRef(annotation['body']['resource']['id'])
@@ -143,7 +144,11 @@ def string2rschAuthor(fullname):
     :param string: fullname il nome e cognome di un autore.
     :returns string: il nome opportunamente modificato
     """
-    fullname = unicodedata.normalize('NFKD',unicode(fullname,"utf-8")).encode("ascii","ignore")
+    try:
+        fullname = unicodedata.normalize('NFKD',unicode(fullname,"utf-8")).encode("ascii","ignore")
+    except TypeError as e:
+        print e.message
+
     # sostituisce i caratteri accentati con i "corrispettivi" caratteri ASCII
     # http://stackoverflow.com/questions/3704731/replace-non-ascii-chars-from-a-unicode-string-in-python
 

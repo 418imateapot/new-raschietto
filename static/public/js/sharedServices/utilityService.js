@@ -30,6 +30,8 @@ function utilityService() {
         if (element === document.body)
             return element.tagName;
 
+        console.log(element);
+
         if (element.className &&
             (element.className.match(/anno\w+/) ||
                 element.tagName.match(/span/i) && element.className === 'ng-scope')) {

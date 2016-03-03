@@ -59,7 +59,6 @@ function annotatedText(annotationService) {
             let annoType = annot.type;
             let annotations = [annot];
 
-
             // Prepara l'entry per questa annotazione
             let result = {
                 rangeBookmark: newRangeBookmark,
@@ -111,6 +110,8 @@ function annotatedText(annotationService) {
             let range = rangy.createRange();
             let className = `anno-${rInfo.type}`;
             range.moveToBookmark(rInfo.rangeBookmark);
+
+            console.log(className);
 
             // Evidenzia il range
             h.addClassApplier(rangy.createClassApplier(className));
