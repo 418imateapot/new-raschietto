@@ -53,6 +53,8 @@ function StagingController($scope, $state, $mdToast, documentService, newAnnotat
         newAnnotationService.nuke();
         $mdToast.showSimple('Annotazioni eliminate');
         model.pending=[];
+        model.isEmpty = true;
+        $state.reload();
         }
 
     function _delete(elem) {
@@ -63,9 +65,7 @@ function StagingController($scope, $state, $mdToast, documentService, newAnnotat
             model.isEmpty = true;
         }
         $mdToast.showSimple('Annotazione eliminata');
-        $state.go('.', {}, {
-            reload: true
-        });
+        $state.reload();
     }
 
     function _isVisible(annot) {
