@@ -1,13 +1,10 @@
-annotationService.$inject = ['$http', 'utilityService', 'newAnnotationService'];
+annotationService.$inject = ['$http', '$state', 'utilityService', 'newAnnotationService'];
 
 /**
  * Servizio che, dato un url, chiede al triplestore le annotazioni
  * sulla fabio:Expression corrispondente
  */
-export
-default
-
-function annotationService($http, utilityService, newAnnotationService) {
+export default function annotationService($http, $state, utilityService, newAnnotationService) {
 
     const service = this;
 
@@ -21,6 +18,10 @@ function annotationService($http, utilityService, newAnnotationService) {
     service.scrape = _scrape;
     service.isFiltered = _isFiltered;
     service.getAnnotations = _getAnnotations;
+    service.reload = () => {
+        service.currentUrl = null;
+        $state.go('.', {}, {reload: true});
+    };
     //service.scrape = _scrape;
 
 
