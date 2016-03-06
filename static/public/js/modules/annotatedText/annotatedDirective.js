@@ -111,11 +111,10 @@ function annotatedText(annotationService) {
             let className = `anno-${rInfo.type}`;
             range.moveToBookmark(rInfo.rangeBookmark);
 
-            console.log(className);
-
             // Evidenzia il range
             h.addClassApplier(rangy.createClassApplier(className));
             try {
+                console.log(className);
                 h.highlightRanges(className, [range]);
             } catch (e) {
                 console.warn(className + ' ha qualche problema?');

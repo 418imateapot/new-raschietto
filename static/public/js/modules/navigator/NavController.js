@@ -3,7 +3,9 @@ NavController.$inject = ['$scope', '$rootScope', '$state', '$stateParams', '$mdD
  * $mdSidenav e $mdDialog sono i servizi per interagire
  * rispettivamente con la barra laterale e la finestra modale
  */
-export default function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdSidenav, $mdMedia, $mdToast, annotationService, userService, loginModal, newAnnotationService) {
+export
+default
+function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdSidenav, $mdMedia, $mdToast, annotationService, userService, loginModal, newAnnotationService) {
     var model = this;
 
     model.open = () => $mdSidenav('left').toggle(); // Funzione da invocare per aprire il dialog.
@@ -127,8 +129,13 @@ export default function NavController($scope, $rootScope, $state, $stateParams, 
      */
     function _switchMode() {
         let newMode = (model.activeMode !== 'Annotator') ? 'annotator' : 'reader';
-        $state.go('.', {
-            mode: newMode
+        console.log("Switcharoo");
+        $mdSidenav('left').close().then(() => {
+            // FYI: questo è un po' un hack
+            annotationService.currentUrl = null;
+            $state.go('.', {
+                mode: newMode
+            });
         });
         _showNavToolBar({
             mode: newMode
@@ -139,13 +146,13 @@ export default function NavController($scope, $rootScope, $state, $stateParams, 
      * Apre la finestra 'about'
      */
     function _about(ev) {
-            $mdDialog.show({
-                template: '<iframe width="512" height="384" src="https://www.youtube.com/embed/ykwqXuMPsoc" frameborder="0" allowfullscreen></iframe>',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true
-            });
-        }
+        $mdDialog.show({
+            template: '<iframe width="512" height="384" src="https://www.youtube.com/embed/ykwqXuMPsoc" frameborder="0" allowfullscreen></iframe>',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true
+        });
+    }
 
 
     /**
@@ -183,14 +190,14 @@ export default function NavController($scope, $rootScope, $state, $stateParams, 
     }
 
     function _scrape() {
-        if($state.current.url==="/tutorial"){
+        if ($state.current.url === "/tutorial") {
             $mdToast.show(
                 $mdToast.simple()
                 .textContent('Scraping inpossibile nella pagina tutorial')
                 .position('top right')
                 .hideDelay(3000)
-                );
-                return;
+            );
+            return;
 
         }
         model.open(); //toggle

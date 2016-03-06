@@ -24,15 +24,19 @@ function MainAreaController($rootScope, $scope, $state, $stateParams, $sanitize,
      * da visualizzare o se dobbiamo interrogare dei servizi
      */
     function _init() {
+        console.info('mainArea init!');
         if (!model.content) {
             // Se possibile, carica l'ultimo documento
+            console.info('No existing document');
             let savedDoc = userService.lastDocument();
             if (savedDoc) {
+                console.info('Loading last open doc..');
                 $rootScope.$broadcast('retrieveNewUrl', {
                     doc_url: savedDoc
                 });
             } else {
                 // Se non abbiamo nulla, andiamo al tutorial
+                console.info('Nothing to show. Redirect to tutorial.');
                 $state.go('teapot.mode.tutorial', {
                     mode: 'reader'
                 });
@@ -40,13 +44,17 @@ function MainAreaController($rootScope, $scope, $state, $stateParams, $sanitize,
         } else {
             // Abbiamo già un dicumento da visualizzare, recuperiamo
             // le annotazioni.
+            console.info('Doc found. Refreshing...');
 
             // Non fare niente se abbiamo già le annotazioni
             // Vedi NewAnnotationController.showModal per un'eccezione
             // malefica a questa regola.
-            if (documentService.currentUrl === annotationService.currentUrl)
+            if (documentService.currentUrl === annotationService.currentUrl) {
+                console.info('Annotations already loaded, nothing to do.');
                 return;
+            }
 
+            console.info('No annotations here, loading from server.');
             _loadAnnotations();
             userService.storeLastDocument(); // Salve ultimo doc in un cookie
         }
