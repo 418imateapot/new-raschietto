@@ -102,7 +102,9 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
                 fullscreen: model.fullscreenDialog,
                 targetEvent: ev,
                 clickOutsideToClose: true
-            });
+            })
+            .then(annotationService.reload)
+            .catch(annotationService.reload);
         });
     }
 
