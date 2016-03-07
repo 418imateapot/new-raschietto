@@ -1,9 +1,9 @@
-StagingController.$inject = ['$scope', '$state', '$mdToast', 'documentService', 'newAnnotationService'];
+StagingController.$inject = ['$scope', '$state', '$mdToast', 'documentService', 'newAnnotationService','annotationService'];
 
 /**
  * Controller per l'area di sosta
  */
-export default function StagingController($scope, $state, $mdToast, documentService, newAnnotationService) {
+export default function StagingController($scope, $state, $mdToast, documentService, newAnnotationService,annotationService) {
 
     const model = this;
 
@@ -52,7 +52,7 @@ export default function StagingController($scope, $state, $mdToast, documentServ
         $mdToast.showSimple('Annotazioni eliminate');
         model.pending=[];
         model.isEmpty = true;
-        $state.reload();
+        annotationService.reload();
         }
 
     function _delete(elem) {
