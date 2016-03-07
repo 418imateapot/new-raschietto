@@ -1,9 +1,9 @@
-AnnotationEditorController.$inject = ['$mdDialog', '$mdConstant', '$mdToast', 'userService', 'newAnnotationService', 'utilityService', 'selectionService'];
+AnnotationEditorController.$inject = ['$mdDialog', '$mdConstant', '$mdToast', 'userService', 'newAnnotationService', 'utilityService', 'selectionService','annotationService'];
 
 export
 default
 
-function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userService, newAnnotationService, utilityService, selectionService) {
+function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userService, newAnnotationService, utilityService, selectionService,annotationService) {
 
     const model = this;
     model.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA]; // Separatori per i nomi
@@ -19,6 +19,7 @@ function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userServic
         let selection = rangy.getSelection();
         model.target = selectionService.initSelection(selection);
         model.editingSelection = false;
+        model.selectedText= selection.toString();
     };
     model.cancelEdit = () => model.editingSelection = false;
 
@@ -153,6 +154,7 @@ function AnnotationEditorController($mdDialog, $mdConstant, $mdToast, userServic
 
         $mdToast.showSimple('Annotazione creata localmente.');
         $mdDialog.hide();
+        annotationService.reload();
     }
 
 }
