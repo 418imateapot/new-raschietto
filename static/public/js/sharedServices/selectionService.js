@@ -60,7 +60,9 @@ function selectionService(annotationService, utilityService) {
             let elementCandidate;
             let idElement;
 
-            if (selectedRange.startContainer.isSameNode(selectedRange.endContainer)) {
+            // isSameNode è obsoleto,
+            // vedi https://developer.mozilla.org/en/docs/Web/API/Node/isSameNode
+            if (selectedRange.startContainer === selectedRange.endContainer) {
                 // Range in un unico nodo
                 elementCandidate = selectedRange.startContainer;
                 console.log("SAME NODE");
