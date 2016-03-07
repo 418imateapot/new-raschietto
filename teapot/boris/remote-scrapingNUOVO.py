@@ -10,57 +10,9 @@ from lxml import html
 import httplib, json
 from urlparse import urlparse
 
-def _scrape_mont(url_string):
-    url = urlparse(url_string)
-    conn = httplib.HTTPConnection(url.hostname)
-    conn.request("GET", url.path)
-    res = conn.getresponse()
-    body = res.read()
+#DLIB SCRAPING PAGINA NORMALE
+print 'DLIBBBBB'
 
-    my_page = html.fromstring(body)
-
-    title = my_page.xpath("//meta[@name='citation_title']/@content")[0].encode("utf8")
-    doi = my_page.xpath("//meta[@name='DC.Identifier.DOI']/@content")[0]
-    authors = my_page.xpath("//meta[@name='citation_author']/@content")[0]
-    date = my_page.xpath("//meta[@name='citation_date']/@content")[0]
-    date = re.findall('\d\d\d\d', date)[0]
-    url = url_string
-
-    result = {"title": title, "doi": doi, "authors": authors, "date": date, "url": url}
-    print 'MONTESQUIEU'
-    return JSONEncoder().encode(result)
-
-def _scrape_mont2(url_string2):
-    
-    url = urlparse(url_string2)
-    conn = httplib.HTTPConnection(url.hostname)
-    conn.request("GET", url.path)
-    res = conn.getresponse()
-    body = res.read()
-    my_page = html.fromstring(body)
-    my_data = [] 
-    citat = []  
-    articleC = []
-    authorC = []
-
-   
-    allTitleCitation = my_page.xpath("//*[@id='content']/ul/li/text()")
-    authorCitation =  my_page.xpath("//*[@id='content']/ul/li/text()")
-    
-    for tit in allTitleCitation:
-         
-        articleC.append(tit.split('.')[0]) 
-
-
-    url = url_string2
-    result = {"MONTESQUIEU Citation": articleC}
-    my_data += zip(authorC,articleC)
-    
-    
-    return JSONEncoder().encode(result ) 
-        
-    
-    
 
 def _scrape_dlib(url_string):
     url = urlparse(url_string)
@@ -79,7 +31,124 @@ def _scrape_dlib(url_string):
     url = url_string
 
     result = {"title": title, "doi": doi, "authors": authors, "date": date, "url": url}
-    return JSONEncoder().encode(result)
+    #return JSONEncoder().encode(result)
+ 
+#DLIB SCRAPING CITAZIONI PAGINA NORMALE
+
+def _scrape_dlib2(url_string2):
+    
+    url = urlparse(url_string2)
+    conn = httplib.HTTPConnection(url.hostname)
+    conn.request("GET", url.path)
+    res = conn.getresponse()
+    body = res.read()
+    my_page = html.fromstring(body)
+    my_data = [] 
+    
+    allAuthorCitation =  my_page.xpath("//a[@name]/../text()")
+    
+    allTitleCitation =  my_page.xpath("//a[@name]/../text()")
+    allNumCitation =  my_page.xpath("//a[@name]/text()")
+   
+    citationWhere =  my_page.xpath("//p/a[@name]/following::i/text() ")
+    allDoiCitation = my_page.xpath("//p/a[@name]/following-sibling::a/text()") #ok funziona per i doi
+    
+    
+    titleC = []
+    authorC = []
+    alldoiC = [] 
+    NumC = [] 
+     
+    #for num in allNumCitation:
+    
+      #  NumC.append(num.rsplit(' ')[0] )
+
+
+    for tit in allTitleCitation:
+    
+        titleC.append(tit.rsplit(' "')[0] and (tit.replace(","," ")))
+    
+
+
+   
+   
+   
+    url = url_string2
+    citat2 = []
+    result = {"DLIB Author Citation": authorC , "DLIB Title Citation": titleC }
+    #my_data += zip(NumC,titleC)
+   
+    
+    #return JSONEncoder().encode(my_data)
+    
+    
+ 
+    
+
+
+
+    url = url_string2
+
+   
+
+#DLIB SCRAPING CITAZIONI PAGINA CON '"'
+
+def _scrape_dlib3(url_string2):
+    
+    url = urlparse(url_string2)
+    conn = httplib.HTTPConnection(url.hostname)
+    conn.request("GET", url.path)
+    res = conn.getresponse()
+    body = res.read()
+    my_page = html.fromstring(body)
+    my_data = [] 
+    
+    allAuthorCitation =  my_page.xpath("//a[@name]/../text()")
+   
+    
+    allTitleCitation =  my_page.xpath("//a[@name]/../text()")
+    
+    
+    citationWhere =  my_page.xpath("//p/a[@name]/following::i/text() ")
+    allDoiCitation = my_page.xpath("//p/a[@name]/following-sibling::a[@href]/text()")
+    
+   
+    titleC = []
+    authorC = []
+    
+
+    
+    
+    
+    for tit in allTitleCitation:
+        
+        titleC.append( (tit.rpartition('"')[0]) and (tit.split('"')[1]))
+
+    for aut in allAuthorCitation:
+        
+        authorC.append( (aut.rpartition('"')[0]) and (aut.split(', "')[0])) #autori e titolo and split
+        
+
+        #titleC.append( (tit.rpartition('"')[2])) data e pagina citation
+
+   
+    url = url_string2
+    citat2 = []
+    result = {"DLIB Author Citation": authorC , "DLIB Title Citation": titleC }
+    my_data += zip(authorC,titleC)
+   
+    
+    #return JSONEncoder().encode(my_data)
+    
+
+
+
+
+
+        
+    
+print 'STATISTICAAAAA'       
+
 
 
 def _scrape_statistica(url_string):
@@ -99,7 +168,7 @@ def _scrape_statistica(url_string):
     url = url_string
 
     result = {"title": title, "doi": doi, "authors": authors, "date": date, "url": url}
-    return JSONEncoder().encode(result)
+    #return JSONEncoder().encode(result)
 
 
 
@@ -142,12 +211,15 @@ def _scrape_statistica2(url_string2):
     result = {"STATISTICA authorCitation": authorC ,"STATISTICA titleCitation": articleC}
     my_data += zip(authorC,articleC)
     citat += citation
-    #print citat
+    #print articleC
     #print result 
-    print 'STATISTICAAAAA'
-    return JSONEncoder().encode(my_data ) #se metti 'result' sono divisi in gruppi
     
-def _scrape_series(url_string):
+    #return JSONEncoder().encode(my_data ) #se metti 'result' sono divisi in gruppi
+   
+print 'MONTESQUIEU'
+
+
+def _scrape_mont(url_string):
     url = urlparse(url_string)
     conn = httplib.HTTPConnection(url.hostname)
     conn.request("GET", url.path)
@@ -156,18 +228,18 @@ def _scrape_series(url_string):
 
     my_page = html.fromstring(body)
 
-    title = my_page.xpath("//meta[@name='citation_title']/@content")[0].encode('utf-8')
+    title = my_page.xpath("//meta[@name='citation_title']/@content")[0].encode("utf8")
     doi = my_page.xpath("//meta[@name='DC.Identifier.DOI']/@content")[0]
-    authors = my_page.xpath("//meta[@name='citation_author']/@content")[0].encode('utf8')
+    authors = my_page.xpath("//meta[@name='citation_author']/@content")[0]
     date = my_page.xpath("//meta[@name='citation_date']/@content")[0]
     date = re.findall('\d\d\d\d', date)[0]
     url = url_string
 
     result = {"title": title, "doi": doi, "authors": authors, "date": date, "url": url}
-    print 'SERIES'
-    return JSONEncoder().encode(result)
+    
+    #return JSONEncoder().encode(result)
 
-def _scrape_series2(url_string2):
+def _scrape_mont2(url_string2):
     
     url = urlparse(url_string2)
     conn = httplib.HTTPConnection(url.hostname)
@@ -190,76 +262,72 @@ def _scrape_series2(url_string2):
 
 
     url = url_string2
-    result = {"Series Citation": articleC}
+    result = {"MONTESQUIEU Citation": articleC}
     my_data += zip(authorC,articleC)
     
     
-    return JSONEncoder().encode(result ) 
+    #return JSONEncoder().encode(result ) 
 
-def _scrape_dlib2(url_string2):
+
+ 
+print 'SERIES'
+
+def _scrape_series(url_string):
+    url = urlparse(url_string)
+    conn = httplib.HTTPConnection(url.hostname)
+    conn.request("GET", url.path)
+    res = conn.getresponse()
+    body = res.read()
+
+    my_page = html.fromstring(body)
+
+    title = my_page.xpath("//meta[@name='citation_title']/@content")
+    doi = my_page.xpath("//meta[@name='DC.Identifier.DOI']/@content")[0]
+    authors = my_page.xpath("//meta[@name='citation_author']/@content")
+    date = my_page.xpath("//meta[@name='citation_date']/@content")[0]
+    date = re.findall('\d\d\d\d', date)[0]
+    url = url_string
+
+    result = {"title": title, "doi": doi, "authors": authors, "date": date, "url": url}
+    
+    #return JSONEncoder().encode(result)
+
+def _scrape_series2(url_string2):
     
     url = urlparse(url_string2)
     conn = httplib.HTTPConnection(url.hostname)
     conn.request("GET", url.path)
     res = conn.getresponse()
     body = res.read()
-    #text.lower().split(None)
     my_page = html.fromstring(body)
     my_data = [] 
-   
-
-    authorCitation =  my_page.xpath("//p/a[@name]/parent::*/text()")[0].split('"')[0]
-    title2Citation =  my_page.xpath("//p/a[@name]/following-sibling::*/text()")[0].split('"')[0]
-    titleCitation = my_page.xpath("//p/a[@name]/parent::*/text()")[0].split('"')[1]
-   
-    
-    doiCitation = my_page.xpath("/html/body/form/table[3]//tr/td/table[5]//tr/td/table[1]//tr/td[2]/p[57]/a[2]/text()")
-
-    #allTitleCitation = my_page.xpath("//p/a[@name]/parent::*/text()")
-    allAuthorCitation =  my_page.xpath("//p/a[@name]/parent::*/text()")
-    #alldoiCitation = my_page.xpath("//p/a[@href]/self::*/text()")
-
-    #print(allTitleCitation)
-
+    citat = []  
     articleC = []
     authorC = []
-    alldoiC = []
 
-    for tit in allAuthorCitation:
-        
-        authorC.append(tit.rpartition('"')[0])
-       
-    #for doi in alldoiCitation:
-      #  alldoiC.append(doi.partition('"http"')[0])
-    
-    print 'DLIBBBBB'
    
-    url = url_string2
-    citat2 = []
-    my_data += authorC         # zip(authorC,articleC)
-    #print authorC
-    #print authorCitation
-    #print titleCitation  
-    #print title2Citation 
-    return JSONEncoder().encode(authorC )
+    allTitleCitation = my_page.xpath("//*[@id='content']/ul/li/text()")
+    authorCitation =  my_page.xpath("//*[@id='content']/ul/li/text()")
     
-    
- 
-    
-
+    for tit in allTitleCitation:
+         
+        articleC.append(tit) 
 
 
     url = url_string2
-    result = { "DLIB authorCitation": authorCitation ,"DLIB titleCitation": titleCitation, "DLIB doiCitation" : doiCitation}
-    my_data += authorCitation,titleCitation, doiCitation
+    result = {"Series Citation": articleC}
+    my_data += zip(authorC,articleC)
     
-        
-    #return JSONEncoder().encode(result)     
+    
+    #return JSONEncoder().encode(result ) 
+
+
    
+     
     
 def scrapeit2(url_string2):
-    if "dlib.org" in url_string2:
-        return _scrape_dlib2(url_string2)
+    if "dlib.org" and "11beel.html" in url_string2:
+        return _scrape_dlib3(url_string2)
     elif "rivista-statistica" in url_string2:
         return _scrape_statistica2(url_string2) 
     elif "montesquieu" in url_string2:
@@ -268,7 +336,7 @@ def scrapeit2(url_string2):
         return _scrape_series2(url_string2)
 	       
     else:
-        return "<h1>NOPEgg</h1>"
+        return _scrape_dlib2(url_string2)
 
 
 def scrapeit(url_string):
@@ -284,14 +352,15 @@ def scrapeit(url_string):
     else:
         return "<h1>NOPE</h1>"
 
-
-if __name__ == '__main__':
+# TEST 
+'''if __name__ == '__main__':
     print(scrapeit('http://rivista-statistica.unibo.it/article/view/4594'))
-    print(scrapeit2('http://rivista-statistica.unibo.it/article/view/4594'))
-    print(scrapeit('http://www.dlib.org/dlib/november14/beel/11beel.html'))
+    print(scrapeit2('http://rivista-statistica.unibo.it/article/view/5303'))
+    print(scrapeit('http://www.dlib.org/dlib/november14/knoth/11knoth.html'))
     print(scrapeit2('http://www.dlib.org/dlib/november14/beel/11beel.html'))
+    print(scrapeit2('http://www.dlib.org/dlib/november14/fedoryszak/11fedoryszak.html'))
     print(scrapeit('http://montesquieu.unibo.it/article/view/5167'))
     print(scrapeit2('http://montesquieu.unibo.it/article/view/5167'))
     print(scrapeit('http://series.unibo.it/article/view/5897'))
     print(scrapeit2('http://series.unibo.it/article/view/5897'))
- 
+ '''
