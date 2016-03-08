@@ -1,9 +1,9 @@
-StagingController.$inject = ['$scope', '$state', '$mdToast', 'documentService', 'newAnnotationService','annotationService'];
+StagingController.$inject = ['$scope', '$state', '$mdToast', 'documentService', 'newAnnotationService','annotationService','$stateParams'];
 
 /**
  * Controller per l'area di sosta
  */
-export default function StagingController($scope, $state, $mdToast, documentService, newAnnotationService,annotationService) {
+export default function StagingController($scope, $state, $mdToast, documentService, newAnnotationService,annotationService,$stateParams) {
 
     const model = this;
 
@@ -14,6 +14,7 @@ export default function StagingController($scope, $state, $mdToast, documentServ
     model.deleteAll=_deleteAll;
     model.isVisible = _isVisible;
     model.isEmpty = true;
+    model.mainButton = ( model.isEmpty && ($stateParams.mode ==="reader"));
 
     // Pagination vars
     model.currentPage = 1;

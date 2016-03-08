@@ -1,5 +1,5 @@
-AnnotationCardController.$inject = ['$sanitize', '$state', 'userService', 'newAnnotationService'];
-export default function AnnotationCardController($sanitize, $state, userService, newAnnotationService) {
+AnnotationCardController.$inject = ['$sanitize', '$state', 'userService', 'newAnnotationService','$stateParams'];
+export default function AnnotationCardController($sanitize, $state, userService, newAnnotationService, $stateParams) {
 
     var model = this;
     model.time= model.annotation.provenance.time;
@@ -11,8 +11,8 @@ export default function AnnotationCardController($sanitize, $state, userService,
     model.avatarColor = '';
     model.isCitationAnn = 'citationAnnNO';
     //model.delete -> passata dallo scope esterno
-    model.isDeleteable = model.delete !== 'false';
-    model.isEditable = (model.edit !== 'false' &&
+    model.isDeleteable = (model.delete !== 'false' && ($stateParams.mode !== 'reader'));
+    model.isEditable = ((model.edit !== 'false' && ($stateParams.mode !== 'reader'))&&
                         (model.email === userService.userEmail ||
                         model.email ===  'scraper@ltw1543'));
 

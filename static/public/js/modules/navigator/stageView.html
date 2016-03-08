@@ -14,11 +14,11 @@
     <md-dialog-actions layout="row" layout-xs="column" layout-align="space-around center">
         <dir-pagination-controls max-size="5"></dir-pagination-controls>
         <span class="staging-buttons" flex layout="row" layout-padding>
-            <md-button ng-hide="stageDialog.isEmpty" ng-click="stageDialog.saveAll()" class="md-raised md-primary" flex="50">
+            <md-button ng-hide="stageDialog.mainButton" ng-click="stageDialog.saveAll()" class="md-raised md-primary" flex="50">
                 <md-tooltip>Salva tutte le annotazioni</md-tooltip>
                 <md-icon class="material-icons">done_all</md-icon>
             </md-button>
-            <md-button ng-hide="stageDialog.isEmpty" ng-click="stageDialog.deleteAll()" class="md-raised md-warn" flex="50">
+            <md-button ng-hide="stageDialog.mainButton" ng-click="stageDialog.deleteAll()" class="md-raised md-warn" flex="50">
                 <md-tooltip>Elimina tutte le annotazioni</md-tooltip>
                 <md-icon class="material-icons">delete_forever</md-icon>
             </md-button>

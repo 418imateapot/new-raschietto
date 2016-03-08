@@ -113,6 +113,7 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
         const stageDialog = this;
         stageDialog.close = () => $mdDialog.cancel();
         stageDialog.isEmpty = true;
+        stageDialog.mainButton = ( stageDialog.isEmpty && ($stateParams.mode ==="reader"));
 
         stageDialog.saveAll = () => {
             $rootScope.$broadcast('save_all');
