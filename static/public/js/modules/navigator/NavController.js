@@ -192,13 +192,14 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
     }
 
     function _scrape() {
-        if ($state.current.url === "/tutorial") {
+        if (($state.current.url === "/tutorial")||($stateParams.mode==="reader")) {
             $mdToast.show(
                 $mdToast.simple()
-                .textContent('Scraping inpossibile nella pagina tutorial')
+                .textContent('Scraping inpossibile nella modalità reader o nel tutorial ')
                 .position('top right')
                 .hideDelay(3000)
             );
+            console.log($stateParams);
             return;
 
         }
