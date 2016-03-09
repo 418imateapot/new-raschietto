@@ -5,7 +5,7 @@ export default class Dlib {
     }
 
     static get REMOTE_PREFIX() {
-        return '/html/body/form/table[3]/tbody/tr/td/table[5]/tbody/tr/td/table[1]/tbody/tr/td[2]';
+        return '/html/body/form/table[3]/tr/td/table[5]/tr/td/table[1]/tr/td[2]';
     }
 
     static get BLACKLIST() {

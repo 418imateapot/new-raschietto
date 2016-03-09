@@ -3,12 +3,11 @@
 Gestisce il routing per l'api server-side di raschietto
 """
 from flask import request, Response
-from flask import make_response
 from json.decoder import JSONDecoder
 
 from .boris.documents import get_doc
 # from .boris.remoteScraping import scrape
-from .boris.remote_scrapingNUOVO import scrape
+from .boris.scraper import scrape
 from .update import generateGraphFromJSON, edit_graph
 from boris.docloader import add_document_to_fuseki
 from . import app

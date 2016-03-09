@@ -3,9 +3,7 @@ import Dlib from './Dlib.js';
 
 selectionService.$inject = ['annotationService', 'utilityService'];
 
-export
-default
-function selectionService(annotationService, utilityService) {
+export default function selectionService(annotationService, utilityService) {
 
     var service = this;
 
@@ -37,6 +35,20 @@ function selectionService(annotationService, utilityService) {
         return getElementByXpath(xpath);
     };
 
+    service.generateRemotePath = function(element) {
+        // Stabilisci l'id per l'elemento
+        let localPath = utilityService.getXPathTo(element);
+        let path;
+
+        if (annotationService.currentUrl.match('dlib')) {
+            path = Dlib.convertFromRaschietto(localPath);
+        } else {
+            path = Riviste.convertFromRaschietto(localPath);
+        }
+
+        return path;
+    };
+
     service.initSelection = function(selection) {
         let src = annotationService.currentUrl;
         let selectedText = selection.toString().trim();
@@ -56,7 +68,7 @@ function selectionService(annotationService, utilityService) {
         if (selectedText.length > 0) { // Abbiamo una selezione
 
             let selectedRange = selection.getRangeAt(0);
-            selectedRange.trim();  // Scarta il whitespace dal nostro range
+            selectedRange.trim(); // Scarta il whitespace dal nostro range
             let elementCandidate;
             let idElement;
 
@@ -86,24 +98,13 @@ function selectionService(annotationService, utilityService) {
                 idElement = elementCandidate;
             } else {
                 console.log("IS TEXT_NODE");
-                idElement= elementCandidate.parentElement;
+                idElement = elementCandidate.parentElement;
             }
 
+            // Estrai start/end dal range in termini di caratteri
             let offsets = selectedRange.toCharacterRange(idElement);
-            console.log(offsets);
-
-            // Stabilisci l'id per l'elemento
-            let localPath = utilityService.getXPathTo(idElement);
-            let path;
-            if (src.match('dlib')) {
-                path = Dlib.convertFromRaschietto(localPath);
-            } else {
-                path = Riviste.convertFromRaschietto(localPath);
-            }
-
-            console.log(path);
-            console.log(localPath);
-
+            // Ottieni il path (rispetto al documento originale)
+            let path = service.generateRemotePath(idElement);
 
             // Dato che abbiamo una selezione, riempiamo il target
             target = {
@@ -130,6 +131,7 @@ function selectionService(annotationService, utilityService) {
             return null;
         }
     }
+
 
 
     function isFragment(str) {

@@ -23,6 +23,7 @@ export default function annotationService($http, $state, utilityService, newAnno
         $state.go('.', {}, {reload: true});
     };
     //service.scrape = _scrape;
+    document.ann = _getAnnotations;
 
 
     /**

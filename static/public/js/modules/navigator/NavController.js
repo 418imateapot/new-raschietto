@@ -200,21 +200,16 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
                 .position('top right')
                 .hideDelay(3000)
             );
-            console.log($stateParams);
             return;
 
         }
         model.open(); //toggle
-        $mdToast.show(
-            $mdToast.simple()
-            .textContent('Scraping in corso..')
-            .position('top right')
-            .hideDelay(3000)
-        );
+        $mdToast.showSimple('Scraping in corso..');
         annotationService.scrape()
             .then(res => {
                 newAnnotationService.generateFromScraper(res.data);
                 $mdToast.updateTextContent('Finito! Ora puoi modificare le nuove annotazioni');
+                _openStagingArea();
             })
             .catch(err => console.warn(err));
     }

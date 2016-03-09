@@ -1,3 +1,6 @@
+import Dlib from './Dlib.js';
+import Riviste from './Riviste.js';
+
 newAnnotationService.$inject = ['$rootScope', '$http', 'localStorageService', 'utilityService'];
 
 export default function newAnnotationService($rootScope, $http, localStorageService, utilityService) {
@@ -34,12 +37,12 @@ export default function newAnnotationService($rootScope, $http, localStorageServ
     function _updateRemote(annotationList) {
         let newAnnotations = annotationList.map(a => _generateAnnotation(a));
         return $http.put('/api/annotations', {
-            items: newAnnotations
-        })
-        .then(response => {
-            return response;
-        })
-        .catch(err => console.warn(err));
+                items: newAnnotations
+            })
+            .then(response => {
+                return response;
+            })
+            .catch(err => console.warn(err));
     }
 
 
@@ -142,7 +145,7 @@ export default function newAnnotationService($rootScope, $http, localStorageServ
                 annot.content.object = annot.content.value;
                 break;
             case 'hasAuthor':
-                if(!Array.isArray(annot.content.value))
+                if (!Array.isArray(annot.content.value))
                     annot.content.value = [annot.content.value];
                 resultArray = annot.content.value.map(val => {
                     let item = $.extend(true, {}, annot);
@@ -258,12 +261,24 @@ export default function newAnnotationService($rootScope, $http, localStorageServ
      * genera annotzioni dallo scraper
      */
     function _generateFromScraper(data) {
+        console.log(data);
+        let doc = angular.fromJson(data.document);
+        let cit = angular.fromJson(data.citations);
+        let src = doc.hasURL;
         let annotations = [];
-        for (let k in data.document) {
+
+        for (let k in doc) {
             let skel = {
                 type: k,
-                content: {value: data.document[k]},
-                target: {start: '', end: '', id: '', source: data.document.hasURL},
+                content: {
+                    value: doc[k]
+                },
+                target: {
+                    start: '',
+                    end: '',
+                    id: '',
+                    source: src
+                },
                 provenance: {
                     author: {
                         name: 'TeapotScraper',
@@ -275,40 +290,84 @@ export default function newAnnotationService($rootScope, $http, localStorageServ
             annotations = annotations.concat(_fillTheBlanks(skel));
         }
 
-        for (let c in data.citations) {
-            let item = data.citations[c];
+        console.log(annotations);
+
+
+        for (let c in cit) {
+            let item = cit[c];
             if (!item || !Array.isArray(item) || item[0] === "") continue;
             let title = item.pop();
             if (!title) {
                 // niente titolo?
                 continue;
             }
+
+            let target = _generateScrapedAnnotationRange(title, src);
+
             let skel = {
                 type: 'cites',
                 content: {
                     value: title,
                     cited: {
                         title: title,
-                        authors: item[0].trim().split(', ')   // Dovrebbero essere rimasti solo gli autori
+                        authors: item[0] ? item[0].trim().split(', ') : []// Dovrebbero essere rimasti solo gli autori
                     }
                 },
-                target: {start: '', end: '', id: '', source: data.document.hasURL},
+                target: target,
                 provenance: {
                     author: {
                         name: 'TeapotScraper',
                         email: 'scraper@ltw1543'
                     },
                     time: new Date()
-                }
+                },
             };
             annotations = annotations.concat(_fillTheBlanks(skel));
         }
 
         _clearScraped();
         _saveLocal(annotations);
-        console.log(annotations);
-        console.log(data.citations);
     }
+
+
+    // Genera le informazioni per compilare il campo 'target'
+    // dell'annotazione
+    function _generateScrapedAnnotationRange(annoText, src) {
+        console.log("HEY");
+        let range = rangy.createRange();
+        let target = {source: src, id: '', start: '', end: ''};
+        let containerElement;
+
+        range.findText(annoText);
+
+        if (range.toString() === "") {
+            // Niente di utile
+            return target;
+        }
+
+        // Questo probabilmente non serve più..
+        if (range.commonAncestorContainer.nodeType === Node.ELEMENT_NODE) {
+            containerElement = range.commonAncestorContainer;
+        } else {
+            containerElement = range.commonAncestorContainer.parentElement;
+        }
+
+        let path = _generateRemotePath(containerElement, src);
+
+        // per semplicità calcoliamo start ed end su tutto
+        // il testo contenuto nell'elemento
+        range.selectNode(containerElement);
+        let start = 0;
+        let end = range.toString().length;
+
+        target.id = path;
+        target.source = src;
+        target.start = start;
+        target.end = end;
+
+        return target;
+    }
+
 
     /**
      * rimuovi le annotazioni dello scraper
@@ -316,13 +375,27 @@ export default function newAnnotationService($rootScope, $http, localStorageServ
     function _clearScraped() {
         let local = _retrieveLocal();
         for (let i in local) {
-            if(local[i].provenance.author.name ===  'TeapotScraper') {
+            if (local[i].provenance.author.name === 'TeapotScraper') {
                 local.splice(i, 1);
             }
         }
         _deleteLocal();
         _saveLocal(local);
 
+    }
+
+    function _generateRemotePath(element, src) {
+        // Stabilisci l'id per l'elemento
+        let localPath = utilityService.getXPathTo(element);
+        let path;
+
+        if (src.match('dlib')) {
+            path = Dlib.convertFromRaschietto(localPath);
+        } else {
+            path = Riviste.convertFromRaschietto(localPath);
+        }
+
+        return path;
     }
 
 }

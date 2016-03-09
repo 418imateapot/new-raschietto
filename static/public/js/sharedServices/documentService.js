@@ -106,7 +106,7 @@ function documentService($http, $rootScope, $compile, annotationService, selecti
      */
     function _highlight(scope) {
 
-        annotationService.getAnnotations(true).forEach((val, index) => {
+        annotationService.getAnnotations().forEach((val, index) => {
             let source, fragment, type, provenance;
             try {
                 source = val.target.source.indexOf('dlib') !== -1 ? 'dlib' : 'riviste';
@@ -126,6 +126,7 @@ function documentService($http, $rootScope, $compile, annotationService, selecti
             let elem = selectionService.getSelector(fragment, type, source, provenance);
             if (!elem || !elem.style)
                 return; // Per stare dalla parte dei bottoni
+
 
 
             elem = angular.element(elem);
