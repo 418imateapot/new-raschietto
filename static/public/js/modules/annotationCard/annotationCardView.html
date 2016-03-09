@@ -9,16 +9,17 @@
             <span class="md-subhead">
                 Annotato da: <a href="mailto:{{annoCard.email}}">{{annoCard.author}}</a>
             </span>
-            <span class="md-subhead">
-                il {{annoCard.time | date:"MM/dd/yyyy 'alle' h:mma"}}
-            </span>
 
         </md-card-header-text>
     </md-card-header>
+
     <md-card-content ng-bind-html="annoCard.text">
         <p>
             {{annoCard.text}}
         </p>
+    </md-card-content>
+    <md-card-content >
+                 Annotato il {{annoCard.time | date:"MM/dd/yyyy 'alle' h:mma"}}.
     </md-card-content>
     <md-card-actions ng-show="annoCard.isEditable" layout="row" layout-align="end center">
         <modify-annotation   ng-show="annoCard.isEditable " annotation="annoCard.annotation"></modify-annotation>

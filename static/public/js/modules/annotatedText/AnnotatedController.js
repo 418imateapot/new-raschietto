@@ -51,7 +51,7 @@ function AnnotatedTextController($scope, $mdDialog, annotationService, newAnnota
     function _showAnnotationController() {
         const dialog = this;
         dialog.isFiltered = () => false;
-
+        dialog.close = () => $mdDialog.cancel();
         // Pagination vars
         dialog.currentPage = 1;
         dialog.pagesize = 10;
