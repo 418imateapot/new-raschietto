@@ -194,14 +194,8 @@ function NavController($scope, $rootScope, $state, $stateParams, $mdDialog, $mdS
 
     function _scrape() {
         if (($state.current.url === "/tutorial")||($stateParams.mode==="reader")) {
-            $mdToast.show(
-                $mdToast.simple()
-                .textContent('Scraping inpossibile nella modalità reader o nel tutorial ')
-                .position('top right')
-                .hideDelay(3000)
-            );
+            $mdToast.showSimple('Scraping impossibile nella modalità reader o nel tutorial.');
             return;
-
         }
         model.open(); //toggle
         $mdToast.showSimple('Scraping in corso..');

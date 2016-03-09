@@ -48,8 +48,12 @@ def _scrape_dlib2(url_string2):
     body = res.read()
     my_page = html.fromstring(body)
     my_data = []
+    hrefIn = []
 
     allTitleCitation = my_page.xpath("//a[@name]/../text()")
+
+    for tit in allTitleCitation:
+        hrefIn.append(tit.rsplit(', '))
 
     titleC = []
 
@@ -60,7 +64,7 @@ def _scrape_dlib2(url_string2):
     url = url_string2
     my_data += titleC
 
-    return JSONEncoder().encode(my_data)
+    return JSONEncoder().encode(hrefIn)
 
 
 # DLIB SCRAPING CITAZIONI PAGINA CON '"'

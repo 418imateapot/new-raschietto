@@ -14,6 +14,7 @@ export default function newAnnotationService($rootScope, $http, localStorageServ
     service.nuke = _deleteLocal;
     service.updateRemote = _updateRemote;
     service.fillTheBlanks = _fillTheBlanks;
+    service.alreadyScraped = false;
 
 
     ////////////////////
@@ -302,7 +303,17 @@ export default function newAnnotationService($rootScope, $http, localStorageServ
                 continue;
             }
 
-            let target = _generateScrapedAnnotationRange(title, src);
+            // Se siamo su dlib non cerchiamo di individuare la
+            // posizione delle cit. altrimenti ci stiamo su un mese
+            let target = {
+                start: '',
+                end: '',
+                id: '',
+                source: src
+            };
+            if(!src.match(/dlib/)) {
+                target = _generateScrapedAnnotationRange(title, src);
+            }
 
             let skel = {
                 type: 'cites',

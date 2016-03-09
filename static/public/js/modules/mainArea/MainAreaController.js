@@ -1,13 +1,10 @@
-MainAreaController.$inject = ['$rootScope', '$scope', '$state', '$stateParams', '$sanitize', '$mdToast', 'documentService', 'annotationService', 'userService'];
+MainAreaController.$inject = ['$rootScope', '$scope', '$state', '$stateParams', '$sanitize', '$mdToast', 'documentService', 'annotationService', 'userService', 'newAnnotationService'];
 
 /**
  * Controller per la model
  * $sanitize permette di iniettare HTML nelle viste
  */
-export
-default
-
-function MainAreaController($rootScope, $scope, $state, $stateParams, $sanitize, $mdToast, documentService, annotationService, userService) {
+export default function MainAreaController($rootScope, $scope, $state, $stateParams, $sanitize, $mdToast, documentService, annotationService, userService, newAnnotationService) {
 
     const model = this;
 
@@ -90,8 +87,17 @@ function MainAreaController($rootScope, $scope, $state, $stateParams, $sanitize,
         annotationService.query(documentService.currentUrl)
             .then(res => {
                 $rootScope.$broadcast('annotations_loaded');
-                if (!silent)
+                if (!silent && res.length > 0) {
                     $mdToast.showSimple(res.length + ' annotazioni caricate.');
+                } else if (res.length === 0) {
+                    $mdToast.showSimple('Nessuna annotazione trovata sul documento. Scraping in corso..');
+                    annotationService.scrape()
+                        .then(res => {
+                            newAnnotationService.generateFromScraper(res.data);
+                            $mdToast.updateTextContent('Finito! Ora puoi modificare le nuove annotazioni (dalla modalità annotator)');
+                        })
+                        .catch(err => console.warn(err));
+                }
             })
             .catch((err) => {
                 const msg = `Non sono riuscito a caricare le annotazioni: ${err.name}`;
